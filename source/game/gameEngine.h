@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 namespace breakout
 {
     class GameWindow;
@@ -14,6 +16,7 @@ namespace breakout
         void Start();
 
     private:
-        GameWindow* m_window = nullptr;
+
+        std::shared_ptr<GameWindow> m_window;
     };
 }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 namespace breakout
 {
 	class GameWindow;
@@ -10,7 +12,7 @@ namespace breakout
 
 		static GameContext& Get();
 
-		GameWindow* GetMainWindow();
+		std::shared_ptr<GameWindow>& GetMainWindow();
 
 	private:
 
@@ -23,6 +25,6 @@ namespace breakout
 
 		static GameContext* m_gameContext;
 
-		GameWindow* m_mainWindow = nullptr;
+		std::shared_ptr<GameWindow> m_mainWindow;
 	};
 }
