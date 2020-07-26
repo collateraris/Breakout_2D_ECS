@@ -17,7 +17,7 @@ project "Game"
 		
         "{COPY} %{cfg.buildtarget.directory}%{cfg.buildtarget.name} " .. paths.build,
     }
-        
+      
     includedirs
     {
         paths.game,
@@ -56,7 +56,7 @@ project "Game"
         "SysTelemetry",
         "SysUI",
         "SysECS",
-		"SysGameState",
+        "SysGameState",
         "opengl32",
         "glfw3",
         "glew32s"
