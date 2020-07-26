@@ -5,6 +5,7 @@
 namespace breakout
 {
 	class GameWindow;
+	class ConfigManager;
 
 	class GameContext
 	{
@@ -13,6 +14,7 @@ namespace breakout
 		static GameContext& Get();
 
 		std::shared_ptr<GameWindow>& GetMainWindow();
+		ConfigManager& GetConfigManager();
 
 	private:
 
@@ -22,8 +24,6 @@ namespace breakout
 		GameContext(GameContext&&) = delete;
 		void operator=(GameContext&) = delete;
 		void operator=(GameContext&&) = delete;
-
-		static GameContext* m_gameContext;
 
 		std::shared_ptr<GameWindow> m_mainWindow;
 	};

@@ -25,6 +25,7 @@ project "Game"
         paths.GLFW.inc,
         paths.glm.inc,
         paths.stb_image.inc,
+        paths.tinyxml2.inc,
         paths.config,
 		paths.gameState,
 		paths.telemetry,

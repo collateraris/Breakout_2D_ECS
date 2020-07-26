@@ -1,6 +1,10 @@
 #include <gameWindow.h>
 
+#include <gameContext.h>
+#include <ConfigManager.h>
+
 #include <iostream>
+
 
 using namespace breakout;
 
@@ -25,7 +29,15 @@ void GameWindow::Init()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-	GLFWwindow* window = glfwCreateWindow(600, 600, "Breakout", nullptr, nullptr);
+	
+	XPath windowConfig = GameContext::Get().GetConfigManager().GetRoot().GetPath("window");
+
+	std::string title = windowConfig.GetAttribute<std::string>("title");
+	int windowWidthPixels = windowConfig.GetAttribute<int>("width");
+	int windowHeightPixels = windowConfig.GetAttribute<int>("height");
+	
+
+	GLFWwindow* window = glfwCreateWindow(windowWidthPixels, windowHeightPixels, title.c_str(), nullptr, nullptr);
 	if (window == nullptr)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
