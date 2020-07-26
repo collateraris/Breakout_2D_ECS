@@ -1,0 +1,31 @@
+paths = require "paths"
+-----------------------------------------------------------------------------------------------------------------------
+project "SysInput"
+    language "C++"
+    characterset "MBCS"
+    kind "StaticLib"
+    targetname "sys_input"
+    
+    includedirs
+    {
+        paths.input,
+    }
+    
+    files
+    {
+        paths.input .. "/**.cpp",
+        paths.input .. "/**.h",
+    }
+    
+    vpaths
+    {
+        ["Source Files"] = 
+        {
+            paths.input .. "/**.cpp",
+        },
+        ["Header Files"] = 
+        {
+            paths.input .. "/**.h",
+        },
+    }
+-----------------------------------------------------------------------------------------------------------------------
