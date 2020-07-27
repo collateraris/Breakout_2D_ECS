@@ -6,6 +6,11 @@
 
 namespace breakout
 {
+    enum struct ESystemType
+    {
+        LogManager = 0,
+    };
+
     constexpr char* CONFIG_FILE = "assets/config.xml";
 
     class ConfigManager
@@ -13,6 +18,8 @@ namespace breakout
     public:
 
         static ConfigManager& Get();
+
+        XPath* Get(ESystemType type) const;
 
         XPath GetRoot();
 

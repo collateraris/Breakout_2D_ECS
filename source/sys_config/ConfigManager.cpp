@@ -19,6 +19,11 @@ ConfigManager& ConfigManager::Get()
 	return configManager;
 }
 
+XPath* ConfigManager::Get(ESystemType type) const
+{
+	return m_config->GetRoot().GetPath("systems").FindChildByAttribute("id", static_cast<int>(type));
+}
+
 XPath ConfigManager::GetRoot()
 {
 	return m_config->GetRoot();

@@ -2,9 +2,17 @@
 <config>
 
 	<window
-		title="Breakout game:"
+		title="Breakout:"
 		width="800"
 		height="800"
 	></window>
+	
+	<systems>
+	<system
+		id="0"
+		name="LogManager"
+		logFile="log.txt"
+	></system>
+	</systems>
 
 </config>

@@ -1,11 +1,19 @@
 #pragma once
 
+#ifdef _DEBUG
+#define LOG(...) breakout::GameContext::Get().GetLogManager().Log(__VA_ARGS__)
+#else
+#define LOG(...) 
+#endif // _DEBUG
+
 #include <memory>
 
 namespace breakout
 {
+
 	class GameWindow;
 	class ConfigManager;
+	class LogManager;
 
 	class GameContext
 	{
@@ -15,6 +23,7 @@ namespace breakout
 
 		std::shared_ptr<GameWindow>& GetMainWindow();
 		ConfigManager& GetConfigManager();
+		LogManager& GetLogManager();
 
 	private:
 

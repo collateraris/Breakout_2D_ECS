@@ -2,6 +2,7 @@
 
 #include <gameWindow.h>
 #include <ConfigManager.h>
+#include <LogManager.h>
 
 using namespace breakout;
 
@@ -28,4 +29,9 @@ std::shared_ptr<GameWindow>& GameContext::GetMainWindow()
 ConfigManager& GameContext::GetConfigManager()
 {
 	return ConfigManager::Get();
+}
+
+LogManager& GameContext::GetLogManager()
+{
+	return LogManager::Get();
 }
