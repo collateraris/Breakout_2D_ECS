@@ -9,12 +9,15 @@ project "SysConfig"
     includedirs
     {
         paths.config,
+        paths.tinyxml2.inc,
     }
     
     files
     {
         paths.config .. "/**.cpp",
         paths.config .. "/**.h",
+        paths.tinyxml2.inc .. "/**.cpp",
+        paths.tinyxml2.inc .. "/**.h",
     }
     
     vpaths
@@ -22,10 +25,12 @@ project "SysConfig"
         ["Source Files"] = 
         {
             paths.config .. "/**.cpp",
+            paths.tinyxml2.inc .. "/**.cpp",
         },
         ["Header Files"] = 
         {
             paths.config .. "/**.h",
+            paths.tinyxml2.inc .. "/**.h",
         },
     }
 -----------------------------------------------------------------------------------------------------------------------

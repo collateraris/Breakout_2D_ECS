@@ -9,6 +9,9 @@ project "SysTelemetry"
     includedirs
     {
         paths.telemetry,
+        paths.game,
+        paths.config,
+        paths.tinyxml2.inc
     }
     
     files
@@ -23,6 +26,7 @@ project "SysTelemetry"
         {
             paths.telemetry .. "/**.cpp",
         },
+
         ["Header Files"] = 
         {
             paths.telemetry .. "/**.h",

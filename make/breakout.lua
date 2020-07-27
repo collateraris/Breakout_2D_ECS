@@ -18,11 +18,11 @@ workspace ("Breakout")
     objdir ("../.gen/obj/%{prj.name}_%{cfg.buildcfg}")
 
     flags ("MultiProcessorCompile")
-    flags ("FatalWarnings")
     warnings ("Extra")
     architecture ("x86")
     system ("Windows")
     systemversion (get_sdk_version())
+    linkoptions { '/NODEFAULTLIB:"libcmt.lib"' }
 
     filter ("configurations:Debug*")
         defines { "_DEBUG", "GLEW_STATIC"}

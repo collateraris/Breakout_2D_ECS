@@ -35,6 +35,10 @@ paths.stb_image      = {}
 paths.stb_image.root = paths.root .. "/libraries/stb_image"
 paths.stb_image.inc  = paths.stb_image.root .. "/include"
 -----------------------------------------------------------------------------------------------------------------------
+paths.tinyxml2      = {}
+paths.tinyxml2.root = paths.root .. "/libraries/tinyxml2"
+paths.tinyxml2.inc  = paths.tinyxml2.root .. "/include"
+-----------------------------------------------------------------------------------------------------------------------
 paths.build     = paths.root .. "/.bin"
 paths.genPrj    = paths.root .. "/.gen/prj"
 paths.genDebug  = paths.root .. "/.gen/bin/Debug/Breakout"
