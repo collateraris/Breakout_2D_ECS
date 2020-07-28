@@ -14,6 +14,8 @@ namespace breakout
 	class GameWindow;
 	class ConfigManager;
 	class LogManager;
+	class GameStateManager;
+	class EventsStorage;
 
 	class GameContext
 	{
@@ -22,8 +24,12 @@ namespace breakout
 		static GameContext& Get();
 
 		std::shared_ptr<GameWindow>& GetMainWindow();
+
 		ConfigManager& GetConfigManager();
 		LogManager& GetLogManager();
+		GameStateManager& GetGameStateManager();
+
+		EventsStorage& GetEventsStorage();
 
 	private:
 

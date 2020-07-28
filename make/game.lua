@@ -27,6 +27,7 @@ project "Game"
         paths.stb_image.inc,
         paths.tinyxml2.inc,
         paths.config,
+        paths.events,
 		paths.gameState,
 		paths.telemetry,
 		paths.input,

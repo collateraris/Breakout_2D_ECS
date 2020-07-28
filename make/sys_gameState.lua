@@ -9,6 +9,9 @@ project "SysGameState"
     includedirs
     {
         paths.gameState,
+        paths.game,
+        paths.events,
+        paths.telemetry
     }
     
     files

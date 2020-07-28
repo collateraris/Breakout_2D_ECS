@@ -3,6 +3,8 @@
 #include <gameWindow.h>
 #include <ConfigManager.h>
 #include <LogManager.h>
+#include <GameStateManager.h>
+#include <EventsStorage.h>
 
 using namespace breakout;
 
@@ -34,4 +36,14 @@ ConfigManager& GameContext::GetConfigManager()
 LogManager& GameContext::GetLogManager()
 {
 	return LogManager::Get();
+}
+
+GameStateManager& GameContext::GetGameStateManager()
+{
+	return GameStateManager::Get();
+}
+
+EventsStorage& GameContext::GetEventsStorage()
+{
+	return EventsStorage::Get();
 }
