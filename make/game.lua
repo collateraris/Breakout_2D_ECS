@@ -37,6 +37,8 @@ project "Game"
 		paths.animation,
 		paths.profile,
         paths.audio,
+        paths.resource,
+        paths.lib_multimedia
     }
     
     libdirs
@@ -59,6 +61,8 @@ project "Game"
         "SysUI",
         "SysECS",
         "SysGameState",
+        "SysResource",
+        "LibMultimedia",
         "opengl32",
         "glfw3",
         "glew32s"
