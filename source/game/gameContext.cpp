@@ -5,6 +5,7 @@
 #include <LogManager.h>
 #include <GameStateManager.h>
 #include <EventsStorage.h>
+#include <MemoryManager.h>
 
 using namespace breakout;
 
@@ -46,4 +47,9 @@ GameStateManager& GameContext::GetGameStateManager()
 EventsStorage& GameContext::GetEventsStorage()
 {
 	return EventsStorage::Get();
+}
+
+MemoryManager& GameContext::GetMemoryManager()
+{
+	return MemoryManager::Get();
 }

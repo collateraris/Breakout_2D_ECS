@@ -6,6 +6,8 @@
 #include <EventsStorage.h>
 #include <GameStateManager.h>
 #include <AssetsManager.h>
+#include <FreeListObjectPool.h>
+#include <FreeListPoolElement.h>
 
 using namespace breakout;
 
@@ -25,6 +27,8 @@ void GameEngine::Init()
     GameContext::Get().GetLogManager().Init();
     GameContext::Get().GetGameStateManager().Init();
     GameContext::Get().GetEventsStorage().Init();
+
+    FreeListObjectPool<PoolTestElement> objpool(100);
 
     LOG("Game Engine Init");
 }

@@ -23,6 +23,7 @@ workspace ("Breakout")
     system ("Windows")
     systemversion (get_sdk_version())
     linkoptions { '/NODEFAULTLIB:"libcmt.lib"' }
+    cppdialect "C++17"
 
     filter ("configurations:Debug*")
         defines { "_DEBUG", "GLEW_STATIC"}
