@@ -25,7 +25,6 @@ void GameEngine::Init()
     GameContext::Get().GetLogManager().Init();
     GameContext::Get().GetGameStateManager().Init();
     GameContext::Get().GetEventsStorage().Init();
-    AssetManager::Get().LoadAll();
 
     LOG("Game Engine Init");
 }

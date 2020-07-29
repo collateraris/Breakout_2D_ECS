@@ -21,5 +21,5 @@ TexturesManager& TexturesManager::Get()
 
 bool TexturesManager::getFromFile(const std::string& path, oglml::Texture2D& resource)
 {
-	return true;
+	return resource.loadFromFile(path);
 };
