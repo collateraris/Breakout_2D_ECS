@@ -1,5 +1,7 @@
 #pragma once
 
+#include <FreeListObjectPool.h>
+
 #include <variant>
 
 namespace breakout
@@ -12,13 +14,25 @@ namespace breakout
 		FreeListPoolElement();
 		~FreeListPoolElement() = default;
 
+		bool IsActive();
+
+		void SetLive(const liveStruct live);
+
+	private:
+
+		friend class FreeListObjectPool<FreeListPoolElement<liveStruct>>;
+
 		FreeListPoolElement<liveStruct>* GetNext();
 
 		void SetNext(FreeListPoolElement<liveStruct>* next);
 
-	private:
+		void Activate();
+
+		void Deactivate();
 
 		std::variant<liveStruct, FreeListPoolElement<liveStruct>*> m_live, m_next;
+
+		bool b_active = false;
 	};
 
 	template<typename liveStruct>
@@ -30,7 +44,7 @@ namespace breakout
 	template<typename liveStruct>
 	FreeListPoolElement<liveStruct>* FreeListPoolElement<liveStruct>::GetNext()
 	{
-		return m_next;
+		return std::get<FreeListPoolElement<liveStruct>*>(m_next);
 	}
 
 	template<typename liveStruct>
@@ -39,16 +53,32 @@ namespace breakout
 		m_next = next;
 	}
 
+	template<typename liveStruct>
+	void FreeListPoolElement<liveStruct>::Activate()
+	{
+		b_active = true;
+	}
+
+	template<typename liveStruct>
+	void FreeListPoolElement<liveStruct>::Deactivate()
+	{
+		b_active = false;
+	}
+
+	template<typename liveStruct>
+	bool FreeListPoolElement<liveStruct>::IsActive()
+	{
+		return b_active;
+	}
+
+	template<typename liveStruct>
+	void FreeListPoolElement<liveStruct>::SetLive(const liveStruct live)
+	{
+		m_live = live;
+	}
+
 	struct PoolTestLive
 	{
 		int a = 0;
-	};
-
-	class PoolTestElement : public FreeListPoolElement<PoolTestLive>
-	{
-	public:
-
-		PoolTestElement() : FreeListPoolElement<PoolTestLive>(){};
-		~PoolTestElement() = default;
 	};
 }
