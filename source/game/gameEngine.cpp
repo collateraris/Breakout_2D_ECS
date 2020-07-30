@@ -6,6 +6,8 @@
 #include <EventsStorage.h>
 #include <GameStateManager.h>
 #include <AssetsManager.h>
+#include <ComponentManager.h>
+#include <Component.h>
 
 using namespace breakout;
 
@@ -25,6 +27,10 @@ void GameEngine::Init()
     GameContext::Get().GetLogManager().Init();
     GameContext::Get().GetGameStateManager().Init();
     GameContext::Get().GetEventsStorage().Init();
+
+    auto& componentManager = ComponentManager::Get();
+    componentManager.CreateComponentPool<TestComponent>(25);
+    auto& component = componentManager.GetComponent<TestComponent>(0);
 
     LOG("Game Engine Init");
 }

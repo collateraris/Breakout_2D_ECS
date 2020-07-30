@@ -5,7 +5,7 @@
 
 namespace breakout
 {
-	template<typename freeListPoolElement>
+	template<class freeListPoolElement>
 	class FreeListObjectPool
 	{
 	public:
@@ -34,7 +34,7 @@ namespace breakout
 		std::vector<freeListPoolElement> m_poolElements = {};
 	};
 
-	template<typename freeListPoolElement>
+	template<class freeListPoolElement>
 	FreeListObjectPool<freeListPoolElement>::FreeListObjectPool(unsigned int poolSize)
 	{
 		m_poolSize = poolSize;
@@ -51,7 +51,7 @@ namespace breakout
 		m_poolElements[poolSize - 1].SetNext(nullptr);
 	}
 
-	template<typename freeListPoolElement>
+	template<class freeListPoolElement>
 	freeListPoolElement& FreeListObjectPool<freeListPoolElement>::Activate()
 	{
 		assert(m_firstAvailable != nullptr);
@@ -64,7 +64,7 @@ namespace breakout
 		return *newElement;
 	}
 
-	template<typename freeListPoolElement>
+	template<class freeListPoolElement>
 	void FreeListObjectPool<freeListPoolElement>::Deactivate(unsigned int poolIndex)
 	{
 		assert(poolIndex < m_poolSize);
@@ -76,7 +76,7 @@ namespace breakout
 		m_poolElements[poolIndex].Deactivate();
 	}
 
-	template<typename freeListPoolElement>
+	template<class freeListPoolElement>
 	void FreeListObjectPool<freeListPoolElement>::DeactivateAll()
 	{
 		for (unsigned int i = 0; i < m_poolSize; ++i)
@@ -87,20 +87,20 @@ namespace breakout
 		}
 	}
 
-	template<typename freeListPoolElement>
+	template<class freeListPoolElement>
 	unsigned int FreeListObjectPool<freeListPoolElement>::GetPoolSize() const
 	{
 		return m_poolSize;
 	}
 
-	template<typename freeListPoolElement>
+	template<class freeListPoolElement>
 	freeListPoolElement& FreeListObjectPool<freeListPoolElement>::GetPoolElement(unsigned int poolIndex)
 	{
 		assert(poolIndex < m_poolSize);
 		return m_poolElements[poolIndex];
 	}
 
-	template<typename freeListPoolElement>
+	template<class freeListPoolElement>
 	bool FreeListObjectPool<freeListPoolElement>::IsContainAvailablePlace() const
 	{
 		return m_firstAvailable != nullptr;

@@ -6,7 +6,7 @@
 
 namespace breakout
 {
-	template<typename liveStruct>
+	template<class liveStruct>
 	class FreeListPoolElement
 	{
 	public:
@@ -17,6 +17,8 @@ namespace breakout
 		bool IsActive();
 
 		void SetLive(const liveStruct live);
+
+		liveStruct& GetLive();
 
 	private:
 
@@ -35,46 +37,51 @@ namespace breakout
 		bool b_active = false;
 	};
 
-	template<typename liveStruct>
+	template<class liveStruct>
 	FreeListPoolElement<liveStruct>::FreeListPoolElement()
 	{
 
 	}
 
-	template<typename liveStruct>
+	template<class liveStruct>
 	FreeListPoolElement<liveStruct>* FreeListPoolElement<liveStruct>::GetNext()
 	{
 		return std::get<FreeListPoolElement<liveStruct>*>(m_next);
 	}
 
-	template<typename liveStruct>
+	template<class liveStruct>
 	void FreeListPoolElement<liveStruct>::SetNext(FreeListPoolElement<liveStruct>* next)
 	{
 		m_next = next;
 	}
 
-	template<typename liveStruct>
+	template<class liveStruct>
 	void FreeListPoolElement<liveStruct>::Activate()
 	{
 		b_active = true;
 	}
 
-	template<typename liveStruct>
+	template<class liveStruct>
 	void FreeListPoolElement<liveStruct>::Deactivate()
 	{
 		b_active = false;
 	}
 
-	template<typename liveStruct>
+	template<class liveStruct>
 	bool FreeListPoolElement<liveStruct>::IsActive()
 	{
 		return b_active;
 	}
 
-	template<typename liveStruct>
+	template<class liveStruct>
 	void FreeListPoolElement<liveStruct>::SetLive(const liveStruct live)
 	{
 		m_live = live;
 	}
 
+	template<class liveStruct>
+	liveStruct& FreeListPoolElement<liveStruct>::GetLive()
+	{
+		return std::get<liveStruct>(m_live);
+	}
 }

@@ -9,6 +9,7 @@ project "SysECS"
     includedirs
     {
         paths.ecs,
+        paths.memory,
     }
     
     files
