@@ -38,6 +38,8 @@ workspace ("Breakout")
        
     filter {}
 -----------------------------------------------------------------------------------------------------------------------
+group ("OpenGLMultimediaLib")
+    include ("lib_multimedia")
 group ("libraries")
     include ("sys_config")
     include ("sys_animation")
@@ -52,7 +54,6 @@ group ("libraries")
     include ("sys_ecs")
     include ("sys_gameState")
     include ("sys_resource")
-    include ("lib_multimedia")
 group ("")
     include ("game")
 -----------------------------------------------------------------------------------------------------------------------

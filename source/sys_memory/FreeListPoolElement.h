@@ -77,8 +77,4 @@ namespace breakout
 		m_live = live;
 	}
 
-	struct PoolTestLive
-	{
-		int a = 0;
-	};
 }
