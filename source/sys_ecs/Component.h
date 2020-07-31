@@ -24,18 +24,4 @@ namespace breakout
 
 	};
 
-	class TestComponent : BaseComponent
-	{
-	public:
-
-		TestComponent() {};
-
-
-		static EComponentType GetType()
-		{
-			return EComponentType::Sprite;
-		};
-
-		int a = 0;
-	};
 }
