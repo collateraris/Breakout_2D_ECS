@@ -7,6 +7,7 @@
 #include <EventsStorage.h>
 #include <MemoryManager.h>
 #include <SystemManager.h>
+#include <AssetsManager.h>
 
 #include <EntityComponentSystem.h>
 
@@ -45,6 +46,11 @@ LogManager& GameContext::GetLogManager()
 GameStateManager& GameContext::GetGameStateManager()
 {
 	return GameStateManager::Get();
+}
+
+AssetManager& GameContext::GetAssetManager()
+{
+	return AssetManager::Get();
 }
 
 EventsStorage& GameContext::GetEventsStorage()

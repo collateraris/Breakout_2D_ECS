@@ -15,13 +15,11 @@ Sprite::Sprite(Texture2D& texture, Shader& shader)
 void Sprite::Draw()
 {
 	static const std::string imageUniform = "uImage";
-	static const std::string projectionUniform = "uProjection";
-	static const std::string modelUniform = "uModel";
+	static const std::string projectionMovelUniform = "uProjectionModel";
 	static const std::string colorUniform = "uColor";
 	static const unsigned int IMAGE_LAYOUT_POSITION = 0;
 
 	Shader::Use(m_shaderID);
-	Shader::SetMatrix4f(m_shaderID, projectionUniform, m_projection);
 	Shader::SetInt(m_shaderID, imageUniform, IMAGE_LAYOUT_POSITION);
 	glm::mat4 model = glm::mat4(1.0f);
 	model = glm::translate(model, glm::vec3(m_position, 0.0f));
@@ -32,7 +30,9 @@ void Sprite::Draw()
 
 	model = glm::scale(model, glm::vec3(m_size, 1.0f));
 
-	Shader::SetMatrix4f(m_shaderID, modelUniform, model);
+	glm::mat4 projectionModel = m_projection * model;
+
+	Shader::SetMatrix4f(m_shaderID, projectionMovelUniform, projectionModel);
 	Shader::SetVector3f(m_shaderID, colorUniform, m_color);
 
 	glActiveTexture(GL_TEXTURE0);

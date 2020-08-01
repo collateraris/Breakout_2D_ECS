@@ -19,6 +19,7 @@ namespace breakout
 	class MemoryManager;
 	class SystemManager;
 	class EntityComponentSystem;
+	class AssetManager;
 
 	class GameContext
 	{
@@ -33,6 +34,7 @@ namespace breakout
 		GameStateManager& GetGameStateManager();
 		MemoryManager& GetMemoryManager();
 		SystemManager& GetSystemManager();
+		AssetManager& GetAssetManager();
 
 		EventsStorage& GetEventsStorage();
 

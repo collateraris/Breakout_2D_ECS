@@ -10,6 +10,7 @@ project "SysResource"
     {
         paths.resource,
         paths.lib_multimedia,
+        paths.glm.inc,
     }
     
     files

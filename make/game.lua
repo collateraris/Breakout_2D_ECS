@@ -83,6 +83,16 @@ project "Game"
         ["Header Files"] = 
         {
             paths.game .. "/*.h",
-        },		
+        },
+
+        ["Source Files/Bindings"] = 
+        {
+            paths.bindings .. "/**.cpp",
+        },
+        ["Header Files/Bindings"] = 
+        {
+            paths.bindings .. "/**.h",
+        },	
+
     }
 -----------------------------------------------------------------------------------------------------------------------

@@ -4,6 +4,7 @@ local paths     = {}
 paths.root      = path.getabsolute("..")
 paths.source    = paths.root   .. "/source"
 paths.game      = paths.source .. "/game"
+paths.bindings  = paths.game .. "/bindings"
 paths.config    = paths.source .. "/sys_config"
 paths.animation = paths.source .. "/sys_animation"
 paths.audio     = paths.source .. "/sys_audio"

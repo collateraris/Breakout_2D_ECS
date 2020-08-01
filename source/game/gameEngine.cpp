@@ -8,11 +8,17 @@
 #include <AssetsManager.h>
 #include <EntityComponentSystem.h>
 
+#include <bindings/AssetsBindings.h>
+#include <ShadersManager.h>
+#include <TexturesManager.h>
+
 using namespace breakout;
 
 GameEngine::GameEngine()
 {
     m_window = GameContext::Get().GetMainWindow();
+
+    AssetsBindings::BindAll();
 }
 
 GameEngine::~GameEngine()
@@ -27,14 +33,10 @@ void GameEngine::Init()
     GameContext::Get().GetGameStateManager().Init();
     GameContext::Get().GetEventsStorage().Init();
 
-    auto& ecs = GameContext::Get().GetECS();
-    ecs.AddComponentByEntityId<BaseComponent>(0);
-    ecs.AddComponentByEntityId<BaseComponent>(1);
-    ecs.AddComponentByEntityId<BaseComponent>(2);
-    ecs.AddComponentByEntityId<BaseComponent>(3);
-    ecs.AddComponentByEntityId<BaseComponent>(4);
-    auto& components = ecs.GetAllComponentsByType<BaseComponent>();
-    auto& component = ComponentManager::Get().GetComponent<BaseComponent>(0);
+    auto& assetManager = GameContext::Get().GetAssetManager();
+    assetManager.LoadAll();
+    auto& shaderManager = ShadersManager::Get();
+    auto& textureManager = TexturesManager::Get();
 
     LOG("Game Engine Init");
 }

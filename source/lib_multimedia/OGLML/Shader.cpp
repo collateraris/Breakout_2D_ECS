@@ -90,7 +90,7 @@ bool Shader::Compile(const std::string& vertexCode, const std::string& fragmentC
     fragment = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragment, 1, &fShaderCode, NULL);
     glCompileShader(fragment);
-    glGetShaderiv(vertex, GL_COMPILE_STATUS, &success);
+    glGetShaderiv(fragment, GL_COMPILE_STATUS, &success);
 
     if (!success)
     {
