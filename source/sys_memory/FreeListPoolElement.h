@@ -14,7 +14,7 @@ namespace breakout
 		FreeListPoolElement();
 		~FreeListPoolElement() = default;
 
-		bool IsActive();
+		bool IsActive() const;
 
 		void SetContainer(const containerStruct& container);
 
@@ -68,7 +68,7 @@ namespace breakout
 	}
 
 	template<class containerStruct>
-	bool FreeListPoolElement<containerStruct>::IsActive()
+	bool FreeListPoolElement<containerStruct>::IsActive() const
 	{
 		return b_active;
 	}

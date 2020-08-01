@@ -4,7 +4,7 @@ namespace breakout
 {
 	enum class EShaderAssetId : int
 	{
-		Sprite,
+		Sprite = 0,
 		MAX,
 	};
 }

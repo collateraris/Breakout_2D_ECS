@@ -11,8 +11,7 @@ using namespace oglml;
 
 Texture2D::~Texture2D()
 {
-	if(b_init)
-		glDeleteTextures(1, &m_textureID);
+
 }
 
 bool Texture2D::loadFromFile(const std::string& path)

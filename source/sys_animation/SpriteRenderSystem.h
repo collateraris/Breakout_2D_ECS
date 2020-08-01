@@ -17,12 +17,13 @@ namespace breakout
         SpriteRenderSystem()
             : BaseSystem() {}
 
+
         virtual ~SpriteRenderSystem() {};
 
-        void Init() override {}
-        void Update(float dtMilliseconds) override { };
+        virtual void Init() override;
+        virtual void Update(float dtMilliseconds) override;
 
-        void Render() { };
+        void Render();
 
 	};
 }

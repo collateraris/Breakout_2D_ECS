@@ -94,5 +94,14 @@ project "Game"
             paths.bindings .. "/**.h",
         },	
 
+        ["Source Files/Components"] = 
+        {
+            paths.components .. "/**.cpp",
+        },
+        ["Header Files/Components"] = 
+        {
+            paths.components .. "/**.h",
+        },
+
     }
 -----------------------------------------------------------------------------------------------------------------------

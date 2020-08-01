@@ -10,6 +10,10 @@ project "SysAnimation"
     {
         paths.animation,
         paths.ecs,
+        paths.lib_multimedia,
+        paths.game,
+        paths.memory,
+        paths.glm.inc
     }
     
     files

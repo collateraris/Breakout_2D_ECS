@@ -2,6 +2,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <cassert>
 
 namespace breakout
 {
@@ -18,6 +19,8 @@ namespace breakout
 		bool Unload(int resourceId);
 
 		bool GetResource(int resourceId, ResourceType& resource);
+
+		ResourceType& GetResource(int resourceId);
 
 	protected:
 
@@ -77,4 +80,14 @@ namespace breakout
 		resource = found->second;
 		return true;
 	}
+
+	template <class ResourceType>
+	ResourceType& ResourcesManager<ResourceType>::GetResource(int resourceId)
+	{
+		auto foundIt = m_resources.find(resourceId);
+		assert(foundIt != m_resources.end());
+
+		return foundIt->second;
+	}
+
 }

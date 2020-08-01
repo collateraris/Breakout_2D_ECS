@@ -6,9 +6,18 @@
 
 using namespace oglml;
 
-Sprite::Sprite(Texture2D& texture, Shader& shader)
+Sprite::Sprite()
+{
+
+}
+
+void Sprite::SetTexture(Texture2D& texture)
 {
 	m_textureID = texture.GetTextureID();
+}
+
+void Sprite::SetShader(Shader& shader)
+{
 	m_shaderID = shader.GetProgramID();
 }
 
@@ -51,17 +60,17 @@ void Sprite::SetRotateAngle(float rotate)
 	m_rotate = rotate;
 }
 
-void Sprite::SetColor(std::array<float, 3>& color)
+void Sprite::SetColor(const std::array<float, 3>& color)
 {
 	m_color = glm::vec3(color[0], color[1], color[2]);
 }
 
-void Sprite::SetPosition(std::array<float, 2>& position)
+void Sprite::SetPosition(const std::array<float, 2>& position)
 {
 	m_position = glm::vec2(position[0], position[1]);
 }
 
-void Sprite::SetSize(std::array<float, 2>& size)
+void Sprite::SetSize(const std::array<float, 2>& size)
 {
 	m_size = glm::vec2(size[0], size[1]);
 }

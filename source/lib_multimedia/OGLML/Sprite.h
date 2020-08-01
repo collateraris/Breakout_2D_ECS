@@ -13,22 +13,24 @@ namespace oglml
 	class Sprite
 	{
 	public:
-		Sprite() = default;
-		Sprite(Texture2D& texture, Shader& shader);
+		Sprite();
 		~Sprite() = default;
+
+		void SetTexture(Texture2D& texture);
+		void SetShader(Shader& shader);
 
 		void Draw();
 
 		void SetScreenSize(float width, float height);
 		void SetRotateAngle(float rotate);
-		void SetColor(std::array<float, 3>& color);
-		void SetPosition(std::array<float, 2>& position);
-		void SetSize(std::array<float, 2>& size);
+		void SetColor(const std::array<float, 3>& color);
+		void SetPosition(const std::array<float, 2>& position);
+		void SetSize(const std::array<float, 2>& size);
 
 	private:
 
-		unsigned int m_textureID;
-		unsigned int m_shaderID;
+		unsigned int m_textureID = 0;
+		unsigned int m_shaderID = 0;
 
 		glm::mat4 m_projection = glm::ortho(0.0f, 800.0f, 600.0f, 0.0f, -1.0f, 1.0f);
 		glm::vec2 m_position = glm::vec2(0.);

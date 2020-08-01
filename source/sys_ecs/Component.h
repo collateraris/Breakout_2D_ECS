@@ -6,6 +6,7 @@ namespace breakout
 	{
 		None = 0,
 		Sprite = 1,
+		Transform = 2,
 		MAX,
 	};
 

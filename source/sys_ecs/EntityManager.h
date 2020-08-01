@@ -15,12 +15,23 @@ namespace breakout
 
 		using EntityId = int;
 
+		using EntityTypeId = int;
+
+		using EntityCounter = unsigned int;
+
 	public:
 
 		static EntityManager& Get();
 
+		int Create(int entityTypeId);
+
+		void Delete(int entityId);
+
 		template<class componentStruct>
 		void AddComponentByEntityId(int entityId, int componentId);
+
+		template<class componentStruct>
+		int GetComponentIdByEntityId(int entityId);
 
 	private:
 
@@ -32,6 +43,8 @@ namespace breakout
 		void operator=(EntityManager&&) = delete;
 
 		std::unordered_map<EntityId, ComponentsIdByType> m_entityStorage;
+
+		std::unordered_map<EntityTypeId, EntityCounter> m_entityTypeCounter;
 	};
 
 	template<class componentStruct>
@@ -52,5 +65,19 @@ namespace breakout
 		assert(foundComponentIt == foundEntityIt->second.end());
 
 		foundEntityIt->second[componentType] = componentId;
+	}
+
+	template<class componentStruct>
+	int EntityManager::GetComponentIdByEntityId(int entityId)
+	{
+		EComponentType componentType = componentStruct::GetType();
+
+		auto foundEntityIt = m_entityStorage.find(entityId);
+		assert(foundEntityIt != m_entityStorage.end());
+
+		auto foundComponentIt = foundEntityIt->second.find(componentType);
+		assert(foundComponentIt != foundEntityIt->second.end());
+
+		return foundComponentIt->second;
 	}
 }

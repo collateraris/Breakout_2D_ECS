@@ -10,12 +10,16 @@
 #include <AssetsManager.h>
 
 #include <EntityComponentSystem.h>
+#include <SystemManager.h>
+#include <SpriteRenderSystem.h>
 
 using namespace breakout;
 
 GameContext::GameContext()
 {
 	m_mainWindow = std::make_shared<GameWindow>();
+
+	m_spriteRenderSystem = SystemManager::Get().CreateSystem<SpriteRenderSystem>();
 }
 
 GameContext::~GameContext()
@@ -71,4 +75,9 @@ SystemManager& GameContext::GetSystemManager()
 EntityComponentSystem& GameContext::GetECS()
 {
 	return EntityComponentSystem::Get();
+}
+
+SpriteRenderSystem* GameContext::GetSpriteRenderSystem()
+{
+	return m_spriteRenderSystem;
 }

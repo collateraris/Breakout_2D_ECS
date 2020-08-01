@@ -1,5 +1,6 @@
 #version 430 core
-layout (location = 0) in vec4 aVertex; // <vec2 position, vec2 texCoords>
+layout (location = 0) in vec3 aPos;
+layout (location = 1) in vec2 aTex;
 
 out vec2 vTexCoords;
 
@@ -7,6 +8,6 @@ uniform mat4 uProjectionModel;
 
 void main()
 {
-    vTexCoords = aVertex.zw;
-    gl_Position = uProjectionModel * vec4(aVertex.xy, 0.0, 1.0);
+    vTexCoords = aTex;
+    gl_Position = uProjectionModel * vec4(aPos, 1.0);
 }

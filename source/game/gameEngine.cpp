@@ -7,10 +7,12 @@
 #include <GameStateManager.h>
 #include <AssetsManager.h>
 #include <EntityComponentSystem.h>
+#include <ECSBreakout.h>
 
 #include <bindings/AssetsBindings.h>
-#include <ShadersManager.h>
-#include <TexturesManager.h>
+
+#include <SpriteRenderSystem.h>
+
 
 using namespace breakout;
 
@@ -33,10 +35,9 @@ void GameEngine::Init()
     GameContext::Get().GetGameStateManager().Init();
     GameContext::Get().GetEventsStorage().Init();
 
-    auto& assetManager = GameContext::Get().GetAssetManager();
-    assetManager.LoadAll();
-    auto& shaderManager = ShadersManager::Get();
-    auto& textureManager = TexturesManager::Get();
+    GameContext::Get().GetAssetManager().LoadAll();
+
+    ECSBreakout::CreateComponent(EEntityType::Awersome);
 
     LOG("Game Engine Init");
 }
@@ -47,6 +48,9 @@ void GameEngine::Start()
 
     while (!m_window->IsOpen())
     {
+        m_window->ClearColorBuffer();
+
+        Render();
 
         GameContext::Get().GetEventsStorage().SwapStorages();
 
@@ -55,4 +59,9 @@ void GameEngine::Start()
     }
 
     m_window->Terminate();
+}
+
+void GameEngine::Render()
+{
+    GameContext::Get().GetSpriteRenderSystem()->Render();
 }

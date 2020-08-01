@@ -20,8 +20,13 @@ namespace breakout
 		template<class componentStruct>
 		const std::vector<FreeListPoolElement<componentStruct>>& GetAllComponentsByType();
 
-		template<typename componentStruct>
+		template<class componentStruct>
 		componentStruct& AddComponentByEntityId(int entityId);
+
+		template<class componentStruct>
+		componentStruct& GetComponentByEntityId(int entityId);
+
+		int CreateEntityByEntityTypeId(int entityTypeId);
 
 	private:
 
@@ -41,7 +46,7 @@ namespace breakout
 		return ComponentManager::Get().GetComponents<componentStruct>();
 	}
 
-	template<typename componentStruct>
+	template<class componentStruct>
 	componentStruct& EntityComponentSystem::AddComponentByEntityId(int entityId)
 	{
 		EComponentType type = componentStruct::GetType();
@@ -53,6 +58,14 @@ namespace breakout
 
 		EntityManager::Get().AddComponentByEntityId<componentStruct>(component.m_entityId, component.m_componentId);
 
+		return component;
+	}
+
+	template<class componentStruct>
+	componentStruct& EntityComponentSystem::GetComponentByEntityId(int entityId)
+	{
+		int componentId = EntityManager::Get().GetComponentIdByEntityId<componentStruct>(entityId);
+		auto& component = ComponentManager::Get().GetComponent<componentStruct>(componentId);
 		return component;
 	}
 }

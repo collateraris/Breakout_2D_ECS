@@ -21,6 +21,8 @@ namespace breakout
 	class EntityComponentSystem;
 	class AssetManager;
 
+	class SpriteRenderSystem;
+
 	class GameContext
 	{
 	public:
@@ -40,6 +42,8 @@ namespace breakout
 
 		EntityComponentSystem& GetECS();
 
+		SpriteRenderSystem* GetSpriteRenderSystem();
+
 	private:
 
 		GameContext();
@@ -50,5 +54,7 @@ namespace breakout
 		void operator=(GameContext&&) = delete;
 
 		std::shared_ptr<GameWindow> m_mainWindow;
+
+		SpriteRenderSystem* m_spriteRenderSystem = nullptr;
 	};
 }
