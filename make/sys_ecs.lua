@@ -10,6 +10,7 @@ project "SysECS"
     {
         paths.ecs,
         paths.memory,
+        paths.animation,
     }
     
     files

@@ -18,6 +18,7 @@ namespace breakout
 	class EventsStorage;
 	class MemoryManager;
 	class SystemManager;
+	class EntityComponentSystem;
 
 	class GameContext
 	{
@@ -34,6 +35,8 @@ namespace breakout
 		SystemManager& GetSystemManager();
 
 		EventsStorage& GetEventsStorage();
+
+		EntityComponentSystem& GetECS();
 
 	private:
 

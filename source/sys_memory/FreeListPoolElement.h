@@ -6,7 +6,7 @@
 
 namespace breakout
 {
-	template<class liveStruct>
+	template<class containerStruct>
 	class FreeListPoolElement
 	{
 	public:
@@ -16,72 +16,72 @@ namespace breakout
 
 		bool IsActive();
 
-		void SetLive(const liveStruct live);
+		void SetContainer(const containerStruct& container);
 
-		liveStruct& GetLive();
+		containerStruct& GetContainer();
 
 	private:
 
-		friend class FreeListObjectPool<FreeListPoolElement<liveStruct>>;
+		friend class FreeListObjectPool<FreeListPoolElement<containerStruct>>;
 
-		FreeListPoolElement<liveStruct>* GetNext();
+		FreeListPoolElement<containerStruct>* GetNext();
 
-		void SetNext(FreeListPoolElement<liveStruct>* next);
+		void SetNext(FreeListPoolElement<containerStruct>* next);
 
 		void Activate();
 
 		void Deactivate();
 
-		std::variant<liveStruct, FreeListPoolElement<liveStruct>*> m_live, m_next;
+		std::variant<containerStruct, FreeListPoolElement<containerStruct>*> m_container, m_next;
 
 		bool b_active = false;
 	};
 
-	template<class liveStruct>
-	FreeListPoolElement<liveStruct>::FreeListPoolElement()
+	template<class containerStruct>
+	FreeListPoolElement<containerStruct>::FreeListPoolElement()
 	{
 
 	}
 
-	template<class liveStruct>
-	FreeListPoolElement<liveStruct>* FreeListPoolElement<liveStruct>::GetNext()
+	template<class containerStruct>
+	FreeListPoolElement<containerStruct>* FreeListPoolElement<containerStruct>::GetNext()
 	{
-		return std::get<FreeListPoolElement<liveStruct>*>(m_next);
+		return std::get<FreeListPoolElement<containerStruct>*>(m_next);
 	}
 
-	template<class liveStruct>
-	void FreeListPoolElement<liveStruct>::SetNext(FreeListPoolElement<liveStruct>* next)
+	template<class containerStruct>
+	void FreeListPoolElement<containerStruct>::SetNext(FreeListPoolElement<containerStruct>* next)
 	{
 		m_next = next;
 	}
 
-	template<class liveStruct>
-	void FreeListPoolElement<liveStruct>::Activate()
+	template<class containerStruct>
+	void FreeListPoolElement<containerStruct>::Activate()
 	{
 		b_active = true;
 	}
 
-	template<class liveStruct>
-	void FreeListPoolElement<liveStruct>::Deactivate()
+	template<class containerStruct>
+	void FreeListPoolElement<containerStruct>::Deactivate()
 	{
 		b_active = false;
 	}
 
-	template<class liveStruct>
-	bool FreeListPoolElement<liveStruct>::IsActive()
+	template<class containerStruct>
+	bool FreeListPoolElement<containerStruct>::IsActive()
 	{
 		return b_active;
 	}
 
-	template<class liveStruct>
-	void FreeListPoolElement<liveStruct>::SetLive(const liveStruct live)
+	template<class containerStruct>
+	void FreeListPoolElement<containerStruct>::SetContainer(const containerStruct& container)
 	{
-		m_live = live;
+		m_container = container;
 	}
 
-	template<class liveStruct>
-	liveStruct& FreeListPoolElement<liveStruct>::GetLive()
+	template<class containerStruct>
+	containerStruct& FreeListPoolElement<containerStruct>::GetContainer()
 	{
-		return std::get<liveStruct>(m_live);
+		return std::get<containerStruct>(m_container);
 	}
 }

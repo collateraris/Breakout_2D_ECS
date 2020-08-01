@@ -2,10 +2,10 @@
 
 namespace breakout
 {
-	enum struct EComponentType : unsigned int
+	enum struct EComponentType : int
 	{
-		None,
-		Sprite,
+		None = 0,
+		Sprite = 1,
 		MAX,
 	};
 
@@ -13,14 +13,13 @@ namespace breakout
 	{
 	public:
 
+		int m_componentId = -1;
+		int m_entityId = -1;
+
 		static EComponentType GetType()
 		{
 			return EComponentType::None;
 		};
-
-	protected:
-
-		unsigned int m_id = 0;
 
 	};
 

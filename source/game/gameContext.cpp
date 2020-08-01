@@ -8,6 +8,8 @@
 #include <MemoryManager.h>
 #include <SystemManager.h>
 
+#include <EntityComponentSystem.h>
+
 using namespace breakout;
 
 GameContext::GameContext()
@@ -58,4 +60,9 @@ MemoryManager& GameContext::GetMemoryManager()
 SystemManager& GameContext::GetSystemManager()
 {
 	return SystemManager::Get();
+}
+
+EntityComponentSystem& GameContext::GetECS()
+{
+	return EntityComponentSystem::Get();
 }

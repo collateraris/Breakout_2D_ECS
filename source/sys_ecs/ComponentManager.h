@@ -8,11 +8,17 @@
 #include <unordered_map>
 #include <functional>
 #include <any>
+#include <vector>
 
 namespace breakout
 {
 	class ComponentManager
 	{
+		using ObjPool = std::any;
+
+		template<class componentStruct>
+		using ComponentPool = FreeListObjectPool<FreeListPoolElement<componentStruct>>;
+
 	public:
 
 		static ComponentManager& Get();
@@ -21,7 +27,7 @@ namespace breakout
 		void CreateComponentPool(unsigned int poolSize);
 
 		template<class componentStruct>
-		void Delete(int componentId);
+		componentStruct& NextComponentActivate();
 
 		template<class componentStruct>
 		componentStruct& GetComponent(int componentId);
@@ -31,6 +37,9 @@ namespace breakout
 
 		template<class componentStruct>
 		void DeleteAll();
+
+		template<class componentStruct>
+		const std::vector<FreeListPoolElement<componentStruct>>& GetComponents();
 
 		template<class componentStruct>
 		bool IsContainAvailablePlace() const;
@@ -44,11 +53,6 @@ namespace breakout
 		void operator=(ComponentManager&) = delete;
 		void operator=(ComponentManager&&) = delete;
 
-		using ObjPool = std::any;
-
-		template<class componentStruct>
-		using ComponentPool = FreeListObjectPool<FreeListPoolElement<componentStruct>>;
-
 		std::unordered_map<EComponentType, ObjPool> m_componentsPools;
 	};
 
@@ -57,18 +61,22 @@ namespace breakout
 	{
 		EComponentType type = componentStruct::GetType();
 
-		m_componentsPools[type] = std::move(FreeListObjectPool<FreeListPoolElement<componentStruct>>(poolSize));
+		m_componentsPools[type] = std::make_any<FreeListObjectPool<FreeListPoolElement<componentStruct>>>(poolSize);
 	}
 
 	template<class componentStruct>
-	void ComponentManager::Delete(int componentId)
+	componentStruct& ComponentManager::NextComponentActivate()
 	{
 		EComponentType type = componentStruct::GetType();
 
 		auto foundIt = m_componentsPools.find(type);
 		assert(foundIt != m_componentsPools.end());
+		assert(foundIt->second.has_value());
 
-		std::any_cast<ComponentPool<componentStruct>>(foundIt->second).Deactivate(componentId);
+		componentStruct& component = std::any_cast<ComponentPool<componentStruct>>(&foundIt->second)
+			->Activate().GetContainer();
+
+		return component;
 	}
 
 	template<class componentStruct>
@@ -78,8 +86,12 @@ namespace breakout
 
 		auto foundIt = m_componentsPools.find(type);
 		assert(foundIt != m_componentsPools.end());
+		assert(foundIt->second.has_value());
 
-		return std::any_cast<ComponentPool<componentStruct>>(foundIt->second).GetPoolElement(componentId).GetLive();
+		componentStruct& component = std::any_cast<ComponentPool<componentStruct>>(&foundIt->second)
+			->GetPoolElement(componentId).GetContainer();
+
+		return component;
 	}
 
 	template<class componentStruct>
@@ -89,8 +101,9 @@ namespace breakout
 
 		auto foundIt = m_componentsPools.find(type);
 		assert(foundIt != m_componentsPools.end());
+		assert(foundIt->second.has_value());
 
-		return std::any_cast<ComponentPool<componentStruct>>(foundIt->second).GetPoolSize();
+		return std::any_cast<ComponentPool<componentStruct>>(&foundIt->second)->GetPoolSize();
 	}
 
 	template<class componentStruct>
@@ -100,8 +113,21 @@ namespace breakout
 
 		auto foundIt = m_componentsPools.find(type);
 		assert(foundIt != m_componentsPools.end());
+		assert(foundIt->second.has_value());
 
-		std::any_cast<ComponentPool<componentStruct>>(foundIt->second).DeactivateAll();
+		std::any_cast<ComponentPool<componentStruct>>(&foundIt->second)->DeactivateAll();
+	}
+
+	template<class componentStruct>
+	const std::vector<FreeListPoolElement<componentStruct>>& ComponentManager::GetComponents()
+	{
+		EComponentType type = componentStruct::GetType();
+
+		auto foundIt = m_componentsPools.find(type);
+		assert(foundIt != m_componentsPools.end());
+		assert(foundIt->second.has_value());
+
+		return std::any_cast<ComponentPool<componentStruct>>(&foundIt->second)->GetPoolElements();
 	}
 
 	template<class componentStruct>
@@ -111,7 +137,8 @@ namespace breakout
 
 		auto foundIt = m_componentsPools.find(type);
 		assert(foundIt != m_componentsPools.end());
+		assert(foundIt->second.has_value());
 
-		return std::any_cast<ComponentPool<componentStruct>>(foundIt->second).IsContainAvailablePlace();
+		return std::any_cast<ComponentPool<componentStruct>>(&foundIt->second)->IsContainAvailablePlace();
 	}
 }

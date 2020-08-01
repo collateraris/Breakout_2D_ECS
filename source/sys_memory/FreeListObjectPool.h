@@ -23,11 +23,13 @@ namespace breakout
 
 		freeListPoolElement& GetPoolElement(unsigned int poolIndex);
 
+		const std::vector<freeListPoolElement>& GetPoolElements();
+
 		bool IsContainAvailablePlace() const;
 
 	private:
 
-		unsigned int m_poolSize;
+		unsigned int m_poolSize = 0;
 
 		freeListPoolElement* m_firstAvailable = nullptr;
 
@@ -98,6 +100,12 @@ namespace breakout
 	{
 		assert(poolIndex < m_poolSize);
 		return m_poolElements[poolIndex];
+	}
+
+	template<class freeListPoolElement>
+	const std::vector<freeListPoolElement>& FreeListObjectPool<freeListPoolElement>::GetPoolElements()
+	{
+		return m_poolElements;
 	}
 
 	template<class freeListPoolElement>

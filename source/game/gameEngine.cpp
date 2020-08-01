@@ -6,8 +6,7 @@
 #include <EventsStorage.h>
 #include <GameStateManager.h>
 #include <AssetsManager.h>
-#include <SpriteRenderSystem.h>
-#include <SystemManager.h>
+#include <EntityComponentSystem.h>
 
 using namespace breakout;
 
@@ -28,9 +27,14 @@ void GameEngine::Init()
     GameContext::Get().GetGameStateManager().Init();
     GameContext::Get().GetEventsStorage().Init();
 
-    SystemManager::Get().CreateSystem<SpriteRenderSystem>();
-    auto spriteSystem = SystemManager::Get().GetSystem<SpriteRenderSystem>();
-    SystemManager::Get().Reset();
+    auto& ecs = GameContext::Get().GetECS();
+    ecs.AddComponentByEntityId<BaseComponent>(0);
+    ecs.AddComponentByEntityId<BaseComponent>(1);
+    ecs.AddComponentByEntityId<BaseComponent>(2);
+    ecs.AddComponentByEntityId<BaseComponent>(3);
+    ecs.AddComponentByEntityId<BaseComponent>(4);
+    auto& components = ecs.GetAllComponentsByType<BaseComponent>();
+    auto& component = ComponentManager::Get().GetComponent<BaseComponent>(0);
 
     LOG("Game Engine Init");
 }
