@@ -23,6 +23,7 @@ workspace ("Breakout")
     system ("Windows")
     systemversion (get_sdk_version())
     linkoptions { '/NODEFAULTLIB:"libcmt.lib"' }
+    cppdialect "C++17"
 
     filter ("configurations:Debug*")
         defines { "_DEBUG", "GLEW_STATIC"}
@@ -37,6 +38,8 @@ workspace ("Breakout")
        
     filter {}
 -----------------------------------------------------------------------------------------------------------------------
+group ("OpenGLMultimediaLib")
+    include ("lib_multimedia")
 group ("libraries")
     include ("sys_config")
     include ("sys_animation")
@@ -49,7 +52,8 @@ group ("libraries")
     include ("sys_telemetry")
     include ("sys_ui")
     include ("sys_ecs")
-	include ("sys_gameState")
+    include ("sys_gameState")
+    include ("sys_resource")
 group ("")
     include ("game")
 -----------------------------------------------------------------------------------------------------------------------

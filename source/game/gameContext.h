@@ -14,6 +14,14 @@ namespace breakout
 	class GameWindow;
 	class ConfigManager;
 	class LogManager;
+	class GameStateManager;
+	class EventsStorage;
+	class MemoryManager;
+	class SystemManager;
+	class EntityComponentSystem;
+	class AssetManager;
+
+	class SpriteRenderSystem;
 
 	class GameContext
 	{
@@ -22,8 +30,19 @@ namespace breakout
 		static GameContext& Get();
 
 		std::shared_ptr<GameWindow>& GetMainWindow();
+
 		ConfigManager& GetConfigManager();
 		LogManager& GetLogManager();
+		GameStateManager& GetGameStateManager();
+		MemoryManager& GetMemoryManager();
+		SystemManager& GetSystemManager();
+		AssetManager& GetAssetManager();
+
+		EventsStorage& GetEventsStorage();
+
+		EntityComponentSystem& GetECS();
+
+		SpriteRenderSystem* GetSpriteRenderSystem();
 
 	private:
 
@@ -35,5 +54,7 @@ namespace breakout
 		void operator=(GameContext&&) = delete;
 
 		std::shared_ptr<GameWindow> m_mainWindow;
+
+		SpriteRenderSystem* m_spriteRenderSystem = nullptr;
 	};
 }

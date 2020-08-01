@@ -21,7 +21,17 @@ namespace breakout
 
         void Terminate();
 
+        void ClearColorBuffer();
+
+        int GetWidth();
+
+        int GetHeight();
+
     protected:
+
         GLFWwindow* m_window = nullptr;
+
+        int m_width = 0;
+        int m_height = 0;
     };
 }

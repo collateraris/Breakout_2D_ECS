@@ -1,36 +1,33 @@
 paths = require "paths"
 -----------------------------------------------------------------------------------------------------------------------
-project "SysAnimation"
+project "SysResource"
     language "C++"
     characterset "MBCS"
     kind "StaticLib"
-    targetname "sys_animation"
+    targetname "sys_resource"
     
     includedirs
     {
-        paths.animation,
-        paths.ecs,
+        paths.resource,
         paths.lib_multimedia,
-        paths.game,
-        paths.memory,
-        paths.glm.inc
+        paths.glm.inc,
     }
     
     files
     {
-        paths.animation .. "/**.cpp",
-        paths.animation .. "/**.h",
+        paths.resource .. "/**.cpp",
+        paths.resource .. "/**.h",
     }
     
     vpaths
     {
         ["Source Files"] = 
         {
-            paths.animation .. "/**.cpp",
+            paths.resource .. "/**.cpp",
         },
         ["Header Files"] = 
         {
-            paths.animation .. "/**.h",
+            paths.resource .. "/**.h",
         },
     }
 -----------------------------------------------------------------------------------------------------------------------

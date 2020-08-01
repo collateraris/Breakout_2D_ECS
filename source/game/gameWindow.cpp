@@ -33,11 +33,11 @@ void GameWindow::Init()
 	XPath windowConfig = GameContext::Get().GetConfigManager().GetRoot().GetPath("window");
 
 	std::string title = windowConfig.GetAttribute<std::string>("title");
-	int windowWidthPixels = windowConfig.GetAttribute<int>("width");
-	int windowHeightPixels = windowConfig.GetAttribute<int>("height");
+	m_width = windowConfig.GetAttribute<int>("width");
+	m_height = windowConfig.GetAttribute<int>("height");
 	
 
-	GLFWwindow* window = glfwCreateWindow(windowWidthPixels, windowHeightPixels, title.c_str(), nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(m_width, m_height, title.c_str(), nullptr, nullptr);
 	if (window == nullptr)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -89,9 +89,25 @@ void GameWindow::SwapBuffers()
 	glfwSwapBuffers(m_window);
 }
 
+void GameWindow::ClearColorBuffer()
+{
+	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+}
+
 void GameWindow::Terminate()
 {
 	glfwTerminate();
+}
+
+int GameWindow::GetWidth()
+{
+	return m_width;
+}
+
+int GameWindow::GetHeight()
+{
+	return m_height;
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)

@@ -9,6 +9,11 @@ project "SysECS"
     includedirs
     {
         paths.ecs,
+        paths.memory,
+        paths.animation,
+        paths.game,
+        paths.lib_multimedia,
+        paths.glm.inc,
     }
     
     files

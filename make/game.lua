@@ -27,6 +27,7 @@ project "Game"
         paths.stb_image.inc,
         paths.tinyxml2.inc,
         paths.config,
+        paths.events,
 		paths.gameState,
 		paths.telemetry,
 		paths.input,
@@ -36,6 +37,8 @@ project "Game"
 		paths.animation,
 		paths.profile,
         paths.audio,
+        paths.resource,
+        paths.lib_multimedia
     }
     
     libdirs
@@ -58,6 +61,8 @@ project "Game"
         "SysUI",
         "SysECS",
         "SysGameState",
+        "SysResource",
+        "LibMultimedia",
         "opengl32",
         "glfw3",
         "glew32s"
@@ -78,6 +83,25 @@ project "Game"
         ["Header Files"] = 
         {
             paths.game .. "/*.h",
-        },		
+        },
+
+        ["Source Files/Bindings"] = 
+        {
+            paths.bindings .. "/**.cpp",
+        },
+        ["Header Files/Bindings"] = 
+        {
+            paths.bindings .. "/**.h",
+        },	
+
+        ["Source Files/Components"] = 
+        {
+            paths.components .. "/**.cpp",
+        },
+        ["Header Files/Components"] = 
+        {
+            paths.components .. "/**.h",
+        },
+
     }
 -----------------------------------------------------------------------------------------------------------------------

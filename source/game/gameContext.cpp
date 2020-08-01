@@ -3,12 +3,23 @@
 #include <gameWindow.h>
 #include <ConfigManager.h>
 #include <LogManager.h>
+#include <GameStateManager.h>
+#include <EventsStorage.h>
+#include <MemoryManager.h>
+#include <SystemManager.h>
+#include <AssetsManager.h>
+
+#include <EntityComponentSystem.h>
+#include <SystemManager.h>
+#include <SpriteRenderSystem.h>
 
 using namespace breakout;
 
 GameContext::GameContext()
 {
 	m_mainWindow = std::make_shared<GameWindow>();
+
+	m_spriteRenderSystem = SystemManager::Get().CreateSystem<SpriteRenderSystem>();
 }
 
 GameContext::~GameContext()
@@ -34,4 +45,39 @@ ConfigManager& GameContext::GetConfigManager()
 LogManager& GameContext::GetLogManager()
 {
 	return LogManager::Get();
+}
+
+GameStateManager& GameContext::GetGameStateManager()
+{
+	return GameStateManager::Get();
+}
+
+AssetManager& GameContext::GetAssetManager()
+{
+	return AssetManager::Get();
+}
+
+EventsStorage& GameContext::GetEventsStorage()
+{
+	return EventsStorage::Get();
+}
+
+MemoryManager& GameContext::GetMemoryManager()
+{
+	return MemoryManager::Get();
+}
+
+SystemManager& GameContext::GetSystemManager()
+{
+	return SystemManager::Get();
+}
+
+EntityComponentSystem& GameContext::GetECS()
+{
+	return EntityComponentSystem::Get();
+}
+
+SpriteRenderSystem* GameContext::GetSpriteRenderSystem()
+{
+	return m_spriteRenderSystem;
 }

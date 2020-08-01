@@ -15,6 +15,10 @@ namespace breakout
         void Init();
         void Start();
 
+    protected:
+
+        void Render();
+
     private:
 
         std::shared_ptr<GameWindow> m_window;
