@@ -1,5 +1,9 @@
 #pragma once
 
+#include <LinearAllocator.h>
+
+#include <memory>
+
 namespace breakout
 {
 	class MemoryManager
@@ -7,6 +11,8 @@ namespace breakout
 	public:
 
 		static MemoryManager& Get();
+
+		std::shared_ptr<LinearAllocator> GetGlobalAllocator() const;
 
 	private:
 
@@ -16,5 +22,7 @@ namespace breakout
 		MemoryManager(MemoryManager&&) = delete;
 		void operator=(MemoryManager&) = delete;
 		void operator=(MemoryManager&&) = delete;
+
+		std::shared_ptr<LinearAllocator> m_globalAllocator;
 	};
 }

@@ -9,6 +9,7 @@ project "SysAnimation"
     includedirs
     {
         paths.animation,
+        paths.ecs,
     }
     
     files

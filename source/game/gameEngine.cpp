@@ -6,8 +6,8 @@
 #include <EventsStorage.h>
 #include <GameStateManager.h>
 #include <AssetsManager.h>
-#include <LinearAllocator.h>
-#include <Component.h>
+#include <SpriteRenderSystem.h>
+#include <SystemManager.h>
 
 using namespace breakout;
 
@@ -28,11 +28,9 @@ void GameEngine::Init()
     GameContext::Get().GetGameStateManager().Init();
     GameContext::Get().GetEventsStorage().Init();
 
-    size_t GLOBAL_POOL_SIZE = sizeof(size_t) * 100000;
-    LinearAllocator allocator(GLOBAL_POOL_SIZE);
-
-    auto component = Allocate<BaseComponent>(&allocator);
-    Deallocate(&allocator, component);
+    SystemManager::Get().CreateSystem<SpriteRenderSystem>();
+    auto spriteSystem = SystemManager::Get().GetSystem<SpriteRenderSystem>();
+    SystemManager::Get().Reset();
 
     LOG("Game Engine Init");
 }

@@ -17,6 +17,7 @@ namespace breakout
 	class GameStateManager;
 	class EventsStorage;
 	class MemoryManager;
+	class SystemManager;
 
 	class GameContext
 	{
@@ -30,6 +31,7 @@ namespace breakout
 		LogManager& GetLogManager();
 		GameStateManager& GetGameStateManager();
 		MemoryManager& GetMemoryManager();
+		SystemManager& GetSystemManager();
 
 		EventsStorage& GetEventsStorage();
 
