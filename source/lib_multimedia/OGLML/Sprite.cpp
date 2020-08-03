@@ -24,7 +24,7 @@ void Sprite::SetShader(Shader& shader)
 void Sprite::Draw()
 {
 	static const std::string imageUniform = "uImage";
-	static const std::string projectionMovelUniform = "uProjectionModel";
+	static const std::string projectionModelUniform = "uProjectionModel";
 	static const std::string colorUniform = "uColor";
 	static const unsigned int IMAGE_LAYOUT_POSITION = 0;
 
@@ -41,13 +41,15 @@ void Sprite::Draw()
 
 	glm::mat4 projectionModel = m_projection * model;
 
-	Shader::SetMatrix4f(m_shaderID, projectionMovelUniform, projectionModel);
+	Shader::SetMatrix4f(m_shaderID, projectionModelUniform, projectionModel);
 	Shader::SetVector3f(m_shaderID, colorUniform, m_color);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, m_textureID);
 
 	QuadRender::Get().Draw();
+
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void Sprite::SetScreenSize(float width, float height)

@@ -30,7 +30,7 @@ void SpriteRenderSystem::Render()
 	for (auto& component : spriteComponents)
 	{
 		if (!component.IsActive())
-			break;
+			continue;
 
 		auto& spriteComponent = static_cast<FreeListPoolElement<SpriteComponent>>(component).GetContainer();
 		int entityId = spriteComponent.m_entityId;

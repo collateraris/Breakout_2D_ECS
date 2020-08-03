@@ -8,8 +8,6 @@ using namespace breakout;
 
 EntityComponentSystem::EntityComponentSystem()
 {
-	ComponentManager::Get().CreateComponentPool<SpriteComponent>(5);
-	ComponentManager::Get().CreateComponentPool<TransformComponent>(5);
 
 }
 

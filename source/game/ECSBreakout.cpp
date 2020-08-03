@@ -1,9 +1,14 @@
 #include <ECSBreakout.h>
 
 #include <gameContext.h>
+#include <Component.h>
+#include <ComponentManager.h>
 #include <EntityComponentSystem.h>
 #include <gameWindow.h>
 
+#include <StringConstants.h>
+
+#include <ConfigManager.h>
 #include <AssetsManager.h>
 #include <ResourcesManager.h>
 #include <TexturesManager.h>
@@ -18,21 +23,41 @@
 
 using namespace breakout;
 
-void CreateAwersomeEntity();
+int CreateAwersomeEntity();
 
-void ECSBreakout::CreateComponent(EEntityType type)
+int CreateBackground();
+
+int CreateSolidBlock();
+
+int CreateBlock();
+
+void ECSBreakout::Init()
+{
+	InitComponentsPools();
+}
+
+int ECSBreakout::CreateComponent(EEntityType type)
 {
 	switch (type)
 	{
 	case EEntityType::Awersome:
-		CreateAwersomeEntity();
+		return CreateAwersomeEntity();
+		break;
+	case EEntityType::Background:
+		return CreateBackground();
+		break;
+	case EEntityType::SolidBlock:
+		return CreateSolidBlock();
+		break;
+	case EEntityType::Block:
+		return CreateBlock();
 		break;
 	default:
 		break;
 	}
 }
 
-void CreateAwersomeEntity()
+int CreateAwersomeEntity()
 {
 	auto& ecs = GameContext::Get().GetECS();
 	int entityId = ecs.CreateEntityByEntityTypeId(static_cast<int>(EEntityType::Awersome));
@@ -58,4 +83,106 @@ void CreateAwersomeEntity()
 	auto& shader = ShadersManager::Get().GetResource(static_cast<int>(EShaderAssetId::Sprite));
 	sprite.SetShader(shader);
 
+	return entityId;
+}
+
+int CreateBackground()
+{
+	auto& ecs = GameContext::Get().GetECS();
+	int entityId = ecs.CreateEntityByEntityTypeId(static_cast<int>(EEntityType::Background));
+
+	auto& transformComponent = ecs.AddComponentByEntityId<TransformComponent>(entityId);
+	transformComponent.SetPosition({ 0.0f, 0.0f });
+	transformComponent.SetRotation(0.f);
+
+	auto& spriteComponent = ecs.AddComponentByEntityId<SpriteComponent>(entityId);
+	auto& sprite = spriteComponent.Sprite();
+
+	auto& texture = TexturesManager::Get().GetResource(static_cast<int>(ETextureAssetId::Background));
+	sprite.SetTexture(texture);
+
+	auto window = GameContext::Get().GetMainWindow();
+
+	float screenWidth = window->GetWidth();
+	float screenHeight = window->GetHeight();
+	sprite.SetScreenSize(screenWidth, screenHeight);
+	transformComponent.SetScale({ screenWidth, screenHeight });
+
+	auto& shader = ShadersManager::Get().GetResource(static_cast<int>(EShaderAssetId::Sprite));
+	sprite.SetShader(shader);
+
+	return entityId;
+}
+
+int CreateSolidBlock()
+{
+	auto& ecs = GameContext::Get().GetECS();
+	int entityId = ecs.CreateEntityByEntityTypeId(static_cast<int>(EEntityType::SolidBlock));
+
+	auto& transformComponent = ecs.AddComponentByEntityId<TransformComponent>(entityId);
+
+	auto& spriteComponent = ecs.AddComponentByEntityId<SpriteComponent>(entityId);
+	auto& sprite = spriteComponent.Sprite();
+
+	auto& texture = TexturesManager::Get().GetResource(static_cast<int>(ETextureAssetId::SolidBlock));
+	sprite.SetTexture(texture);
+
+	auto& shader = ShadersManager::Get().GetResource(static_cast<int>(EShaderAssetId::Sprite));
+	sprite.SetShader(shader);
+
+	auto window = GameContext::Get().GetMainWindow();
+
+	float screenWidth = window->GetWidth();
+	float screenHeight = window->GetHeight();
+	sprite.SetScreenSize(screenWidth, screenHeight);
+
+	return entityId;
+}
+
+int CreateBlock()
+{
+	auto& ecs = GameContext::Get().GetECS();
+	int entityId = ecs.CreateEntityByEntityTypeId(static_cast<int>(EEntityType::Block));
+
+	auto& transformComponent = ecs.AddComponentByEntityId<TransformComponent>(entityId);
+
+	auto& spriteComponent = ecs.AddComponentByEntityId<SpriteComponent>(entityId);
+	auto& sprite = spriteComponent.Sprite();
+
+	auto& texture = TexturesManager::Get().GetResource(static_cast<int>(ETextureAssetId::Block));
+	sprite.SetTexture(texture);
+
+	auto& shader = ShadersManager::Get().GetResource(static_cast<int>(EShaderAssetId::Sprite));
+	sprite.SetShader(shader);
+
+	auto window = GameContext::Get().GetMainWindow();
+
+	float screenWidth = window->GetWidth();
+	float screenHeight = window->GetHeight();
+	sprite.SetScreenSize(screenWidth, screenHeight);
+
+	return entityId;
+}
+
+void ECSBreakout::InitComponentsPools()
+{
+	auto components = GameContext::Get().GetConfigManager().GetRoot().GetPath(componentsStr).GetChildren();
+
+	for (auto& component : components)
+	{
+		EComponentType id = static_cast<EComponentType>(component.GetAttribute<int>(idStr));
+		int poolSize = component.GetAttribute<int>(poolSizeStr);
+		
+		switch (id)
+		{
+		case breakout::EComponentType::Sprite:
+			ComponentManager::Get().CreateComponentPool<SpriteComponent>(poolSize);
+			break;
+		case breakout::EComponentType::Transform:
+			ComponentManager::Get().CreateComponentPool<TransformComponent>(poolSize);
+			break;
+		default:
+			break;
+		}
+	}
 }

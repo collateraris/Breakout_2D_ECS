@@ -2,9 +2,12 @@
 
 namespace breakout
 {
-    enum class EEntityType : int
-    {
-        Awersome = 0,
+	enum class EEntityType : int
+	{
+		Awersome = 0,
+		Background = 1,
+		SolidBlock = 2,
+		Block = 3,
 		MAX,
     };
 
@@ -12,6 +15,12 @@ namespace breakout
 	{
 	public:
 
-		static void CreateComponent(EEntityType);
+		static void Init();
+
+		static int CreateComponent(EEntityType);
+
+	private:
+
+		static void InitComponentsPools();
 	};
 }

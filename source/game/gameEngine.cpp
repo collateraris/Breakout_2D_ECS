@@ -8,6 +8,7 @@
 #include <AssetsManager.h>
 #include <EntityComponentSystem.h>
 #include <ECSBreakout.h>
+#include <GameMaps.h>
 
 #include <bindings/AssetsBindings.h>
 
@@ -37,7 +38,10 @@ void GameEngine::Init()
 
     GameContext::Get().GetAssetManager().LoadAll();
 
-    ECSBreakout::CreateComponent(EEntityType::Awersome);
+    ECSBreakout::Init();
+    ECSBreakout::CreateComponent(EEntityType::Background);
+
+    GameMaps::Get().LoadMap(EGameMapLevels::Space_invader);
 
     LOG("Game Engine Init");
 }
