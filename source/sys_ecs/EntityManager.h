@@ -3,6 +3,7 @@
 #include <Component.h>
 
 #include <unordered_map>
+#include <list>
 #include <cassert>
 
 namespace breakout
@@ -17,15 +18,13 @@ namespace breakout
 
 		using EntityTypeId = int;
 
-		using EntityCounter = unsigned int;
+		using EntityIdList = std::list<int>;
 
 	public:
 
 		static EntityManager& Get();
 
 		int Create(int entityTypeId);
-
-		void Delete(int entityId);
 
 		template<class componentStruct>
 		void AddComponentByEntityId(int entityId, int componentId);
@@ -44,7 +43,9 @@ namespace breakout
 
 		std::unordered_map<EntityId, ComponentsIdByType> m_entityStorage;
 
-		std::unordered_map<EntityTypeId, EntityCounter> m_entityTypeCounter;
+		std::unordered_map<EntityTypeId, EntityIdList> m_entityTypeStorage;
+
+		int m_entityIdCounter = 0;
 	};
 
 	template<class componentStruct>

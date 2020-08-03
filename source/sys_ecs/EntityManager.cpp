@@ -20,22 +20,15 @@ EntityManager& EntityManager::Get()
 
 int EntityManager::Create(int entityTypeId)
 {
-    auto foundIt = m_entityTypeCounter.find(entityTypeId);
+    auto foundIt = m_entityTypeStorage.find(entityTypeId);
 
-    if (foundIt == m_entityTypeCounter.end())
+    int id = m_entityIdCounter++;
+    if (foundIt == m_entityTypeStorage.end())
     {
-        m_entityTypeCounter[entityTypeId] = 0;
-        return 0;
+        m_entityTypeStorage[entityTypeId] = { id };
+        return id;
     }
 
-    return ++foundIt->second;
-}
-
-void EntityManager::Delete(int entityId)
-{
-    auto foundComponentsIdIt = m_entityStorage.find(entityId);
-    assert(foundComponentsIdIt != m_entityStorage.end());
-    
-    foundComponentsIdIt->second.clear();
-    m_entityStorage.erase(entityId);
+    foundIt->second.push_back(id);
+    return id;
 }
