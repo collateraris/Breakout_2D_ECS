@@ -14,7 +14,6 @@
 
 #include <SpriteRenderSystem.h>
 
-
 using namespace breakout;
 
 GameEngine::GameEngine()
@@ -42,6 +41,8 @@ void GameEngine::Init()
     ECSBreakout::CreateComponent(EEntityType::Background);
 
     GameMaps::Get().LoadMap(EGameMapLevels::Space_invader);
+
+    //ECSBreakout::CreateComponent(EEntityType::PlayerPaddle);
 
     LOG("Game Engine Init");
 }

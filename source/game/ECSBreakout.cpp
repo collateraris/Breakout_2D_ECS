@@ -20,6 +20,10 @@
 
 #include <SpriteComponent.h>
 #include <components/TransformComponent.h>
+#include <MovementComponent.h>
+
+#include <array>
+#include <functional>
 
 using namespace breakout;
 
@@ -30,6 +34,8 @@ int CreateBackground();
 int CreateSolidBlock();
 
 int CreateBlock();
+
+int CreatePlayerPaddle();
 
 void ECSBreakout::Init()
 {
@@ -51,6 +57,9 @@ int ECSBreakout::CreateComponent(EEntityType type)
 		break;
 	case EEntityType::Block:
 		return CreateBlock();
+		break;
+	case EEntityType::PlayerPaddle:
+		return CreatePlayerPaddle();
 		break;
 	default:
 		break;
@@ -164,6 +173,46 @@ int CreateBlock()
 	return entityId;
 }
 
+int CreatePlayerPaddle()
+{
+	auto& ecs = GameContext::Get().GetECS();
+	int entityId = ecs.CreateEntityByEntityTypeId(static_cast<int>(EEntityType::Block));
+
+	auto& transformComponent = ecs.AddComponentByEntityId<TransformComponent>(entityId);
+
+	auto& spriteComponent = ecs.AddComponentByEntityId<SpriteComponent>(entityId);
+	auto& sprite = spriteComponent.Sprite();
+
+	auto& texture = TexturesManager::Get().GetResource(static_cast<int>(ETextureAssetId::PlayerPaddle));
+	sprite.SetTexture(texture);
+
+	auto& shader = ShadersManager::Get().GetResource(static_cast<int>(EShaderAssetId::Sprite));
+	sprite.SetShader(shader);
+
+	auto window = GameContext::Get().GetMainWindow();
+
+	float screenWidth = window->GetWidth();
+	float screenHeight = window->GetHeight();
+	sprite.SetScreenSize(screenWidth, screenHeight);
+
+	const std::array<float, 2> playerSize = { 100.0f, 20.0f };
+	transformComponent.SetPosition({ screenWidth * 0.5f - playerSize[0] * 0.5f, 
+		screenHeight - playerSize[1]});
+	transformComponent.SetScale(playerSize);
+
+	auto movementComponent = ecs.AddComponentByEntityId<MovementComponent>(entityId);
+	movementComponent.SetVelocity({500.f, 0.f});
+
+	auto  updateFunction = [=](int entityId, int movementComponentId, float dtMilliseconds)
+	{
+
+	};
+
+	movementComponent.SetUpdateFunction(updateFunction);
+
+	return entityId;
+}
+
 void ECSBreakout::InitComponentsPools()
 {
 	auto components = GameContext::Get().GetConfigManager().GetRoot().GetPath(componentsStr).GetChildren();
@@ -180,6 +229,9 @@ void ECSBreakout::InitComponentsPools()
 			break;
 		case breakout::EComponentType::Transform:
 			ComponentManager::Get().CreateComponentPool<TransformComponent>(poolSize);
+			break;
+		case breakout::EComponentType::Movement:
+			ComponentManager::Get().CreateComponentPool<MovementComponent>(poolSize);
 			break;
 		default:
 			break;

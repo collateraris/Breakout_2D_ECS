@@ -38,6 +38,7 @@ project "Game"
 		paths.profile,
         paths.audio,
         paths.resource,
+        paths.physics,
         paths.lib_multimedia
     }
     

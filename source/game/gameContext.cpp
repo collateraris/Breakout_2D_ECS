@@ -12,6 +12,8 @@
 #include <EntityComponentSystem.h>
 #include <SystemManager.h>
 #include <SpriteRenderSystem.h>
+#include <InputSystem.h>
+#include <MovementSystem.h>
 
 using namespace breakout;
 
@@ -20,10 +22,13 @@ GameContext::GameContext()
 	m_mainWindow = std::make_shared<GameWindow>();
 
 	m_spriteRenderSystem = SystemManager::Get().CreateSystem<SpriteRenderSystem>();
+	m_movementSystem = SystemManager::Get().CreateSystem<MovementSystem>();
+	m_inputSystem = SystemManager::Get().CreateSystem<InputSystem>();
 }
 
 GameContext::~GameContext()
 {
+
 }
 
 GameContext& GameContext::Get()
@@ -80,4 +85,14 @@ EntityComponentSystem& GameContext::GetECS()
 SpriteRenderSystem* GameContext::GetSpriteRenderSystem()
 {
 	return m_spriteRenderSystem;
+}
+
+MovementSystem* GameContext::GetMovementSystem()
+{
+	return m_movementSystem;
+}
+
+InputSystem* GameContext::GetInputSystem()
+{
+	return m_inputSystem;
 }

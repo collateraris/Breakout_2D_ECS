@@ -26,6 +26,8 @@ namespace breakout
 
 		int Create(int entityTypeId);
 
+		void Delete(int entityId);
+
 		template<class componentStruct>
 		void AddComponentByEntityId(int entityId, int componentId);
 
@@ -81,4 +83,5 @@ namespace breakout
 
 		return foundComponentIt->second;
 	}
+
 }

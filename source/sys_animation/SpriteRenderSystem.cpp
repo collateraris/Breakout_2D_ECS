@@ -8,7 +8,10 @@
 
 #include <OGLML/Sprite.h>
 
-#include <vector>
+#include <GameMaps.h>
+#include <ECSBreakout.h>
+
+#include <array>
 
 using namespace breakout;
 
@@ -29,10 +32,8 @@ void SpriteRenderSystem::Render()
 
 	for (auto& component : spriteComponents)
 	{
-		if (!component.IsActive())
-			continue;
 
-		auto& spriteComponent = static_cast<FreeListPoolElement<SpriteComponent>>(component).GetContainer();
+		auto& spriteComponent = static_cast<FreeListPoolElement<SpriteComponent>*>(component)->GetContainer();
 		int entityId = spriteComponent.m_entityId;
 		auto& transformComponent = ecs.GetComponentByEntityId<TransformComponent>(entityId);
 
@@ -42,5 +43,6 @@ void SpriteRenderSystem::Render()
 		sprite.SetRotateAngle(transformComponent.GetRotation());
 
 		sprite.Draw();
+
 	}
 }

@@ -8,6 +8,7 @@ namespace breakout
 		Background = 1,
 		SolidBlock = 2,
 		Block = 3,
+		PlayerPaddle = 4,
 		MAX,
     };
 

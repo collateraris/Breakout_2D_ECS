@@ -4,8 +4,10 @@ namespace breakout
 {
 	enum class EBaseSystemType : int
 	{
-		None,
-		SpriteRender,
+		None = 0,
+		SpriteRender = 1,
+		Input = 2,
+		Movement = 3,
 		MAX
 	};
 

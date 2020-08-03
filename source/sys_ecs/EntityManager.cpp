@@ -1,5 +1,7 @@
 #include <EntityManager.h>
 
+#include <ComponentManager.h>
+
 using namespace breakout;
 
 EntityManager::EntityManager()
@@ -31,4 +33,20 @@ int EntityManager::Create(int entityTypeId)
 
     foundIt->second.push_back(id);
     return id;
+}
+
+void EntityManager::Delete(int entityId)
+{
+    auto foundIt = m_entityStorage.find(entityId);
+    assert(foundIt != m_entityStorage.end());
+
+    auto& componentManager = ComponentManager::Get();
+
+    for (auto& componentsIdByType : foundIt->second)
+    {
+        componentManager.Delete(componentsIdByType.first, componentsIdByType.second);
+    }
+
+    foundIt->second.clear();
+    m_entityStorage.erase(foundIt->first);
 }

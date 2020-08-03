@@ -9,6 +9,8 @@ project "SysInput"
     includedirs
     {
         paths.input,
+        paths.game,
+        paths.ecs,
     }
     
     files

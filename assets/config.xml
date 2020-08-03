@@ -18,6 +18,7 @@
 	<components>
 		<component id="1" name="Sprite" poolSize="120"></component>
 		<component id="2" name="Transform" poolSize="120"></component>
+		<component id="3" name="Movement" poolSize="2"></component>
 	</components>
 	
 	<gameMaps>
@@ -37,6 +38,7 @@
 			<texture id="1" name="background" path="assets/textures/background.jpg"></texture>
 			<texture id="2" name="block_solid" path="assets/textures/block_solid.png"></texture>
 			<texture id="3" name="block" path="assets/textures/block.png"></texture>
+			<texture id="4" name="paddle" path="assets/textures/paddle.png"></texture>
 		</textures>
 	</assets>
 
