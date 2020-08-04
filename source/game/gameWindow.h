@@ -3,6 +3,8 @@
 #include <glew.h>
 #include <glfw3.h>
 
+#include <Delegate.h>
+
 namespace breakout
 {
     class GameWindow
@@ -26,6 +28,10 @@ namespace breakout
         int GetWidth();
 
         int GetHeight();
+
+        Delegate& GetKeyButtonDelegate();
+
+        Delegate& GetMouseClickDelegate();
 
     protected:
 

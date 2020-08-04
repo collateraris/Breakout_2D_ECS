@@ -5,8 +5,10 @@
 
 #include <iostream>
 
-
 using namespace breakout;
+
+Delegate g_keyButtonDelegate;
+Delegate g_mouseClickDelegate;
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
@@ -19,6 +21,16 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 GameWindow::~GameWindow()
 {
 
+}
+
+Delegate& GameWindow::GetKeyButtonDelegate()
+{
+	return g_keyButtonDelegate;
+}
+
+Delegate& GameWindow::GetMouseClickDelegate()
+{
+	return g_mouseClickDelegate;
 }
 
 void GameWindow::Init()
@@ -112,32 +124,20 @@ int GameWindow::GetHeight()
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
-	GLFWwindow* w = window;
-	w = nullptr;
-	int sum = key + scancode + action + mode;
-	sum++;
+	g_keyButtonDelegate.Execute(key, scancode, action, mode);
 }
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
-	GLFWwindow* w = window;
-	w = nullptr;
-	double pos = xpos + ypos;
-	pos++;
+	g_mouseClickDelegate.Execute(xpos, ypos);
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	GLFWwindow* w = window;
-	w = nullptr;
-	double offset = xoffset + yoffset;
-	offset++;
+
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
-	GLFWwindow* w = window;
-	w = nullptr;
-	int sum = width + height;
-	sum++;
+
 }

@@ -14,6 +14,8 @@
 
 #include <SpriteRenderSystem.h>
 
+#include <Delegate.h>
+
 using namespace breakout;
 
 GameEngine::GameEngine()
@@ -42,7 +44,14 @@ void GameEngine::Init()
 
     GameMaps::Get().LoadMap(EGameMapLevels::Space_invader);
 
-    //ECSBreakout::CreateComponent(EEntityType::PlayerPaddle);
+    ECSBreakout::CreateComponent(EEntityType::PlayerPaddle);
+
+    TestDelegate testDelegate;
+    auto& keyDelegate = m_window->GetKeyButtonDelegate();
+    keyDelegate.Bind(&testDelegate, &TestDelegate::KeyButton);
+
+    auto& mouseDelegate = m_window->GetMouseClickDelegate();
+    mouseDelegate.Bind(&testDelegate, &TestDelegate::Mouse);
 
     LOG("Game Engine Init");
 }
