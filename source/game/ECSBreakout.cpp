@@ -22,8 +22,10 @@
 #include <components/TransformComponent.h>
 #include <MovementComponent.h>
 
+#include <InputManager.h>
+
 #include <array>
-#include <functional>
+#include <algorithm>
 
 using namespace breakout;
 
@@ -203,12 +205,29 @@ int CreatePlayerPaddle()
 	auto movementComponent = ecs.AddComponentByEntityId<MovementComponent>(entityId);
 	movementComponent.SetVelocity({500.f, 0.f});
 
-	auto  updateFunction = [=](int entityId, int movementComponentId, float dtMilliseconds)
+	InputManager::Get().OnKeyPress().BindLambda([&, entityId](oglml::EKeyButtonCode key, oglml::EKeyModeCode mode)
 	{
-
-	};
-
-	movementComponent.SetUpdateFunction(updateFunction);
+		if (key == oglml::EKeyButtonCode::KEY_A)
+		{
+			auto& transformComponent = GameContext::Get().GetECS().GetComponentByEntityId<TransformComponent>(entityId);
+			auto pos = transformComponent.GetPosition();
+			pos[0] -= 300.f;
+			auto window = GameContext::Get().GetMainWindow();
+			float screenWidth = window->GetWidth();
+			pos[0] = std::clamp(pos[0], 0.f, screenWidth - transformComponent.GetScale()[0]);
+			transformComponent.SetPosition(pos);
+		}
+		else if (key == oglml::EKeyButtonCode::KEY_D)
+		{
+			auto& transformComponent = GameContext::Get().GetECS().GetComponentByEntityId<TransformComponent>(entityId);
+			auto pos = transformComponent.GetPosition();
+			pos[0] += 300.f;
+			auto window = GameContext::Get().GetMainWindow();
+			float screenWidth = window->GetWidth();
+			pos[0] = std::clamp(pos[0], 0.f, screenWidth - transformComponent.GetScale()[0]);
+			transformComponent.SetPosition(pos);
+		}
+	});
 
 	return entityId;
 }

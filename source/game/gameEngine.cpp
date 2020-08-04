@@ -5,6 +5,7 @@
 #include <LogManager.h>
 #include <EventsStorage.h>
 #include <GameStateManager.h>
+#include <InputManager.h>
 #include <AssetsManager.h>
 #include <EntityComponentSystem.h>
 #include <ECSBreakout.h>
@@ -14,9 +15,8 @@
 
 #include <SpriteRenderSystem.h>
 
-#include <Delegate.h>
-
 using namespace breakout;
+
 
 GameEngine::GameEngine()
 {
@@ -39,6 +39,8 @@ void GameEngine::Init()
 
     GameContext::Get().GetAssetManager().LoadAll();
 
+    m_window->GetKeyButtonDelegate().BindObject(&InputManager::Get(), &InputManager::KeyEnterListener);
+
     ECSBreakout::Init();
     ECSBreakout::CreateComponent(EEntityType::Background);
 
@@ -46,12 +48,6 @@ void GameEngine::Init()
 
     ECSBreakout::CreateComponent(EEntityType::PlayerPaddle);
 
-    TestDelegate testDelegate;
-    auto& keyDelegate = m_window->GetKeyButtonDelegate();
-    keyDelegate.Bind(&testDelegate, &TestDelegate::KeyButton);
-
-    auto& mouseDelegate = m_window->GetMouseClickDelegate();
-    mouseDelegate.Bind(&testDelegate, &TestDelegate::Mouse);
 
     LOG("Game Engine Init");
 }

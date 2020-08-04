@@ -2,167 +2,121 @@
 
 #include <cassert>
 
-#include <iostream>
+#include <utility>
+#include <tuple>
+#include <vector>
 
 namespace breakout
 {
-
-	struct NIL {};
-
-	class IArguments
+	template<typename... Args>
+	class IDelegate
 	{
 	public:
-
-		virtual ~IArguments() {};
+		virtual void Execute(Args&&... args) = 0;
 	};
 
-	template<class T1 = NIL, class T2 = NIL,
-			class T3 = NIL, class T4 = NIL>
-	class Arguments : public IArguments
+	template<typename TLambda, typename... Args>
+	class LambdaDelegate : public IDelegate<Args...>
 	{
 	public:
-
-		Arguments(const T1& i_arg1, const T2& i_arg2)
-			: m_arg1(i_arg1), m_arg2(i_arg2) {};
-
-		Arguments(const T1& i_arg1, const T2& i_arg2,
-			const T1& i_arg3, const T2& i_arg4)
-			: m_arg1(i_arg1), 
-			m_arg2(i_arg2),
-			m_arg3(i_arg3), 
-			m_arg4(i_arg4)
+		explicit LambdaDelegate(TLambda&& lambda)
+			: m_lambda(std::forward<TLambda>(lambda))
 		{};
 
-		T1 m_arg1;
-		T2 m_arg2;
-		T3 m_arg3;
-		T4 m_arg4;
-	};
-
-	class IContainer 
-	{
-	public:
-
-		virtual void Call(IArguments*) = 0;
-	};
-
-	template<class T, class M>
-	class Container : public IContainer {};
-
-	template<class T, class A1, class A2>
-		class Container<T, void (T::*)(A1, A2)>
-		: public IContainer
-	{
-
-		typedef void (T::* M)(A1, A2);
-		typedef Arguments<A1, A2> A;
-
-		T* m_class;
-		M m_method;
-
-	public:
-
-		Container(T* i_class, M i_method)
-			: m_class(i_class),
-			m_method(i_method)
-		{};
-
-		void Call(IArguments* i_args)
+		void Execute(Args&&... args) override
 		{
-			A* a = dynamic_cast<A*>(i_args);
-			assert(a);
-			if (a)
-			{
-				(m_class->*m_method)(a->m_arg1, a->m_arg2);
-			}
-		}
-	};
-
-	template<class T, class A1, class A2,
-		class A3, class A4>
-	class Container<T, void (T::*)(A1, A2, A3, A4)>
-		: public IContainer
-	{
-	
-		typedef void (T::* M)(A1, A2, A3, A4);
-		typedef Arguments<A1, A2, A3, A4> A;
-
-		T* m_class;
-		M m_method;
-
-	public:
-
-		Container(T* i_class, M i_method)
-			: m_class(i_class),
-			m_method(i_method)
-		{};
-
-		void Call(IArguments* i_args)
-		{
-			A* a = dynamic_cast<A*>(i_args);
-			assert(a);
-			if (a)
-			{
-				(m_class->*m_method)(a->m_arg1,
-					a->m_arg2,
-					a->m_arg3,
-					a->m_arg4);
-			}
-		}
-	};
-
-	class Delegate
-	{
-	public:
-
-		Delegate()
-			: m_container(nullptr)
-		{};
-
-		~Delegate()
-		{
-			if (m_container) delete m_container;
-		};
-
-		template<class T, class M>
-		void Bind(T* i_class, M i_method)
-		{
-			if (m_container) delete m_container;
-			m_container = new Container<T, M>(i_class, i_method);
-		}
-
-		template<class T1, class T2>
-		void Execute(const T1& i_arg1, const T2& i_arg2)
-		{
-			m_container->Call(&Arguments<T1, T2>(i_arg1, i_arg2));
-		}
-
-		template<class T1, class T2, class T3, class T4 >
-		void Execute(const T1& i_arg1, const T2& i_arg2,
-			const T3& i_arg3, const T4& i_arg4)
-		{
-			m_container->Call(&Arguments<T1, T2, T3, T4>(i_arg1, i_arg2, i_arg3, i_arg4));
+			(m_lambda)(std::forward<Args>(args)...);
 		}
 
 	private:
-		
-		IContainer* m_container = nullptr;
+
+		TLambda m_lambda;
 	};
 
-	class TestDelegate
+	template<typename Object, typename... Args>
+	class ObjMethodDelegate : public IDelegate<Args...>
+	{
+		using DelegateFunction = void(Object::*)(Args...);
+
+	public:
+		explicit ObjMethodDelegate(Object* i_class, DelegateFunction i_method)
+			: m_class(i_class),
+			  m_method(i_method)
+		{}
+
+
+		void Execute(Args&&... args) override
+		{
+			(m_class->*m_method)(std::forward<Args>(args)...);
+		}
+
+	private:
+
+		Object* m_class;
+		DelegateFunction m_method;
+	};
+
+	template<typename... Args>
+	class MulticastDelegate
 	{
 	public:
 
-		void KeyButton(int key, int scancode, int action, int mode)
+		using IDelegateT = IDelegate<Args...>;
+
+		template<typename Object, typename... Args2>
+		using DelegateFunction = void(Object::*)(Args...);
+
+		template<typename LambdaType, typename... Args2>
+		inline void BindLambda(LambdaType&& lambda, Args2&&... args)
 		{
-			std::cout << "k " << key << " s " << scancode
-				<< " a " << action << " m " << mode << std::endl;
+			m_containers.push_back(CreateLambda<LambdaType>(std::forward<LambdaType>(lambda)));
 		}
 
-		void Mouse(double xpos, double ypos)
+		template<typename T, typename... Args2>
+		inline void BindObject(T* i_class, DelegateFunction<T, Args2...> i_method)
 		{
-			std::cout << "x " << xpos << " y " << ypos << std::endl;
+			m_containers.push_back(CreateObjMethod<T>(i_class, i_method));
 		}
+
+		MulticastDelegate() = default;
+
+		~MulticastDelegate()
+		{
+			Unbind();
+		}
+
+		void Unbind()
+		{
+			for (auto& container : m_containers)
+			{
+				delete container;
+			}
+		}
+
+		void Broadcast(Args... args) const
+		{
+			for (auto& container: m_containers)
+			{
+				container->Execute(std::forward<Args>(args)...);
+			}
+		}
+
+	private:
+
+		template<typename TLambda, typename... Args2>
+		static IDelegateT* CreateLambda(TLambda&& lambda)
+		{
+			IDelegateT* new_lambda = new LambdaDelegate<TLambda, Args...>(std::forward<TLambda>(lambda));
+			return new_lambda;
+		}
+
+		template<typename T, typename... Args2>
+		static IDelegateT* CreateObjMethod(T* i_class, DelegateFunction<T, Args2...> i_method)
+		{
+			IDelegateT* new_method = new ObjMethodDelegate<T, Args...>(i_class, i_method);
+			return new_method;
+		}
+
+		std::vector<IDelegateT*> m_containers = {};
 	};
-
 }

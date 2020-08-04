@@ -6,8 +6,7 @@ namespace breakout
 	{
 		None = 0,
 		SpriteRender = 1,
-		Input = 2,
-		Movement = 3,
+		Movement = 2,
 		MAX
 	};
 

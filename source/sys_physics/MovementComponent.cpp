@@ -21,13 +21,3 @@ void MovementComponent::SetVelocity(const std::array<float, 2>& velocity)
 {
 	m_velocity = velocity;
 }
-
-void MovementComponent::SetUpdateFunction(const std::function<void(int, int, float)>& update)
-{
-	m_updateFunction = update;
-}
-
-void MovementComponent::Update(float dtMilliseconds)
-{
-	m_updateFunction(m_entityId, m_componentId, dtMilliseconds);
-}

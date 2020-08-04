@@ -25,4 +25,5 @@ namespace breakout
 
         EEventType m_eventType;
     };
+
 }

@@ -7,30 +7,18 @@
 
 using namespace breakout;
 
-Delegate g_keyButtonDelegate;
-Delegate g_mouseClickDelegate;
+MulticastDelegate<oglml::EKeyButtonCode, oglml::EActionCode, oglml::EKeyModeCode> g_keyButtonDelegate;
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
-
-void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 GameWindow::~GameWindow()
 {
 
 }
 
-Delegate& GameWindow::GetKeyButtonDelegate()
+MulticastDelegate<oglml::EKeyButtonCode, oglml::EActionCode, oglml::EKeyModeCode>& GameWindow::GetKeyButtonDelegate()
 {
 	return g_keyButtonDelegate;
-}
-
-Delegate& GameWindow::GetMouseClickDelegate()
-{
-	return g_mouseClickDelegate;
 }
 
 void GameWindow::Init()
@@ -61,15 +49,6 @@ void GameWindow::Init()
 	//keycallback
 	glfwSetKeyCallback(window, key_callback);
 
-	//mousecallback
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	glfwSetCursorPosCallback(window, mouse_callback);
-
-	//scrollcallback
-	glfwSetScrollCallback(window, scroll_callback);
-
-	//framebuffer
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 	glewExperimental = GL_TRUE;
 	if (glewInit() != GLEW_OK)
@@ -124,20 +103,9 @@ int GameWindow::GetHeight()
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
-	g_keyButtonDelegate.Execute(key, scancode, action, mode);
-}
+	oglml::EKeyButtonCode keyCode = oglml::InputDecoder::GetKeyButtonCodeFromGLFW3(key);
+	oglml::EActionCode actionCode = oglml::InputDecoder::GetActionCodeFromGLFW3(action);
+	oglml::EKeyModeCode modeCode = oglml::InputDecoder::GetKeyModeCodeFromGLFW3(mode);
 
-void mouse_callback(GLFWwindow* window, double xpos, double ypos)
-{
-	g_mouseClickDelegate.Execute(xpos, ypos);
-}
-
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-{
-
-}
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-
+	g_keyButtonDelegate.Broadcast(keyCode, actionCode, modeCode);
 }

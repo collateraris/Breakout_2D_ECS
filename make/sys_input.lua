@@ -11,6 +11,8 @@ project "SysInput"
         paths.input,
         paths.game,
         paths.ecs,
+        paths.events,
+        paths.lib_multimedia,
     }
     
     files

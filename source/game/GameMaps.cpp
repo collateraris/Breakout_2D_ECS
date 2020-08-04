@@ -42,7 +42,7 @@ void GameMaps::LoadMap(EGameMapLevels levels)
     auto gameLvl = gameLevels[id];
     std::string path = gameLvl.GetAttribute<std::string>(pathStr);
 
-    std::vector<std::vector<unsigned int>> tileData = { {} };
+    std::vector<std::vector<unsigned int>> tileData = {};
     Load(path, tileData);
 
     assert(tileData.size() > 0);

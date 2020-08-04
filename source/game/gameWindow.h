@@ -4,6 +4,7 @@
 #include <glfw3.h>
 
 #include <Delegate.h>
+#include <OGLML/InputCode.h>
 
 namespace breakout
 {
@@ -29,9 +30,7 @@ namespace breakout
 
         int GetHeight();
 
-        Delegate& GetKeyButtonDelegate();
-
-        Delegate& GetMouseClickDelegate();
+        MulticastDelegate<oglml::EKeyButtonCode, oglml::EActionCode, oglml::EKeyModeCode>& GetKeyButtonDelegate();
 
     protected:
 
