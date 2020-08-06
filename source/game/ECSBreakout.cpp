@@ -22,6 +22,7 @@
 #include <components/TransformComponent.h>
 #include <MovementComponent.h>
 #include <PlayerComponent.h>
+#include <PlayerBallComponent.h>
 
 #include <LogManager.h>
 
@@ -30,6 +31,7 @@
 
 #include <EventsStorage.h>
 
+#include <cassert>
 #include <array>
 #include <algorithm>
 
@@ -44,6 +46,8 @@ int CreateSolidBlock();
 int CreateBlock();
 
 int CreatePlayerPaddle();
+
+int CreatePlayerBall();
 
 void ECSBreakout::Init()
 {
@@ -71,7 +75,11 @@ int ECSBreakout::CreateComponent(EEntityType type)
 	case EEntityType::PlayerPaddle:
 		return CreatePlayerPaddle();
 		break;
+	case EEntityType::PlayerBall:
+		return CreatePlayerBall();
+		break;
 	default:
+		assert(false, entityNotInitStr);
 		break;
 	}
 }
@@ -220,14 +228,50 @@ int CreatePlayerPaddle()
 		if (key == oglml::EKeyButtonCode::KEY_A)
 		{
 			EventsStorage::Get().Put(BaseEvent(EEventType::PLAYER_ACTION_MOVE_LEFT));
-			LOG(playerMovePushEventLeft.c_str());
+			LOG(playerMoveLeftPushEvent.c_str());
 		}
 		else if (key == oglml::EKeyButtonCode::KEY_D)
 		{
 			EventsStorage::Get().Put(BaseEvent(EEventType::PLAYER_ACTION_MOVE_RIGHT));
-			LOG(playerMovePushEventRight.c_str());
+			LOG(playerMoveRightPushEvent.c_str());
+		}
+		else if (key == oglml::EKeyButtonCode::KEY_SPACE)
+		{
+			EventsStorage::Get().Put(BaseEvent(EEventType::PLAYER_ACTION_SPACE_CLICK));
+			LOG(playerSpaceClickPushEventRight.c_str());
 		}
 	});
+
+	return entityId;
+}
+
+int CreatePlayerBall()
+{
+	auto& ecs = GameContext::Get().GetECS();
+	int entityId = ecs.CreateEntityByEntityTypeId(static_cast<int>(EEntityType::PlayerBall));
+
+	ecs.AddComponentByEntityId<PlayerBallComponent>(entityId);
+
+	auto& transformComponent = ecs.AddComponentByEntityId<TransformComponent>(entityId);
+	transformComponent.SetScale({ 25.5f, 25.5f });
+
+	auto& spriteComponent = ecs.AddComponentByEntityId<SpriteComponent>(entityId);
+	auto& sprite = spriteComponent.Sprite();
+
+	auto window = GameContext::Get().GetMainWindow();
+
+	float screenWidth = window->GetWidth();
+	float screenHeight = window->GetHeight();
+	sprite.SetScreenSize(screenWidth, screenHeight);
+
+	auto& texture = TexturesManager::Get().GetResource(static_cast<int>(ETextureAssetId::Awersome));
+	sprite.SetTexture(texture);
+
+	auto& shader = ShadersManager::Get().GetResource(static_cast<int>(EShaderAssetId::Sprite));
+	sprite.SetShader(shader);
+
+	auto& movementComponent = ecs.AddComponentByEntityId<MovementComponent>(entityId);
+	movementComponent.SetVelocity({ 100.0f, -350.0f });
 
 	return entityId;
 }
@@ -255,6 +299,9 @@ void ECSBreakout::InitComponentsPools()
 		case breakout::EComponentType::Player:
 			ComponentManager::Get().CreateComponentPool<PlayerComponent>(poolSize);
 			break;
+		case breakout::EComponentType::PlayerBall:
+			ComponentManager::Get().CreateComponentPool<PlayerBallComponent>(poolSize);
+			break;
 		default:
 			break;
 		}
@@ -268,4 +315,5 @@ void ECSBreakout::CreateWorld()
 	GameMaps::Get().LoadMap(EGameMapLevels::Space_invader);
 
 	ECSBreakout::CreateComponent(EEntityType::PlayerPaddle);
+	ECSBreakout::CreateComponent(EEntityType::PlayerBall);
 }

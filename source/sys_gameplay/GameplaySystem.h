@@ -5,6 +5,7 @@
 namespace breakout
 {
     class PlayerLogicSystem;
+    class PlayerBallLogicSystem;
 
     class GameplaySystem : public BaseSystem
     {
@@ -26,5 +27,6 @@ namespace breakout
     private:
 
         PlayerLogicSystem* m_playerLogic = nullptr;
+        PlayerBallLogicSystem* m_playerBallLogic = nullptr;
     };
 }

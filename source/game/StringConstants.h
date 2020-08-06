@@ -15,7 +15,9 @@ namespace breakout
 	static const std::string pathStr = "path";
 	static const std::string poolSizeStr = "poolSize";
 
-	static const std::string playerMovePushEventLeft = "PUSH EVENT : PLAYER MOVE LEFT";
+	static const std::string playerMoveLeftPushEvent = "PUSH EVENT : PLAYER MOVE LEFT";
+	static const std::string playerMoveRightPushEvent = "PUSH EVENT : PLAYER MOVE RIGHT";
+	static const std::string playerSpaceClickPushEventRight = "PUSH EVENT : PLAYER SPACE CLICK";
 
-	static const std::string playerMovePushEventRight = "PUSH EVENT : PLAYER MOVE RIGHT";
+	static const std::string entityNotInitStr = "ENTITY DOESN`T INIT";
 }

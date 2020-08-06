@@ -9,6 +9,7 @@ namespace breakout
 		SolidBlock = 2,
 		Block = 3,
 		PlayerPaddle = 4,
+		PlayerBall = 5,
 		MAX,
     };
 

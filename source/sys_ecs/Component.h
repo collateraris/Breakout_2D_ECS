@@ -9,6 +9,7 @@ namespace breakout
 		Transform = 2,
 		Movement = 3,
 		Player = 4,
+		PlayerBall = 5,
 		MAX,
 	};
 

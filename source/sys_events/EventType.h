@@ -7,6 +7,7 @@ namespace breakout
 		GAME_STATE_CHANGE,
         PLAYER_ACTION_MOVE_LEFT,
         PLAYER_ACTION_MOVE_RIGHT,
+        PLAYER_ACTION_SPACE_CLICK,
 		MAX
 	};
 

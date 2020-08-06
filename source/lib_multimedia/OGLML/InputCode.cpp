@@ -69,6 +69,7 @@ EKeyButtonCode InputDecoder::GetKeyButtonCodeFromGLFW3(int key)
 		{GLFW_KEY_X, EKeyButtonCode::KEY_X},
 		{GLFW_KEY_Y, EKeyButtonCode::KEY_Y},
 		{GLFW_KEY_Z, EKeyButtonCode::KEY_Z},
+		{GLFW_KEY_SPACE, EKeyButtonCode::KEY_SPACE},
 	};
 
 

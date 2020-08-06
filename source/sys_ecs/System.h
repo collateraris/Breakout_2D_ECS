@@ -9,6 +9,7 @@ namespace breakout
 		Movement = 2,
 		Gameplay = 3,
 		PlayerLogic = 4,
+		PlayerBallLogic = 5,
 		MAX
 	};
 
