@@ -7,6 +7,10 @@
 		height="800"
 	></window>
 	
+	<FPS>
+		<fps id = "0" FPS = "60"></fps>
+	</FPS>
+	
 	<systems>
 	<system
 		id="0"

@@ -3,6 +3,7 @@
 #include <gameContext.h>
 #include <ConfigManager.h>
 
+#include <array>
 #include <iostream>
 
 using namespace breakout;
@@ -91,6 +92,15 @@ void GameWindow::Terminate()
 	glfwTerminate();
 }
 
+void GameWindow::Update()
+{
+	PollEvents();
+	SwapBuffers();
+	ClearColorBuffer();
+
+	CalculateDeltaTime();
+};
+
 int GameWindow::GetWidth()
 {
 	return m_width;
@@ -101,6 +111,26 @@ int GameWindow::GetHeight()
 	return m_height;
 }
 
+float GameWindow::GetDeltaTime()
+{
+	return m_deltaTime;
+}
+
+void GameWindow::CalculateDeltaTime()
+{
+	static std::array<float, 2> deltaTimeStory = { 0.f , 0.f };
+	static bool currentDeltaTime = false;
+
+	deltaTimeStory[currentDeltaTime] = GetCurrentTime();
+	m_deltaTime = deltaTimeStory[currentDeltaTime] - deltaTimeStory[!currentDeltaTime];
+	currentDeltaTime = !currentDeltaTime;
+}
+
+float GameWindow::GetCurrentTime()
+{
+	return glfwGetTime();
+}
+
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
 	oglml::EKeyButtonCode keyCode = oglml::InputDecoder::GetKeyButtonCodeFromGLFW3(key);
@@ -109,3 +139,4 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 	g_keyButtonDelegate.Broadcast(keyCode, actionCode, modeCode);
 }
+

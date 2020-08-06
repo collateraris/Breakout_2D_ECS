@@ -22,6 +22,8 @@ namespace breakout
 
         void SwapBuffers();
 
+        void Update();
+
         void Terminate();
 
         void ClearColorBuffer();
@@ -29,6 +31,12 @@ namespace breakout
         int GetWidth();
 
         int GetHeight();
+
+        float GetDeltaTime();
+
+        void CalculateDeltaTime();
+
+        float GetCurrentTime();
 
         MulticastDelegate<oglml::EKeyButtonCode, oglml::EActionCode, oglml::EKeyModeCode>& GetKeyButtonDelegate();
 
@@ -38,5 +46,7 @@ namespace breakout
 
         int m_width = 0;
         int m_height = 0;
+
+        float m_deltaTime = 0.f;
     };
 }

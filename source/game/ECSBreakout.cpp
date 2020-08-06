@@ -23,6 +23,8 @@
 #include <MovementComponent.h>
 #include <PlayerComponent.h>
 
+#include <LogManager.h>
+
 #include <InputManager.h>
 
 #include <EventsStorage.h>
@@ -208,17 +210,19 @@ int CreatePlayerPaddle()
 	transformComponent.SetScale(playerSize);
 
 	auto& movementComponent = ecs.AddComponentByEntityId<MovementComponent>(entityId);
-	movementComponent.SetVelocity({500.f, 0.f});
+	movementComponent.SetVelocity({2000.f, 0.f});
 
 	InputManager::Get().OnKeyPress().BindLambda([&](oglml::EKeyButtonCode key, oglml::EKeyModeCode mode)
 	{
 		if (key == oglml::EKeyButtonCode::KEY_A)
 		{
 			EventsStorage::Get().Put(BaseEvent(EEventType::PLAYER_ACTION_MOVE_LEFT));
+			LOG(playerMovePushEventLeft.c_str());
 		}
 		else if (key == oglml::EKeyButtonCode::KEY_D)
 		{
 			EventsStorage::Get().Put(BaseEvent(EEventType::PLAYER_ACTION_MOVE_RIGHT));
+			LOG(playerMovePushEventRight.c_str());
 		}
 	});
 
