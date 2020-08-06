@@ -26,6 +26,7 @@
 #include <LogManager.h>
 
 #include <InputManager.h>
+#include <GameMaps.h>
 
 #include <EventsStorage.h>
 
@@ -47,6 +48,8 @@ int CreatePlayerPaddle();
 void ECSBreakout::Init()
 {
 	InitComponentsPools();
+
+	CreateWorld();
 }
 
 int ECSBreakout::CreateComponent(EEntityType type)
@@ -256,4 +259,13 @@ void ECSBreakout::InitComponentsPools()
 			break;
 		}
 	}
+}
+
+void ECSBreakout::CreateWorld()
+{
+	ECSBreakout::CreateComponent(EEntityType::Background);
+
+	GameMaps::Get().LoadMap(EGameMapLevels::Space_invader);
+
+	ECSBreakout::CreateComponent(EEntityType::PlayerPaddle);
 }

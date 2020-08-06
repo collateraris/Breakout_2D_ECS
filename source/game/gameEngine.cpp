@@ -10,7 +10,6 @@
 #include <AssetsManager.h>
 #include <EntityComponentSystem.h>
 #include <ECSBreakout.h>
-#include <GameMaps.h>
 #include <GameplaySystem.h>
 
 #include <bindings/AssetsBindings.h>
@@ -50,11 +49,6 @@ void GameEngine::Init()
     GameContext::Get().GetGameplaySystem()->Init();
 
     ECSBreakout::Init();
-    ECSBreakout::CreateComponent(EEntityType::Background);
-
-    GameMaps::Get().LoadMap(EGameMapLevels::Space_invader);
-
-    ECSBreakout::CreateComponent(EEntityType::PlayerPaddle);
 
     auto fpsOptions = GameContext::Get().GetConfigManager().GetRoot().GetPath(FPSStr).GetChildren();
     m_msPerFrame = 1000 / (fpsOptions[0].GetAttribute<float>(FPSStr));

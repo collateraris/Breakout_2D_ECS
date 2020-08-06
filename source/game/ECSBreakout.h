@@ -23,5 +23,7 @@ namespace breakout
 	private:
 
 		static void InitComponentsPools();
+
+		static void CreateWorld();
 	};
 }
