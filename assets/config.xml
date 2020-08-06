@@ -19,6 +19,7 @@
 		<component id="1" name="Sprite" poolSize="120"></component>
 		<component id="2" name="Transform" poolSize="120"></component>
 		<component id="3" name="Movement" poolSize="2"></component>
+		<component id="4" name="Player" poolSize="1"></component>
 	</components>
 	
 	<gameMaps>

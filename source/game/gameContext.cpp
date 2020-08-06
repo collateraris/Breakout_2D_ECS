@@ -13,6 +13,7 @@
 #include <SystemManager.h>
 #include <SpriteRenderSystem.h>
 #include <MovementSystem.h>
+#include <GameplaySystem.h>
 
 using namespace breakout;
 
@@ -22,6 +23,7 @@ GameContext::GameContext()
 
 	m_spriteRenderSystem = SystemManager::Get().CreateSystem<SpriteRenderSystem>();
 	m_movementSystem = SystemManager::Get().CreateSystem<MovementSystem>();
+	m_gameplaySystem = SystemManager::Get().CreateSystem<GameplaySystem>();
 }
 
 GameContext::~GameContext()
@@ -88,4 +90,9 @@ SpriteRenderSystem* GameContext::GetSpriteRenderSystem()
 MovementSystem* GameContext::GetMovementSystem()
 {
 	return m_movementSystem;
+}
+
+GameplaySystem* GameContext::GetGameplaySystem()
+{
+	return m_gameplaySystem;
 }

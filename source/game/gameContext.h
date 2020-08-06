@@ -23,6 +23,7 @@ namespace breakout
 
 	class SpriteRenderSystem;
 	class MovementSystem;
+	class GameplaySystem;
 
 	class GameContext
 	{
@@ -45,6 +46,7 @@ namespace breakout
 
 		SpriteRenderSystem* GetSpriteRenderSystem();
 		MovementSystem* GetMovementSystem();
+		GameplaySystem* GetGameplaySystem();
 
 	private:
 
@@ -59,5 +61,6 @@ namespace breakout
 
 		SpriteRenderSystem* m_spriteRenderSystem = nullptr;
 		MovementSystem* m_movementSystem = nullptr;
+		GameplaySystem* m_gameplaySystem = nullptr;
 	};
 }

@@ -21,8 +21,11 @@
 #include <SpriteComponent.h>
 #include <components/TransformComponent.h>
 #include <MovementComponent.h>
+#include <PlayerComponent.h>
 
 #include <InputManager.h>
+
+#include <EventsStorage.h>
 
 #include <array>
 #include <algorithm>
@@ -180,6 +183,8 @@ int CreatePlayerPaddle()
 	auto& ecs = GameContext::Get().GetECS();
 	int entityId = ecs.CreateEntityByEntityTypeId(static_cast<int>(EEntityType::Block));
 
+	ecs.AddComponentByEntityId<PlayerComponent>(entityId);
+
 	auto& transformComponent = ecs.AddComponentByEntityId<TransformComponent>(entityId);
 
 	auto& spriteComponent = ecs.AddComponentByEntityId<SpriteComponent>(entityId);
@@ -202,30 +207,18 @@ int CreatePlayerPaddle()
 		screenHeight - playerSize[1]});
 	transformComponent.SetScale(playerSize);
 
-	auto movementComponent = ecs.AddComponentByEntityId<MovementComponent>(entityId);
+	auto& movementComponent = ecs.AddComponentByEntityId<MovementComponent>(entityId);
 	movementComponent.SetVelocity({500.f, 0.f});
 
-	InputManager::Get().OnKeyPress().BindLambda([&, entityId](oglml::EKeyButtonCode key, oglml::EKeyModeCode mode)
+	InputManager::Get().OnKeyPress().BindLambda([&](oglml::EKeyButtonCode key, oglml::EKeyModeCode mode)
 	{
 		if (key == oglml::EKeyButtonCode::KEY_A)
 		{
-			auto& transformComponent = GameContext::Get().GetECS().GetComponentByEntityId<TransformComponent>(entityId);
-			auto pos = transformComponent.GetPosition();
-			pos[0] -= 300.f;
-			auto window = GameContext::Get().GetMainWindow();
-			float screenWidth = window->GetWidth();
-			pos[0] = std::clamp(pos[0], 0.f, screenWidth - transformComponent.GetScale()[0]);
-			transformComponent.SetPosition(pos);
+			EventsStorage::Get().Put(BaseEvent(EEventType::PLAYER_ACTION_MOVE_LEFT));
 		}
 		else if (key == oglml::EKeyButtonCode::KEY_D)
 		{
-			auto& transformComponent = GameContext::Get().GetECS().GetComponentByEntityId<TransformComponent>(entityId);
-			auto pos = transformComponent.GetPosition();
-			pos[0] += 300.f;
-			auto window = GameContext::Get().GetMainWindow();
-			float screenWidth = window->GetWidth();
-			pos[0] = std::clamp(pos[0], 0.f, screenWidth - transformComponent.GetScale()[0]);
-			transformComponent.SetPosition(pos);
+			EventsStorage::Get().Put(BaseEvent(EEventType::PLAYER_ACTION_MOVE_RIGHT));
 		}
 	});
 
@@ -251,6 +244,9 @@ void ECSBreakout::InitComponentsPools()
 			break;
 		case breakout::EComponentType::Movement:
 			ComponentManager::Get().CreateComponentPool<MovementComponent>(poolSize);
+			break;
+		case breakout::EComponentType::Player:
+			ComponentManager::Get().CreateComponentPool<PlayerComponent>(poolSize);
 			break;
 		default:
 			break;

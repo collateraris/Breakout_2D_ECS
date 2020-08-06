@@ -10,6 +10,7 @@
 #include <EntityComponentSystem.h>
 #include <ECSBreakout.h>
 #include <GameMaps.h>
+#include <GameplaySystem.h>
 
 #include <bindings/AssetsBindings.h>
 
@@ -41,6 +42,8 @@ void GameEngine::Init()
 
     m_window->GetKeyButtonDelegate().BindObject(&InputManager::Get(), &InputManager::KeyEnterListener);
 
+    GameContext::Get().GetGameplaySystem()->Init();
+
     ECSBreakout::Init();
     ECSBreakout::CreateComponent(EEntityType::Background);
 
@@ -59,6 +62,8 @@ void GameEngine::Start()
     while (!m_window->IsOpen())
     {
         m_window->ClearColorBuffer();
+
+        GameContext::Get().GetGameplaySystem()->Update(1.f);
 
         Render();
 

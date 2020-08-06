@@ -7,6 +7,8 @@ namespace breakout
 		None = 0,
 		SpriteRender = 1,
 		Movement = 2,
+		Gameplay = 3,
+		PlayerLogic = 4,
 		MAX
 	};
 

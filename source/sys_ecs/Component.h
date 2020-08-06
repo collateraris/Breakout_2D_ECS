@@ -8,6 +8,7 @@ namespace breakout
 		Sprite = 1,
 		Transform = 2,
 		Movement = 3,
+		Player = 4,
 		MAX,
 	};
 

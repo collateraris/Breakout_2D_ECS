@@ -5,6 +5,8 @@ namespace breakout
 	enum class EEventType
 	{
 		GAME_STATE_CHANGE,
+        PLAYER_ACTION_MOVE_LEFT,
+        PLAYER_ACTION_MOVE_RIGHT,
 		MAX
 	};
 
@@ -14,7 +16,7 @@ namespace breakout
         BaseEvent(EEventType eventType)
             : m_eventType(eventType) {}
 
-        ~BaseEvent() {};
+        virtual ~BaseEvent() {};
 
         EEventType GetType() const
         {
