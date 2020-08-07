@@ -9,6 +9,7 @@
 #include <ECSBreakout.h>
 
 #include <SpriteComponent.h>
+#include <ColliderComponent.h>
 #include <components/TransformComponent.h>
 
 #include <OGLML/Sprite.h>
@@ -112,8 +113,13 @@ void GameMaps::GenerateBlocks(const std::vector<std::vector<unsigned int>>& tile
     auto SetCommonBlockData = [&](int entityId, unsigned int y, unsigned int x, const std::array<float, 3>& color)
     {
         auto& transformComponent = ecs.GetComponentByEntityId<TransformComponent>(entityId);
-        transformComponent.SetPosition({ unitWidth * x + halfUnitWidth, unitHeight * y + halfUnitHeight });
-        transformComponent.SetScale({ halfUnitWidth, halfUnitHeight });
+        std::array<float, 2> pos = { unitWidth * x + halfUnitWidth, unitHeight * y + halfUnitHeight };
+        std::array<float, 2> size = { halfUnitWidth, halfUnitHeight };
+        transformComponent.SetPosition(pos);
+        transformComponent.SetScale(size);
+
+        auto& colliderComponent = ecs.GetComponentByEntityId<ColliderComponent>(entityId);
+        colliderComponent.SetSize(size[0], size[1]).SetCenter(pos[0] + size[0] * 0.5f, pos[1] + size[1] * 0.5f);
 
         auto& spriteComponent = ecs.GetComponentByEntityId<SpriteComponent>(entityId);
         spriteComponent.Sprite().SetColor(color);

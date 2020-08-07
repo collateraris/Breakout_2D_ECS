@@ -11,6 +11,7 @@
 #include <EntityComponentSystem.h>
 #include <ECSBreakout.h>
 #include <GameplaySystem.h>
+#include <PhysicsSystem.h>
 
 #include <bindings/AssetsBindings.h>
 
@@ -46,6 +47,7 @@ void GameEngine::Init()
 
     m_window->GetKeyButtonDelegate().BindObject(&InputManager::Get(), &InputManager::KeyEnterListener);
 
+    GameContext::Get().GetPhysicsSystem()->Init();
     GameContext::Get().GetGameplaySystem()->Init();
 
     ECSBreakout::Init();
@@ -70,6 +72,7 @@ void GameEngine::Start()
 
         deltaTime = m_window->GetDeltaTime();
 
+        GameContext::Get().GetPhysicsSystem()->Update(deltaTime);
         GameContext::Get().GetGameplaySystem()->Update(deltaTime);
 
         Render();

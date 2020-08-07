@@ -14,6 +14,7 @@
 #include <SpriteRenderSystem.h>
 #include <MovementSystem.h>
 #include <GameplaySystem.h>
+#include <PhysicsSystem.h>
 
 using namespace breakout;
 
@@ -24,6 +25,7 @@ GameContext::GameContext()
 	m_spriteRenderSystem = SystemManager::Get().CreateSystem<SpriteRenderSystem>();
 	m_movementSystem = SystemManager::Get().CreateSystem<MovementSystem>();
 	m_gameplaySystem = SystemManager::Get().CreateSystem<GameplaySystem>();
+	m_physicsSystem = SystemManager::Get().CreateSystem<PhysicsSystem>();
 }
 
 GameContext::~GameContext()
@@ -95,4 +97,9 @@ MovementSystem* GameContext::GetMovementSystem()
 GameplaySystem* GameContext::GetGameplaySystem()
 {
 	return m_gameplaySystem;
+}
+
+PhysicsSystem* GameContext::GetPhysicsSystem()
+{
+	return m_physicsSystem;
 }

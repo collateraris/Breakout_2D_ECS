@@ -8,7 +8,7 @@
 	></window>
 	
 	<FPS>
-		<fps id = "0" FPS = "60"></fps>
+		<fps id = "0" FPS = "30"></fps>
 	</FPS>
 	
 	<systems>
@@ -25,6 +25,7 @@
 		<component id="3" name="Movement" poolSize="2"></component>
 		<component id="4" name="Player" poolSize="1"></component>
 		<component id="5" name="PlayerBall" poolSize="1"></component>
+		<component id="6" name="Collider" poolSize="120"></component>
 	</components>
 	
 	<gameMaps>

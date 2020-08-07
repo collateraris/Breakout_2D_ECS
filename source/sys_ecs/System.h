@@ -10,6 +10,8 @@ namespace breakout
 		Gameplay = 3,
 		PlayerLogic = 4,
 		PlayerBallLogic = 5,
+		Physics = 6,
+		Collision = 7,
 		MAX
 	};
 

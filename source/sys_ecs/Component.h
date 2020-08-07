@@ -10,6 +10,7 @@ namespace breakout
 		Movement = 3,
 		Player = 4,
 		PlayerBall = 5,
+		Collider = 6,
 		MAX,
 	};
 

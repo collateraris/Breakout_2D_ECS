@@ -3,6 +3,7 @@
 #include <EntityComponentSystem.h>
 #include <PlayerBallComponent.h>
 #include <PlayerComponent.h>
+#include <ColliderComponent.h>
 
 #include <EventsStorage.h>
 
@@ -129,6 +130,10 @@ void PlayerBallLogicSystem::SetPosition(bool axis /* false - x, true - y*/, shor
 	int sign = velocitySign < 0 ? -1 : 1;
 	ballPos[axis] += velocitySign * playerVelocity * dtMilliseconds;
 	ballTransform.SetPosition(ballPos);
+
+	const auto& ballSize = ballTransform.GetScale();
+	auto& colliderComponent = GameContext::Get().GetECS().GetComponentByEntityId<ColliderComponent>(m_playerBallEntityId);
+	colliderComponent.SetCenter(ballPos[0] + ballSize[0] * 0.5f, ballPos[1] + ballSize[1] * 0.5f);
 }
 
 void PlayerBallLogicSystem::MoveLogic(float dtMilliseconds)

@@ -23,6 +23,7 @@
 #include <MovementComponent.h>
 #include <PlayerComponent.h>
 #include <PlayerBallComponent.h>
+#include <ColliderComponent.h>
 
 #include <LogManager.h>
 
@@ -146,6 +147,9 @@ int CreateSolidBlock()
 	auto& ecs = GameContext::Get().GetECS();
 	int entityId = ecs.CreateEntityByEntityTypeId(static_cast<int>(EEntityType::SolidBlock));
 
+	auto& colliderComponent = ecs.AddComponentByEntityId<ColliderComponent>(entityId);
+	colliderComponent.SetColliderType(EColliderType::Square);
+
 	auto& transformComponent = ecs.AddComponentByEntityId<TransformComponent>(entityId);
 
 	auto& spriteComponent = ecs.AddComponentByEntityId<SpriteComponent>(entityId);
@@ -170,6 +174,9 @@ int CreateBlock()
 {
 	auto& ecs = GameContext::Get().GetECS();
 	int entityId = ecs.CreateEntityByEntityTypeId(static_cast<int>(EEntityType::Block));
+
+	auto& colliderComponent = ecs.AddComponentByEntityId<ColliderComponent>(entityId);
+	colliderComponent.SetColliderType(EColliderType::Square);
 
 	auto& transformComponent = ecs.AddComponentByEntityId<TransformComponent>(entityId);
 
@@ -220,6 +227,9 @@ int CreatePlayerPaddle()
 		screenHeight - playerSize[1]});
 	transformComponent.SetScale(playerSize);
 
+	auto& colliderComponent = ecs.AddComponentByEntityId<ColliderComponent>(entityId);
+	colliderComponent.SetColliderType(EColliderType::Square).SetSize(playerSize[0], playerSize[1]);
+
 	auto& movementComponent = ecs.AddComponentByEntityId<MovementComponent>(entityId);
 	movementComponent.SetVelocity({2000.f, 0.f});
 
@@ -254,6 +264,9 @@ int CreatePlayerBall()
 
 	auto& transformComponent = ecs.AddComponentByEntityId<TransformComponent>(entityId);
 	transformComponent.SetScale({ 25.5f, 25.5f });
+
+	auto& colliderComponent = ecs.AddComponentByEntityId<ColliderComponent>(entityId);
+	colliderComponent.SetColliderType(EColliderType::Circle).SetSize(25.5f, 25.5f);
 
 	auto& spriteComponent = ecs.AddComponentByEntityId<SpriteComponent>(entityId);
 	auto& sprite = spriteComponent.Sprite();
@@ -301,6 +314,9 @@ void ECSBreakout::InitComponentsPools()
 			break;
 		case breakout::EComponentType::PlayerBall:
 			ComponentManager::Get().CreateComponentPool<PlayerBallComponent>(poolSize);
+			break;
+		case breakout::EComponentType::Collider:
+			ComponentManager::Get().CreateComponentPool<ColliderComponent>(poolSize);
 			break;
 		default:
 			break;

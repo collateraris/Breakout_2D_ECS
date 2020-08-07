@@ -2,6 +2,7 @@
 
 #include <EntityComponentSystem.h>
 #include <PlayerComponent.h>
+#include <ColliderComponent.h>
 
 #include <EventsStorage.h>
 
@@ -75,6 +76,10 @@ void PlayerLogicSystem::SetPosition(bool axis /* false - x, true - y*/, short in
 	float screenWidth = window->GetWidth();
 	pos[axis] = std::clamp(pos[axis], 0.f + transformComponent.GetScale()[axis], screenWidth - transformComponent.GetScale()[axis]);
 	transformComponent.SetPosition(pos);
+
+	const auto& size = transformComponent.GetScale();
+	auto& colliderComponent = GameContext::Get().GetECS().GetComponentByEntityId<ColliderComponent>(m_playerEntityId);
+	colliderComponent.SetCenter(pos[0] + size[0] * 0.5f, pos[1] + size[1] * 0.5f);
 }
 
 
