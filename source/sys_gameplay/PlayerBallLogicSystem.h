@@ -6,6 +6,7 @@ namespace breakout
 {
     class PlayerBallLogicSystem : public BaseSystem
     {
+        using entityId = int;
 
     public:
 
@@ -22,6 +23,8 @@ namespace breakout
 
         virtual void Init() override;
         virtual void Update(float dtMilliseconds) override;
+
+        void CollitionResolution(entityId, entityId);
 
     protected:
 

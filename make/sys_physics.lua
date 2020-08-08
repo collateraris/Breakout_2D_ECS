@@ -12,6 +12,8 @@ project "SysPhysics"
         paths.game,
         paths.ecs,
         paths.memory,
+        paths.events,
+        paths.telemetry,
     }
     
     files

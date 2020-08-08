@@ -13,6 +13,13 @@ namespace breakout
 		Square,
 	};
 
+	enum class EDamagableType
+	{
+		None,
+		Saved,
+		Destroyable,
+	};
+
 	class ColliderComponent : public BaseComponent
 	{
 	public:
@@ -37,6 +44,15 @@ namespace breakout
 			return *this;
 		}
 
+		ColliderComponent& SetPosition(const std::array<float, 2>& pos)
+		{
+			m_pos = pos;
+			float x_center = pos[0] + m_width * 0.5f;
+			float y_center = pos[1] + m_height * 0.5f;
+			SetCenter(x_center, y_center);
+			return *this;
+		}
+
 		float GetWidth() const
 		{
 			return m_width;
@@ -57,15 +73,31 @@ namespace breakout
 			return m_center;
 		}
 
+		const std::array<float, 2>& GetPosition() const
+		{
+			return m_pos;
+		}
+
 		ColliderComponent& SetColliderType(EColliderType type)
 		{
 			m_type = type;
 			return *this;
 		}
 
-		EColliderType GetColliderType()
+		ColliderComponent& SetDamagableType(EDamagableType type)
+		{
+			m_damageableType = type;
+			return *this;
+		}
+
+		EColliderType GetColliderType() const
 		{
 			return m_type;
+		}
+
+		EDamagableType GetDamagableType() const
+		{
+			return m_damageableType;
 		}
 
 	private:
@@ -75,7 +107,9 @@ namespace breakout
 		float m_radius = 0.f;
 
 		std::array<float, 2> m_center = {0.f , 0.f};
+		std::array<float, 2> m_pos = { 0.f , 0.f };
 
 		EColliderType m_type = EColliderType::None;
+		EDamagableType m_damageableType = EDamagableType::None;
 	};
 }

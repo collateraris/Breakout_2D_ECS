@@ -2,12 +2,15 @@
 
 #include <System.h>
 
+#include <list>
+
 namespace breakout
 {
+    class ColliderComponent;
 
     class CollisionSystem : public BaseSystem
     {
-
+        using entityId = int;
     public:
 
         static EBaseSystemType GetType()
@@ -24,7 +27,13 @@ namespace breakout
 
     protected:
 
-        void CollisitionDetection(float dtMilliseconds);
+        void CollisionDetection(float dtMilliseconds);
+        void CollisionResolution(entityId, entityId);
 
+        bool CheckCollision(const ColliderComponent& A, const ColliderComponent& B) const;
+
+        bool CheckAABB_AABBCollision(const ColliderComponent& A, const ColliderComponent& B) const;
+
+        bool CheckCircle_AABBCollision(const ColliderComponent& A, const ColliderComponent& B) const;
     };
 }

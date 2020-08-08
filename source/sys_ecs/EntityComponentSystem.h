@@ -28,6 +28,8 @@ namespace breakout
 		template<class componentStruct>
 		componentStruct& GetComponentByEntityId(int entityId);
 
+		void EntityDestroy(int entityId);
+
 		int CreateEntityByEntityTypeId(int entityTypeId);
 
 	private:

@@ -119,7 +119,7 @@ void GameMaps::GenerateBlocks(const std::vector<std::vector<unsigned int>>& tile
         transformComponent.SetScale(size);
 
         auto& colliderComponent = ecs.GetComponentByEntityId<ColliderComponent>(entityId);
-        colliderComponent.SetSize(size[0], size[1]).SetCenter(pos[0] + size[0] * 0.5f, pos[1] + size[1] * 0.5f);
+        colliderComponent.SetSize(size[0], size[1]).SetPosition(pos);
 
         auto& spriteComponent = ecs.GetComponentByEntityId<SpriteComponent>(entityId);
         spriteComponent.Sprite().SetColor(color);

@@ -12,9 +12,9 @@ namespace breakout
 
 		static InputManager& Get();
 
-		MulticastDelegate<oglml::EKeyButtonCode, oglml::EKeyModeCode>& OnKeyRelease();
+		MulticastDelegate<oglml::EKeyButtonCode, oglml::EKeyModeCode>& OnKeyReleased();
 
-		MulticastDelegate<oglml::EKeyButtonCode, oglml::EKeyModeCode>& OnKeyPress();
+		MulticastDelegate<oglml::EKeyButtonCode, oglml::EKeyModeCode>& OnKeyPressed();
 
 		void KeyEnterListener(oglml::EKeyButtonCode, oglml::EActionCode, oglml::EKeyModeCode);
 
@@ -27,7 +27,7 @@ namespace breakout
 		void operator=(InputManager&) = delete;
 		void operator=(InputManager&&) = delete;
 
-		MulticastDelegate<oglml::EKeyButtonCode, oglml::EKeyModeCode> m_OnKeyReleaseDelegate;
-		MulticastDelegate<oglml::EKeyButtonCode, oglml::EKeyModeCode> m_OnKeyPressDelegate;
+		MulticastDelegate<oglml::EKeyButtonCode, oglml::EKeyModeCode> m_OnKeyReleasedDelegate;
+		MulticastDelegate<oglml::EKeyButtonCode, oglml::EKeyModeCode> m_OnKeyPressedDelegate;
 	};
 }

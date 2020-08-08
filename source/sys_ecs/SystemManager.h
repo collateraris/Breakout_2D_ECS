@@ -49,7 +49,6 @@ namespace breakout
 
 		auto globalAllocator = MemoryManager::Get().GetGlobalAllocator();
 		auto system = Allocate<systemClass>(globalAllocator.get());
-		system->Init();
 
 		m_systems[type] = system;
 

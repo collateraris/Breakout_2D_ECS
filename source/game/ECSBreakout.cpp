@@ -148,7 +148,8 @@ int CreateSolidBlock()
 	int entityId = ecs.CreateEntityByEntityTypeId(static_cast<int>(EEntityType::SolidBlock));
 
 	auto& colliderComponent = ecs.AddComponentByEntityId<ColliderComponent>(entityId);
-	colliderComponent.SetColliderType(EColliderType::Square);
+	colliderComponent.SetColliderType(EColliderType::Square)
+		.SetDamagableType(EDamagableType::Saved);
 
 	auto& transformComponent = ecs.AddComponentByEntityId<TransformComponent>(entityId);
 
@@ -176,7 +177,8 @@ int CreateBlock()
 	int entityId = ecs.CreateEntityByEntityTypeId(static_cast<int>(EEntityType::Block));
 
 	auto& colliderComponent = ecs.AddComponentByEntityId<ColliderComponent>(entityId);
-	colliderComponent.SetColliderType(EColliderType::Square);
+	colliderComponent.SetColliderType(EColliderType::Square)
+		.SetDamagableType(EDamagableType::Destroyable);
 
 	auto& transformComponent = ecs.AddComponentByEntityId<TransformComponent>(entityId);
 
@@ -223,17 +225,21 @@ int CreatePlayerPaddle()
 	sprite.SetScreenSize(screenWidth, screenHeight);
 
 	const std::array<float, 2> playerSize = { 100.0f, 20.0f };
-	transformComponent.SetPosition({ screenWidth * 0.5f - playerSize[0] * 0.5f, 
-		screenHeight - playerSize[1]});
+	const std::array<float, 2> playerSizePos = { screenWidth * 0.5f - playerSize[0] * 0.5f,
+		screenHeight - playerSize[1] };
+	transformComponent.SetPosition(playerSizePos);
 	transformComponent.SetScale(playerSize);
 
 	auto& colliderComponent = ecs.AddComponentByEntityId<ColliderComponent>(entityId);
-	colliderComponent.SetColliderType(EColliderType::Square).SetSize(playerSize[0], playerSize[1]);
+	colliderComponent.SetColliderType(EColliderType::Square)
+		.SetDamagableType(EDamagableType::Saved)
+		.SetSize(playerSize[0], playerSize[1])
+		.SetPosition(playerSizePos);
 
 	auto& movementComponent = ecs.AddComponentByEntityId<MovementComponent>(entityId);
 	movementComponent.SetVelocity({2000.f, 0.f});
 
-	InputManager::Get().OnKeyPress().BindLambda([&](oglml::EKeyButtonCode key, oglml::EKeyModeCode mode)
+	InputManager::Get().OnKeyPressed().BindLambda([&](oglml::EKeyButtonCode key, oglml::EKeyModeCode mode)
 	{
 		if (key == oglml::EKeyButtonCode::KEY_A)
 		{
@@ -266,7 +272,9 @@ int CreatePlayerBall()
 	transformComponent.SetScale({ 25.5f, 25.5f });
 
 	auto& colliderComponent = ecs.AddComponentByEntityId<ColliderComponent>(entityId);
-	colliderComponent.SetColliderType(EColliderType::Circle).SetSize(25.5f, 25.5f);
+	colliderComponent.SetColliderType(EColliderType::Circle)
+		.SetDamagableType(EDamagableType::Saved)
+		.SetSize(25.5f, 25.5f);
 
 	auto& spriteComponent = ecs.AddComponentByEntityId<SpriteComponent>(entityId);
 	auto& sprite = spriteComponent.Sprite();
@@ -328,7 +336,7 @@ void ECSBreakout::CreateWorld()
 {
 	ECSBreakout::CreateComponent(EEntityType::Background);
 
-	GameMaps::Get().LoadMap(EGameMapLevels::Space_invader);
+	GameMaps::Get().LoadMap(EGameMapLevels::Standard);
 
 	ECSBreakout::CreateComponent(EEntityType::PlayerPaddle);
 	ECSBreakout::CreateComponent(EEntityType::PlayerBall);

@@ -79,7 +79,7 @@ void PlayerLogicSystem::SetPosition(bool axis /* false - x, true - y*/, short in
 
 	const auto& size = transformComponent.GetScale();
 	auto& colliderComponent = GameContext::Get().GetECS().GetComponentByEntityId<ColliderComponent>(m_playerEntityId);
-	colliderComponent.SetCenter(pos[0] + size[0] * 0.5f, pos[1] + size[1] * 0.5f);
+	colliderComponent.SetPosition(pos);
 }
 
 

@@ -12,6 +12,7 @@ namespace breakout
 		PlayerBallLogic = 5,
 		Physics = 6,
 		Collision = 7,
+		DamagableColliderLogic = 8,
 		MAX
 	};
 

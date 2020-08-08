@@ -18,20 +18,20 @@ InputManager& InputManager::Get()
 	return inputManager;
 }
 
-MulticastDelegate<oglml::EKeyButtonCode, oglml::EKeyModeCode>& InputManager::OnKeyRelease()
+MulticastDelegate<oglml::EKeyButtonCode, oglml::EKeyModeCode>& InputManager::OnKeyReleased()
 {
-	return m_OnKeyReleaseDelegate;
+	return m_OnKeyReleasedDelegate;
 }
 
-MulticastDelegate<oglml::EKeyButtonCode, oglml::EKeyModeCode>& InputManager::OnKeyPress()
+MulticastDelegate<oglml::EKeyButtonCode, oglml::EKeyModeCode>& InputManager::OnKeyPressed()
 {
-	return m_OnKeyPressDelegate;
+	return m_OnKeyPressedDelegate;
 }
 
 void InputManager::KeyEnterListener(oglml::EKeyButtonCode key, oglml::EActionCode action, oglml::EKeyModeCode mode)
 {
 	if (action == oglml::EActionCode::RELEASE)
-		m_OnKeyReleaseDelegate.Broadcast(key, mode);
+		m_OnKeyReleasedDelegate.Broadcast(key, mode);
 	else
-		m_OnKeyPressDelegate.Broadcast(key, mode);
+		m_OnKeyPressedDelegate.Broadcast(key, mode);
 }

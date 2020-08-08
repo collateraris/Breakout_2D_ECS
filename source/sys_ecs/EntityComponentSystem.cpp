@@ -26,3 +26,8 @@ int EntityComponentSystem::CreateEntityByEntityTypeId(int entityTypeId)
 {
 	return EntityManager::Get().Create(entityTypeId);
 }
+
+void EntityComponentSystem::EntityDestroy(int entityId)
+{
+	EntityManager::Get().Delete(entityId);
+}

@@ -12,13 +12,15 @@
 #include <components/TransformComponent.h>
 #include <MovementComponent.h>
 
+#include <EventManager.h>
+
 #include <algorithm>
 
 using namespace breakout;
 
 void PlayerBallLogicSystem::Init()
 {
-
+	EventManager::Get().OnCollitionDetected().BindObject(this, &PlayerBallLogicSystem::CollitionResolution);
 }
 
 void PlayerBallLogicSystem::Update(float dtMilliseconds)
@@ -43,6 +45,11 @@ void PlayerBallLogicSystem::Update(float dtMilliseconds)
 	default:
 		break;
 	}
+}
+
+void PlayerBallLogicSystem::CollitionResolution(entityId, entityId)
+{
+
 }
 
 void PlayerBallLogicSystem::SetPlayerEntityId()
@@ -131,9 +138,8 @@ void PlayerBallLogicSystem::SetPosition(bool axis /* false - x, true - y*/, shor
 	ballPos[axis] += velocitySign * playerVelocity * dtMilliseconds;
 	ballTransform.SetPosition(ballPos);
 
-	const auto& ballSize = ballTransform.GetScale();
 	auto& colliderComponent = GameContext::Get().GetECS().GetComponentByEntityId<ColliderComponent>(m_playerBallEntityId);
-	colliderComponent.SetCenter(ballPos[0] + ballSize[0] * 0.5f, ballPos[1] + ballSize[1] * 0.5f);
+	colliderComponent.SetPosition(ballPos);
 }
 
 void PlayerBallLogicSystem::MoveLogic(float dtMilliseconds)
@@ -166,6 +172,9 @@ void PlayerBallLogicSystem::MoveLogic(float dtMilliseconds)
 	}
 
 	ballTransform.SetPosition(ballPos);
+
+	auto& colliderComponent = GameContext::Get().GetECS().GetComponentByEntityId<ColliderComponent>(m_playerBallEntityId);
+	colliderComponent.SetPosition(ballPos);
 }
 
 

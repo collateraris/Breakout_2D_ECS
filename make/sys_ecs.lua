@@ -15,6 +15,7 @@ project "SysECS"
         paths.physics,
         paths.lib_multimedia,
         paths.glm.inc,
+        paths.gameplay,
     }
     
     files
