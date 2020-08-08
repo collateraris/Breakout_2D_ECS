@@ -34,6 +34,9 @@ namespace breakout
 		template<class componentStruct>
 		int GetComponentIdByEntityId(int entityId);
 
+		template<class componentStruct>
+		bool IsContainComponentByEntityId(int entityId);
+
 	private:
 
 		EntityManager();
@@ -76,13 +79,24 @@ namespace breakout
 		EComponentType componentType = componentStruct::GetType();
 
 		auto foundEntityIt = m_entityStorage.find(entityId);
-		if (foundEntityIt == m_entityStorage.end())
-			assert(foundEntityIt != m_entityStorage.end());
+		assert(foundEntityIt != m_entityStorage.end());
 
 		auto foundComponentIt = foundEntityIt->second.find(componentType);
 		assert(foundComponentIt != foundEntityIt->second.end());
 
 		return foundComponentIt->second;
+	}
+
+	template<class componentStruct>
+	bool EntityManager::IsContainComponentByEntityId(int entityId)
+	{
+		EComponentType componentType = componentStruct::GetType();
+
+		auto foundEntityIt = m_entityStorage.find(entityId);
+		assert(foundEntityIt != m_entityStorage.end());
+
+		auto foundComponentIt = foundEntityIt->second.find(componentType);
+		return foundComponentIt != foundEntityIt->second.end();
 	}
 
 }

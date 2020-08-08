@@ -28,6 +28,9 @@ namespace breakout
 		template<class componentStruct>
 		componentStruct& GetComponentByEntityId(int entityId);
 
+		template<class componentStruct>
+		bool IsContainComponentByEntityId(int entityId);
+
 		void EntityDestroy(int entityId);
 
 		int CreateEntityByEntityTypeId(int entityTypeId);
@@ -74,5 +77,11 @@ namespace breakout
 		int componentId = EntityManager::Get().GetComponentIdByEntityId<componentStruct>(entityId);
 		auto& component = ComponentManager::Get().GetComponent<componentStruct>(componentId);
 		return component;
+	}
+
+	template<class componentStruct>
+	bool EntityComponentSystem::IsContainComponentByEntityId(int entityId)
+	{
+		return EntityManager::Get().IsContainComponentByEntityId<componentStruct>(entityId);
 	}
 }

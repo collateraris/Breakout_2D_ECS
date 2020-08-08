@@ -2,17 +2,19 @@
 
 #include <Delegate.h>
 
+
 namespace breakout
 {
+	class ColliderComponent;
+
 	class EventManager
 	{
-		using entityId = int;
 
 	public:
 
 		static EventManager& Get();
 
-		MulticastDelegate<entityId, entityId>& OnCollitionDetected();
+		MulticastDelegate<const ColliderComponent&, const ColliderComponent&>& OnCollitionDetected();
 
 	private:
 
@@ -23,7 +25,7 @@ namespace breakout
 		void operator=(EventManager&) = delete;
 		void operator=(EventManager&&) = delete;
 
-		MulticastDelegate<entityId, entityId> OnCollitionDetectedDelegate;
+		MulticastDelegate<const ColliderComponent&, const ColliderComponent&> OnCollitionDetectedDelegate;
 	};
 }
 

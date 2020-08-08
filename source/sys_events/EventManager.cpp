@@ -1,5 +1,7 @@
 #include <EventManager.h>
 
+#include <ColliderComponent.h>
+
 using namespace breakout;
 
 EventManager::EventManager()
@@ -18,7 +20,7 @@ EventManager& EventManager::Get()
 	return eventManager;
 }
 
-MulticastDelegate<EventManager::entityId, EventManager::entityId>& EventManager::OnCollitionDetected()
+MulticastDelegate<const ColliderComponent&, const ColliderComponent&>& EventManager::OnCollitionDetected()
 {
 	return OnCollitionDetectedDelegate;
 }

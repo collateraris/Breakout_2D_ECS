@@ -4,10 +4,10 @@
 
 namespace breakout
 {
+    class ColliderComponent;
+
     class DamagableColliderLogicSystem : public BaseSystem
     {
-        using entityId = int;
-
     public:
 
         static EBaseSystemType GetType()
@@ -24,6 +24,6 @@ namespace breakout
         virtual void Init() override;
         virtual void Update(float dtMilliseconds) override;
 
-        void CollitionResolution(entityId, entityId);
+        void CollitionResolution(const ColliderComponent&, const ColliderComponent&);
     };
 }

@@ -19,20 +19,18 @@ void DamagableColliderLogicSystem::Update(float dtMilliseconds)
 
 }
 
-void DamagableColliderLogicSystem::CollitionResolution(entityId A, entityId B)
+void DamagableColliderLogicSystem::CollitionResolution(const ColliderComponent& componentA, const ColliderComponent& componentB)
 {
 	auto& ecs = EntityComponentSystem::Get();
-	auto& componentA = ecs.GetComponentByEntityId<ColliderComponent>(A);
-	auto& componentB = ecs.GetComponentByEntityId<ColliderComponent>(B);
 
 	if (componentA.GetDamagableType() == EDamagableType::Destroyable)
 	{
-		ecs.EntityDestroy(A);
+		ecs.EntityDestroy(componentA.m_entityId);
 	}
 
 	if (componentB.GetDamagableType() == EDamagableType::Destroyable)
 	{
-		ecs.EntityDestroy(B);
+		ecs.EntityDestroy(componentB.m_entityId);
 	}
 }
 

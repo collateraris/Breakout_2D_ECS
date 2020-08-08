@@ -10,7 +10,6 @@ namespace breakout
 
     class CollisionSystem : public BaseSystem
     {
-        using entityId = int;
     public:
 
         static EBaseSystemType GetType()
@@ -25,10 +24,12 @@ namespace breakout
         virtual void Init() override;
         virtual void Update(float dtMilliseconds) override;
 
+        static std::array<float, 2> GetCircle_AABBCollisionDiff(const ColliderComponent& A, const ColliderComponent& B);
+
     protected:
 
         void CollisionDetection(float dtMilliseconds);
-        void CollisionResolution(entityId, entityId);
+        void CollisionResolution(const ColliderComponent&, const ColliderComponent&) const;
 
         bool CheckCollision(const ColliderComponent& A, const ColliderComponent& B) const;
 

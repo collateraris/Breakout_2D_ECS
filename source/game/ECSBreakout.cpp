@@ -244,17 +244,14 @@ int CreatePlayerPaddle()
 		if (key == oglml::EKeyButtonCode::KEY_A)
 		{
 			EventsStorage::Get().Put(BaseEvent(EEventType::PLAYER_ACTION_MOVE_LEFT));
-			LOG(playerMoveLeftPushEvent.c_str());
 		}
 		else if (key == oglml::EKeyButtonCode::KEY_D)
 		{
 			EventsStorage::Get().Put(BaseEvent(EEventType::PLAYER_ACTION_MOVE_RIGHT));
-			LOG(playerMoveRightPushEvent.c_str());
 		}
 		else if (key == oglml::EKeyButtonCode::KEY_SPACE)
 		{
 			EventsStorage::Get().Put(BaseEvent(EEventType::PLAYER_ACTION_SPACE_CLICK));
-			LOG(playerSpaceClickPushEventRight.c_str());
 		}
 	});
 

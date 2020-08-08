@@ -4,6 +4,7 @@
 #include <PlayerBallComponent.h>
 #include <PlayerComponent.h>
 #include <ColliderComponent.h>
+#include <CollisionSystem.h>
 
 #include <EventsStorage.h>
 
@@ -15,8 +16,19 @@
 #include <EventManager.h>
 
 #include <algorithm>
+#include <numeric>
+#include <cassert>
+
 
 using namespace breakout;
+
+enum class EDirection
+{
+	UP = 0,
+	RIGHT = 1,
+	DOWN = 2,
+	LEFT = 3
+};
 
 void PlayerBallLogicSystem::Init()
 {
@@ -47,9 +59,55 @@ void PlayerBallLogicSystem::Update(float dtMilliseconds)
 	}
 }
 
-void PlayerBallLogicSystem::CollitionResolution(entityId, entityId)
+void PlayerBallLogicSystem::CollitionResolution(const ColliderComponent& componentA, const ColliderComponent& componentB)
 {
+	const auto& circleCollider = componentA.GetColliderType() == EColliderType::Circle ? componentA : componentB;
+	const auto& squareCollider = componentB.GetColliderType() == EColliderType::Square ? componentB : componentA;
+	if (circleCollider.GetColliderType() != EColliderType::Circle || squareCollider.GetColliderType() != EColliderType::Square)
+		return;
 
+
+	std::array<std::array<float, 2>, 4> directions = { {{0.0f, 1.0f}, {1.0f, 0.0f}, {0.0f, -1.0f}, {-1.0f, 0.0f}} };
+	std::array<float, 2> difference = CollisionSystem::GetCircle_AABBCollisionDiff(circleCollider, squareCollider);
+	float invDifferenceLen = 1.0f / sqrtf(difference[0] * difference[0] + difference[1] * difference[1]);
+	difference = { difference[0] * invDifferenceLen, difference[1] * invDifferenceLen };
+
+	float maxDotProduct = 0.f;
+	EDirection bestDir = EDirection::UP;
+	for(int i = 0; i < directions.size(); ++i)
+	{
+		float dotProduct = std::inner_product(difference.begin(), difference.end(), directions[i].begin(), 0);
+		if (dotProduct > maxDotProduct)
+		{
+			maxDotProduct = dotProduct;
+			bestDir = static_cast<EDirection>(i);
+		}
+	}
+	auto& ballMovement = EntityComponentSystem::Get()
+		.GetComponentByEntityId<MovementComponent>(circleCollider.m_entityId);
+
+	auto& ballTransform = EntityComponentSystem::Get()
+		.GetComponentByEntityId<TransformComponent>(circleCollider.m_entityId);
+
+	std::array<float, 2> ballVelocity = ballMovement.GetVelocity();
+	std::array<float, 2> ballPos = ballTransform.GetPosition();
+	float ballRadius = circleCollider.GetRadius();
+
+	if (bestDir == EDirection::LEFT || bestDir == EDirection::RIGHT) // horizontal collision
+	{
+		ballVelocity[0] *= -1.0f;
+		float penetration = ballRadius - std::abs(difference[0]);
+		ballPos[0] += bestDir == EDirection::LEFT ? penetration : -penetration;
+	}
+	else // vertical collision
+	{
+		ballVelocity[1] *= -1.0f;
+		float penetration = ballRadius - std::abs(difference[1]);
+		ballPos[1] += bestDir == EDirection::UP ? penetration : -penetration;
+	}
+
+	ballMovement.SetVelocity(ballVelocity);
+	ballTransform.SetPosition(ballPos);
 }
 
 void PlayerBallLogicSystem::SetPlayerEntityId()

@@ -8,7 +8,6 @@
 
 #include <unordered_set>
 #include <algorithm>
-#include <iostream>
 
 using namespace breakout;
 
@@ -65,7 +64,7 @@ void CollisionSystem::CollisionDetection(float dtMilliseconds)
             const ColliderComponent& B = (*innerIt).GetContainer();
             if (CheckCollision(A, B))
             {
-                CollisionResolution(A.m_entityId, B.m_entityId);
+                CollisionResolution(A, B);
             }
         }
     }
@@ -73,7 +72,7 @@ void CollisionSystem::CollisionDetection(float dtMilliseconds)
 
 }
 
-void CollisionSystem::CollisionResolution(entityId A, entityId B)
+void CollisionSystem::CollisionResolution(const ColliderComponent& A, const ColliderComponent& B) const
 {
      EventManager::Get().OnCollitionDetected().Broadcast(A, B);
 }
@@ -92,26 +91,33 @@ bool CollisionSystem::CheckCollision(const ColliderComponent& A, const ColliderC
     return false;
 }
 
+
 bool CollisionSystem::CheckAABB_AABBCollision(const ColliderComponent& A, const ColliderComponent& B) const
 {
-    return  A.GetPosition()[0] + A.GetWidth() >= B.GetPosition()[0] &&
-        B.GetPosition()[0] + B.GetWidth() >= A.GetPosition()[0] &&
-        A.GetPosition()[1] + A.GetHeight() >= B.GetPosition()[1] &&
-        B.GetPosition()[1] + B.GetHeight() >= A.GetPosition()[1];
+    return  A.GetPosition()[0] + A.GetWidth() > B.GetPosition()[0] &&
+        B.GetPosition()[0] + B.GetWidth() > A.GetPosition()[0] &&
+        A.GetPosition()[1] + A.GetHeight() > B.GetPosition()[1] &&
+        B.GetPosition()[1] + B.GetHeight() > A.GetPosition()[1];
+}
+
+std::array<float, 2> CollisionSystem::GetCircle_AABBCollisionDiff(const ColliderComponent& circle, const ColliderComponent& square)
+{
+    const std::array<float, 2>& circleCenter = circle.GetCenter();
+    const std::array<float, 2>& aabbCenter = square.GetCenter();
+    const std::array<float, 2> aabbHalfExtends = { square.GetWidth() * 0.5f, square.GetHeight() * 0.5f };
+
+    std::array<float, 2> difference = { circleCenter[0] - aabbCenter[0], circleCenter[1] - aabbCenter[1] };
+    const std::array<float, 2> clamped = { std::clamp(difference[0], -aabbHalfExtends[0], aabbHalfExtends[0]),
+                                          std::clamp(difference[1], -aabbHalfExtends[1], aabbHalfExtends[1]) };
+
+    const std::array<float, 2> closest = { aabbCenter[0] + clamped[0], aabbCenter[1] + clamped[1] };
+    difference = { closest[0] - circleCenter[0], closest[1] - circleCenter[1] };
+    return difference;
 }
 
 bool CollisionSystem::CheckCircle_AABBCollision(const ColliderComponent& circle, const ColliderComponent& square) const
 {
-    const std::array<float, 2>& circleCenter = circle.GetCenter();
-    const std::array<float, 2>& aabbCenter = square.GetCenter();
-    const std::array<float, 2> aabbHalfExtends = {square.GetWidth() * 0.5f, square.GetHeight() * 0.5f};
-
-    std::array<float, 2> difference = {circleCenter[0] - aabbCenter[0], circleCenter[1] - aabbCenter[1] };
-    const std::array<float, 2> clamped = {std::clamp(difference[0], -aabbHalfExtends[0], aabbHalfExtends[0]),
-                                          std::clamp(difference[1], -aabbHalfExtends[1], aabbHalfExtends[1])};
-
-    const std::array<float, 2> closest = {aabbCenter[0] + clamped[0], aabbCenter[1] + clamped[1] };
-    difference = {closest[0] - circleCenter[0], closest[1] - circleCenter[1]};
+    std::array<float, 2> difference = GetCircle_AABBCollisionDiff(circle, square);
 
     float circleRadius = circle.GetRadius();
     return (difference[0] * difference[0] + difference[1] * difference[1]) < circleRadius * circleRadius;
