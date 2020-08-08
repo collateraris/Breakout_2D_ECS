@@ -11,6 +11,7 @@ project "SysEvents"
         paths.events,
         paths.physics,
         paths.ecs,
+        paths.game,
     }
     
     files

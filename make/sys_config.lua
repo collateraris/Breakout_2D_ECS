@@ -10,6 +10,7 @@ project "SysConfig"
     {
         paths.config,
         paths.tinyxml2.inc,
+        paths.game,
     }
     
     files

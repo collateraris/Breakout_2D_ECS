@@ -14,6 +14,7 @@
 #include <MovementComponent.h>
 
 #include <EventManager.h>
+#include <Vector2.h>
 
 #include <algorithm>
 #include <numeric>
@@ -59,24 +60,38 @@ void PlayerBallLogicSystem::Update(float dtMilliseconds)
 	}
 }
 
-void PlayerBallLogicSystem::CollitionResolution(const ColliderComponent& componentA, const ColliderComponent& componentB)
+void PlayerBallLogicSystem::PaddlePlayerCollition(const ColliderComponent& ballCollider, const ColliderComponent& playerCollider) const
 {
-	const auto& circleCollider = componentA.GetColliderType() == EColliderType::Circle ? componentA : componentB;
-	const auto& squareCollider = componentB.GetColliderType() == EColliderType::Square ? componentB : componentA;
-	if (circleCollider.GetColliderType() != EColliderType::Circle || squareCollider.GetColliderType() != EColliderType::Square)
-		return;
+	Vector2<float> ballPos = ballCollider.GetPosition();
+	float ballRadius = ballCollider.GetRadius();
+	Vector2<float> paddlePos = playerCollider.GetPosition();
+	float paddleWidth = playerCollider.GetWidth();
 
+	float centerBoard = paddlePos.x() + paddleWidth * 0.5f;
+	float distance = (ballPos.x() + ballRadius) - centerBoard;
+	float percentage = distance * (2.f / paddleWidth);
+	float strength = 2.f;
 
+	auto& ballMovement = EntityComponentSystem::Get().GetComponentByEntityId<MovementComponent>(ballCollider.m_entityId);
+	Vector2<float> oldVelocity = ballMovement.GetVelocity();
+	Vector2<float> newVelocity = ballMovement.GetVelocity();
+	newVelocity.x() = m_ballInitVelocity[0] * percentage * strength;
+	newVelocity = newVelocity.normalized() * oldVelocity.length();
+	newVelocity.y() = -1.0f * abs(newVelocity.y());
+	ballMovement.SetVelocity(newVelocity.data());
+}
+
+void PlayerBallLogicSystem::BlockCollition(const ColliderComponent& circleCollider, const ColliderComponent& squareCollider) const
+{
 	std::array<std::array<float, 2>, 4> directions = { {{0.0f, 1.0f}, {1.0f, 0.0f}, {0.0f, -1.0f}, {-1.0f, 0.0f}} };
-	std::array<float, 2> difference = CollisionSystem::GetCircle_AABBCollisionDiff(circleCollider, squareCollider);
-	float invDifferenceLen = 1.0f / sqrtf(difference[0] * difference[0] + difference[1] * difference[1]);
-	difference = { difference[0] * invDifferenceLen, difference[1] * invDifferenceLen };
+	Vector2<float> difference = CollisionSystem::GetCircle_AABBCollisionDiff(circleCollider, squareCollider);
+	difference = difference.normalized();
 
 	float maxDotProduct = 0.f;
 	EDirection bestDir = EDirection::UP;
-	for(int i = 0; i < directions.size(); ++i)
+	for (int i = 0; i < directions.size(); ++i)
 	{
-		float dotProduct = std::inner_product(difference.begin(), difference.end(), directions[i].begin(), 0);
+		float dotProduct = Vector2<float>::Dot(difference.data(), directions[i]);
 		if (dotProduct > maxDotProduct)
 		{
 			maxDotProduct = dotProduct;
@@ -89,25 +104,46 @@ void PlayerBallLogicSystem::CollitionResolution(const ColliderComponent& compone
 	auto& ballTransform = EntityComponentSystem::Get()
 		.GetComponentByEntityId<TransformComponent>(circleCollider.m_entityId);
 
-	std::array<float, 2> ballVelocity = ballMovement.GetVelocity();
-	std::array<float, 2> ballPos = ballTransform.GetPosition();
+	Vector2<float> ballVelocity = ballMovement.GetVelocity();
+	Vector2<float> ballPos = ballTransform.GetPosition();
 	float ballRadius = circleCollider.GetRadius();
 
 	if (bestDir == EDirection::LEFT || bestDir == EDirection::RIGHT) // horizontal collision
 	{
-		ballVelocity[0] *= -1.0f;
+		ballVelocity.x() *= -1.0f;
 		float penetration = ballRadius - std::abs(difference[0]);
-		ballPos[0] += bestDir == EDirection::LEFT ? penetration : -penetration;
+		ballPos.x() += bestDir == EDirection::LEFT ? penetration : -penetration;
 	}
 	else // vertical collision
 	{
-		ballVelocity[1] *= -1.0f;
+		ballVelocity.y() *= -1.0f;
 		float penetration = ballRadius - std::abs(difference[1]);
-		ballPos[1] += bestDir == EDirection::UP ? penetration : -penetration;
+		ballPos.y() += bestDir == EDirection::UP ? penetration : -penetration;
 	}
 
-	ballMovement.SetVelocity(ballVelocity);
-	ballTransform.SetPosition(ballPos);
+	ballMovement.SetVelocity(ballVelocity.data());
+
+	auto IsPlayer = [&](const ColliderComponent& component) -> bool
+	{
+		return component.m_entityId == m_playerEntityId;
+	};
+
+	ballTransform.SetPosition(ballPos.data());
+
+	if (IsPlayer(squareCollider))
+	{
+		PaddlePlayerCollition(circleCollider, squareCollider);
+	}
+}
+
+void PlayerBallLogicSystem::CollitionResolution(const ColliderComponent& componentA, const ColliderComponent& componentB)
+{
+	const auto& circleCollider = componentA.GetColliderType() == EColliderType::Circle ? componentA : componentB;
+	const auto& squareCollider = componentB.GetColliderType() == EColliderType::Square ? componentB : componentA;
+	if (circleCollider.GetColliderType() != EColliderType::Circle || squareCollider.GetColliderType() != EColliderType::Square)
+		return;
+
+	BlockCollition(circleCollider, squareCollider);	
 }
 
 void PlayerBallLogicSystem::SetPlayerEntityId()
@@ -182,57 +218,57 @@ void PlayerBallLogicSystem::SetInitPosition()
 void PlayerBallLogicSystem::SetPosition(bool axis /* false - x, true - y*/, short int velocitySign /* <0 - negative, >= - positive*/, float dtMilliseconds)
 {
 	auto& playerTransform = GameContext::Get().GetECS().GetComponentByEntityId<TransformComponent>(m_playerEntityId);
-	const auto& playerPos = playerTransform.GetPosition();
+	Vector2<float> playerPos = playerTransform.GetPosition();
 		
 	auto& ballTransform = GameContext::Get().GetECS().GetComponentByEntityId<TransformComponent>(m_playerBallEntityId);
 	const auto& playerSize = playerTransform.GetScale();
 	float ballRadius = ballTransform.GetScale()[axis];
-	const std::array<float, 2> deltaPos = {playerSize[0] * 0.5f - ballRadius * 2.0f, -ballRadius * 2.0f};
-	std::array<float, 2> ballPos = {playerPos[0] + deltaPos[0], playerPos[1] + deltaPos[1] };
+	Vector2<float> deltaPos({playerSize[0] * 0.5f - ballRadius * 2.0f, -ballRadius * 2.0f});
+	Vector2<float> ballPos = playerPos + deltaPos;
 
 	auto& playerMovement = GameContext::Get().GetECS().GetComponentByEntityId<MovementComponent>(m_playerEntityId);
 	auto playerVelocity = playerMovement.GetVelocity()[axis] * dtMilliseconds;
 	int sign = velocitySign < 0 ? -1 : 1;
-	ballPos[axis] += velocitySign * playerVelocity * dtMilliseconds;
-	ballTransform.SetPosition(ballPos);
+	ballPos.x() += velocitySign * playerVelocity * dtMilliseconds;
+	ballTransform.SetPosition(ballPos.data());
 
 	auto& colliderComponent = GameContext::Get().GetECS().GetComponentByEntityId<ColliderComponent>(m_playerBallEntityId);
-	colliderComponent.SetPosition(ballPos);
+	colliderComponent.SetPosition(ballPos.data());
 }
 
 void PlayerBallLogicSystem::MoveLogic(float dtMilliseconds)
 {
 	auto& ballTransform = GameContext::Get().GetECS().GetComponentByEntityId<TransformComponent>(m_playerBallEntityId);
-	auto ballPos = ballTransform.GetPosition();
-	const auto& ballSize = ballTransform.GetScale();
+	Vector2<float> ballPos = ballTransform.GetPosition();
+	Vector2<float> ballSize = ballTransform.GetScale();
 
 	auto& ballMovement = GameContext::Get().GetECS().GetComponentByEntityId<MovementComponent>(m_playerBallEntityId);
-	const auto& ballVelocity = ballMovement.GetVelocity();
-	ballPos = { ballPos[0] + ballVelocity[0] * dtMilliseconds, ballPos[1] + ballVelocity[1] * dtMilliseconds };
+	Vector2<float> ballVelocity = ballMovement.GetVelocity();
+	ballPos += ballVelocity * dtMilliseconds;
 
 	auto window = GameContext::Get().GetMainWindow();
 	float screenWidth = window->GetWidth();
 
-	if (ballPos[0] <= 0.0f)
+	if (ballPos.x() <= 0.0f)
 	{
-		ballMovement.SetVelocity({-ballVelocity[0], -ballVelocity[1] });
-		ballPos = {0.f, ballPos[1] };
+		ballMovement.SetVelocity({-ballVelocity.x(), -ballVelocity.y() });
+		ballPos.x() = 0.f;
 	}
-	else if (ballPos[0] + ballSize[0] >= screenWidth)
+	else if (ballPos.x() + ballSize.x() >= screenWidth)
 	{
-		ballMovement.SetVelocity({ -ballVelocity[0], -ballVelocity[1] });
-		ballPos = { screenWidth - ballSize[0], ballPos[1] };
+		ballMovement.SetVelocity({ -ballVelocity.x(), -ballVelocity.y() });
+		ballPos = { screenWidth - ballSize.x(), ballPos.y() };
 	}
-	if (ballPos[1] <= 0.0f)
+	if (ballPos.y() <= 0.0f)
 	{
-		ballMovement.SetVelocity({ -ballVelocity[0], -ballVelocity[1] });
-		ballPos = { ballPos[0], 0.f };
+		ballMovement.SetVelocity({ -ballVelocity.x(), -ballVelocity.y() });
+		ballPos.y() = 0.f;
 	}
 
-	ballTransform.SetPosition(ballPos);
+	ballTransform.SetPosition(ballPos.data());
 
 	auto& colliderComponent = GameContext::Get().GetECS().GetComponentByEntityId<ColliderComponent>(m_playerBallEntityId);
-	colliderComponent.SetPosition(ballPos);
+	colliderComponent.SetPosition(ballPos.data());
 }
 
 

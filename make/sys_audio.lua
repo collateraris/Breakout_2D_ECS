@@ -9,6 +9,7 @@ project "SysAudio"
     includedirs
     {
         paths.audio,
+        paths.game,
     }
     
     files

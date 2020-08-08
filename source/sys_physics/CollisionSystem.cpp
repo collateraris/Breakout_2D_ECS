@@ -6,6 +6,8 @@
 #include <EventManager.h>
 #include <FreeListPoolElement.h>
 
+#include <Vector2.h>
+
 #include <unordered_set>
 #include <algorithm>
 
@@ -102,23 +104,22 @@ bool CollisionSystem::CheckAABB_AABBCollision(const ColliderComponent& A, const 
 
 std::array<float, 2> CollisionSystem::GetCircle_AABBCollisionDiff(const ColliderComponent& circle, const ColliderComponent& square)
 {
-    const std::array<float, 2>& circleCenter = circle.GetCenter();
-    const std::array<float, 2>& aabbCenter = square.GetCenter();
-    const std::array<float, 2> aabbHalfExtends = { square.GetWidth() * 0.5f, square.GetHeight() * 0.5f };
+    Vector2<float> circleCenter = circle.GetCenter();
+    Vector2<float> aabbCenter = square.GetCenter();
+    Vector2<float> aabbHalfExtends({ square.GetWidth() * 0.5f, square.GetHeight() * 0.5f });
 
-    std::array<float, 2> difference = { circleCenter[0] - aabbCenter[0], circleCenter[1] - aabbCenter[1] };
-    const std::array<float, 2> clamped = { std::clamp(difference[0], -aabbHalfExtends[0], aabbHalfExtends[0]),
-                                          std::clamp(difference[1], -aabbHalfExtends[1], aabbHalfExtends[1]) };
+    Vector2<float> difference = circleCenter - aabbCenter;
+    Vector2<float> clamped = Vector2<float>::Clamp(difference, aabbHalfExtends);
 
-    const std::array<float, 2> closest = { aabbCenter[0] + clamped[0], aabbCenter[1] + clamped[1] };
-    difference = { closest[0] - circleCenter[0], closest[1] - circleCenter[1] };
-    return difference;
+    Vector2<float> closest = aabbCenter + clamped;
+    difference = closest - circleCenter;
+    return difference.data();
 }
 
 bool CollisionSystem::CheckCircle_AABBCollision(const ColliderComponent& circle, const ColliderComponent& square) const
 {
-    std::array<float, 2> difference = GetCircle_AABBCollisionDiff(circle, square);
+    Vector2<float> difference = GetCircle_AABBCollisionDiff(circle, square);
 
     float circleRadius = circle.GetRadius();
-    return (difference[0] * difference[0] + difference[1] * difference[1]) < circleRadius * circleRadius;
+    return difference.sqrLength() < circleRadius * circleRadius;
 }
