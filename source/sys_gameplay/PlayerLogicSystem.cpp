@@ -74,7 +74,7 @@ void PlayerLogicSystem::SetPosition(bool axis /* false - x, true - y*/, short in
 	pos[axis] += sign * velocity;
 	auto window = GameContext::Get().GetMainWindow();
 	float screenWidth = window->GetWidth();
-	pos[axis] = std::clamp(pos[axis], 0.f + transformComponent.GetScale()[axis], screenWidth - transformComponent.GetScale()[axis]);
+	pos[axis] = std::clamp(pos[axis], 0.f, screenWidth - transformComponent.GetScale()[axis]);
 	transformComponent.SetPosition(pos);
 
 	const auto& size = transformComponent.GetScale();

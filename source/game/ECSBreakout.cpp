@@ -237,7 +237,7 @@ int CreatePlayerPaddle()
 		.SetPosition(playerSizePos);
 
 	auto& movementComponent = ecs.AddComponentByEntityId<MovementComponent>(entityId);
-	movementComponent.SetVelocity({2000.f, 0.f});
+	movementComponent.SetVelocity({500.f, 0.f});
 
 	InputManager::Get().OnKeyPressed().BindLambda([&](oglml::EKeyButtonCode key, oglml::EKeyModeCode mode)
 	{
@@ -265,13 +265,14 @@ int CreatePlayerBall()
 
 	ecs.AddComponentByEntityId<PlayerBallComponent>(entityId);
 
+	const std::array<float, 2> ballSize = { 25.5f, 25.5f };
 	auto& transformComponent = ecs.AddComponentByEntityId<TransformComponent>(entityId);
-	transformComponent.SetScale({ 25.5f, 25.5f });
+	transformComponent.SetScale(ballSize);
 
 	auto& colliderComponent = ecs.AddComponentByEntityId<ColliderComponent>(entityId);
-	colliderComponent.SetColliderType(EColliderType::Circle)
+	colliderComponent.SetColliderType(EColliderType::Square)
 		.SetDamagableType(EDamagableType::Saved)
-		.SetSize(25.5f, 25.5f);
+		.SetSize(ballSize[0], ballSize[1]);
 
 	auto& spriteComponent = ecs.AddComponentByEntityId<SpriteComponent>(entityId);
 	auto& sprite = spriteComponent.Sprite();
@@ -333,7 +334,7 @@ void ECSBreakout::CreateWorld()
 {
 	ECSBreakout::CreateComponent(EEntityType::Background);
 
-	GameMaps::Get().LoadMap(EGameMapLevels::Standard);
+	GameMaps::Get().LoadMap(EGameMapLevels::Bounce_galore);
 
 	ECSBreakout::CreateComponent(EEntityType::PlayerPaddle);
 	ECSBreakout::CreateComponent(EEntityType::PlayerBall);

@@ -10,7 +10,7 @@ namespace oglml
 		Texture2D() = default;
 		~Texture2D();
 
-		bool loadFromFile(const std::string& path);
+		bool loadFromFile(const std::string& path, bool usingAlpha = false);
 		unsigned int GetTextureID();
 
 		void operator=(Texture2D&);

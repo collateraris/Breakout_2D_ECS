@@ -143,7 +143,7 @@ void PlayerBallLogicSystem::CollitionResolution(const ColliderComponent& compone
 	if (circleCollider.GetColliderType() != EColliderType::Circle || squareCollider.GetColliderType() != EColliderType::Square)
 		return;
 
-	BlockCollition(circleCollider, squareCollider);	
+	//BlockCollition(circleCollider, squareCollider);	
 }
 
 void PlayerBallLogicSystem::SetPlayerEntityId()
@@ -223,7 +223,7 @@ void PlayerBallLogicSystem::SetPosition(bool axis /* false - x, true - y*/, shor
 	auto& ballTransform = GameContext::Get().GetECS().GetComponentByEntityId<TransformComponent>(m_playerBallEntityId);
 	const auto& playerSize = playerTransform.GetScale();
 	float ballRadius = ballTransform.GetScale()[axis];
-	Vector2<float> deltaPos({playerSize[0] * 0.5f - ballRadius * 2.0f, -ballRadius * 2.0f});
+	Vector2<float> deltaPos({playerSize[0] * 0.5f - ballRadius * 0.5f, - playerSize[1] - ballRadius * 0.25f });
 	Vector2<float> ballPos = playerPos + deltaPos;
 
 	auto& playerMovement = GameContext::Get().GetECS().GetComponentByEntityId<MovementComponent>(m_playerEntityId);

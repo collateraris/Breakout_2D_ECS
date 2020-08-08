@@ -12,6 +12,8 @@ MulticastDelegate<oglml::EKeyButtonCode, oglml::EActionCode, oglml::EKeyModeCode
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+
 GameWindow::~GameWindow()
 {
 
@@ -37,7 +39,6 @@ void GameWindow::Init()
 	m_width = windowConfig.GetAttribute<int>("width");
 	m_height = windowConfig.GetAttribute<int>("height");
 	
-
 	GLFWwindow* window = glfwCreateWindow(m_width, m_height, title.c_str(), nullptr, nullptr);
 	if (window == nullptr)
 	{
@@ -49,6 +50,7 @@ void GameWindow::Init()
 
 	//keycallback
 	glfwSetKeyCallback(window, key_callback);
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 
 	glewExperimental = GL_TRUE;
@@ -83,7 +85,7 @@ void GameWindow::SwapBuffers()
 
 void GameWindow::ClearColorBuffer()
 {
-	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
@@ -138,5 +140,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	oglml::EKeyModeCode modeCode = oglml::InputDecoder::GetKeyModeCodeFromGLFW3(mode);
 
 	g_keyButtonDelegate.Broadcast(keyCode, actionCode, modeCode);
+}
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+	glViewport(0, 0, width, height);
 }
 

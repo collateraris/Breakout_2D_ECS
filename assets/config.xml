@@ -3,8 +3,8 @@
 
 	<window
 		title="Breakout:"
-		width="1200"
-		height="800"
+		width="800"
+		height="600"
 	></window>
 	
 	<FPS>
@@ -41,11 +41,11 @@
 			<shader id="0" name="sprite_render_0" path="assets/shaders/sprite_render_0"></shader>
 		</shaders>
 		<textures>
-			<texture id="0" name="awesomeface" path="assets/textures/awesomeface.png"></texture>
-			<texture id="1" name="background" path="assets/textures/background.jpg"></texture>
-			<texture id="2" name="block_solid" path="assets/textures/block_solid.png"></texture>
-			<texture id="3" name="block" path="assets/textures/block.png"></texture>
-			<texture id="4" name="paddle" path="assets/textures/paddle.png"></texture>
+			<texture id="0" name="awesomeface" path="assets/textures/awesomeface.png" alpha="1"></texture>
+			<texture id="1" name="background" path="assets/textures/background.jpg" alpha="0"></texture>
+			<texture id="2" name="block_solid" path="assets/textures/block_solid.png" alpha="0"></texture>
+			<texture id="3" name="block" path="assets/textures/block.png" alpha="0"></texture>
+			<texture id="4" name="paddle" path="assets/textures/paddle.png" alpha="1"></texture>
 		</textures>
 	</assets>
 

@@ -82,9 +82,6 @@ void GameMaps::GenerateBlocks(const std::vector<std::vector<unsigned int>>& tile
     const float unitWidth = static_cast<float>(lvlWidth) / tileDataWidth;
     const float unitHeight = static_cast<float>(lvlHeight) / tileDataHeight;
 
-    const float halfUnitWidth = unitWidth * 0.5f;
-    const float halfUnitHeight = unitHeight * 0.5f;
-
     //init color
     std::vector<std::array<float, 3>> colors =
     {
@@ -113,8 +110,8 @@ void GameMaps::GenerateBlocks(const std::vector<std::vector<unsigned int>>& tile
     auto SetCommonBlockData = [&](int entityId, unsigned int y, unsigned int x, const std::array<float, 3>& color)
     {
         auto& transformComponent = ecs.GetComponentByEntityId<TransformComponent>(entityId);
-        std::array<float, 2> pos = { unitWidth * x + halfUnitWidth, unitHeight * y + halfUnitHeight };
-        std::array<float, 2> size = { halfUnitWidth, halfUnitHeight };
+        std::array<float, 2> pos = { unitWidth * x , unitHeight * y};
+        std::array<float, 2> size = { unitWidth, unitHeight};
         transformComponent.SetPosition(pos);
         transformComponent.SetScale(size);
 

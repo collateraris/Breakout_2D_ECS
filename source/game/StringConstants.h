@@ -14,6 +14,7 @@ namespace breakout
 	static const std::string idStr = "id";
 	static const std::string pathStr = "path";
 	static const std::string poolSizeStr = "poolSize";
+	static const std::string alphaStr = "alpha";
 
 	static const std::string playerMoveLeftPushEvent = "PUSH EVENT : PLAYER MOVE LEFT";
 	static const std::string playerMoveRightPushEvent = "PUSH EVENT : PLAYER MOVE RIGHT";
