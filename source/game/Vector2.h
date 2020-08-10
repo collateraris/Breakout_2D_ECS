@@ -153,7 +153,7 @@ namespace breakout
 	template<>
 	Vector2<float> Vector2<float>::normalized()
 	{
-		float invLen = 1.f / length();
+		float invLen = 1.f / (length() + 0.001);
 		return Vector2<float>({m_data[0] * invLen, m_data[1] * invLen });
 	}
 
