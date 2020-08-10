@@ -54,6 +54,7 @@ group ("libraries")
     include ("sys_ecs")
     include ("sys_gameState")
     include ("sys_resource")
+    include ("sys_gameplay")
 group ("")
     include ("game")
 -----------------------------------------------------------------------------------------------------------------------

@@ -9,6 +9,9 @@ project "SysEvents"
     includedirs
     {
         paths.events,
+        paths.physics,
+        paths.ecs,
+        paths.game,
     }
     
     files

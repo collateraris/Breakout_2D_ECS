@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <unordered_set>
 #include <cassert>
 
 namespace breakout
@@ -25,6 +26,8 @@ namespace breakout
 
 		const std::vector<freeListPoolElement>& GetPoolElements();
 
+		const std::unordered_set<freeListPoolElement*>& GetActiveElements();
+
 		bool IsContainAvailablePlace() const;
 
 	private:
@@ -34,6 +37,8 @@ namespace breakout
 		freeListPoolElement* m_firstAvailable = nullptr;
 
 		std::vector<freeListPoolElement> m_poolElements = {};
+
+		std::unordered_set<freeListPoolElement*> m_activeElements = {};
 	};
 
 	template<class freeListPoolElement>
@@ -63,6 +68,8 @@ namespace breakout
 
 		newElement->Activate();
 
+		m_activeElements.insert(newElement);
+
 		return *newElement;
 	}
 
@@ -76,17 +83,25 @@ namespace breakout
 		m_firstAvailable = &m_poolElements[poolIndex];
 
 		m_poolElements[poolIndex].Deactivate();
+
+		m_activeElements.erase(&m_poolElements[poolIndex]);
 	}
 
 	template<class freeListPoolElement>
 	void FreeListObjectPool<freeListPoolElement>::DeactivateAll()
 	{
-		for (unsigned int i = 0; i < m_poolSize; ++i)
+		m_firstAvailable = &m_poolElements[0];
+
+		for (unsigned int i = 0; i < poolSize - 1; ++i)
 		{
-			if (!m_poolElements[i].IsActive())
-				continue;
-			Deactivate(i);
+			m_poolElements[i].SetNext(&m_poolElements[i + 1]);
+			m_poolElements[i].Deactivate();
 		}
+
+		m_poolElements[poolSize - 1].SetNext(nullptr);
+		m_poolElements[poolSize - 1].Deactivate();
+
+		m_activeElements.clear();
 	}
 
 	template<class freeListPoolElement>
@@ -106,6 +121,12 @@ namespace breakout
 	const std::vector<freeListPoolElement>& FreeListObjectPool<freeListPoolElement>::GetPoolElements()
 	{
 		return m_poolElements;
+	}
+
+	template<class freeListPoolElement>
+	const std::unordered_set<freeListPoolElement*>& FreeListObjectPool<freeListPoolElement>::GetActiveElements()
+	{
+		return m_activeElements;
 	}
 
 	template<class freeListPoolElement>

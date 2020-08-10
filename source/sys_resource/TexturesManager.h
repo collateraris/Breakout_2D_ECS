@@ -5,6 +5,7 @@
 #include <OGLML/Texture2D.h>
 
 #include <string>
+#include <iostream>
 
 namespace breakout
 {
@@ -13,6 +14,8 @@ namespace breakout
 	public:
 
 		static TexturesManager& Get();
+
+		bool Load(int resourceId, const std::string& path);
 
 	protected:
 

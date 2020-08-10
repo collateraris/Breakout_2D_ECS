@@ -3,6 +3,7 @@
 #include <Component.h>
 
 #include <unordered_map>
+#include <list>
 #include <cassert>
 
 namespace breakout
@@ -17,7 +18,7 @@ namespace breakout
 
 		using EntityTypeId = int;
 
-		using EntityCounter = unsigned int;
+		using EntityIdList = std::list<int>;
 
 	public:
 
@@ -33,6 +34,9 @@ namespace breakout
 		template<class componentStruct>
 		int GetComponentIdByEntityId(int entityId);
 
+		template<class componentStruct>
+		bool IsContainComponentByEntityId(int entityId);
+
 	private:
 
 		EntityManager();
@@ -44,7 +48,9 @@ namespace breakout
 
 		std::unordered_map<EntityId, ComponentsIdByType> m_entityStorage;
 
-		std::unordered_map<EntityTypeId, EntityCounter> m_entityTypeCounter;
+		std::unordered_map<EntityTypeId, EntityIdList> m_entityTypeStorage;
+
+		int m_entityIdCounter = 0;
 	};
 
 	template<class componentStruct>
@@ -80,4 +86,17 @@ namespace breakout
 
 		return foundComponentIt->second;
 	}
+
+	template<class componentStruct>
+	bool EntityManager::IsContainComponentByEntityId(int entityId)
+	{
+		EComponentType componentType = componentStruct::GetType();
+
+		auto foundEntityIt = m_entityStorage.find(entityId);
+		assert(foundEntityIt != m_entityStorage.end());
+
+		auto foundComponentIt = foundEntityIt->second.find(componentType);
+		return foundComponentIt != foundEntityIt->second.end();
+	}
+
 }

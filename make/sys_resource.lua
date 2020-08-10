@@ -11,6 +11,9 @@ project "SysResource"
         paths.resource,
         paths.lib_multimedia,
         paths.glm.inc,
+        paths.config,
+        paths.game,
+        paths.tinyxml2.inc,
     }
     
     files

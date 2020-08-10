@@ -38,7 +38,7 @@ void EventsStorage::Put(BaseEvent& event)
 	}
 }
 
-const std::vector<BaseEvent>& EventsStorage::GetAll(EEventType eventTypeEnum)
+std::vector<BaseEvent>& EventsStorage::GetAll(EEventType eventTypeEnum)
 {
 	assert(IsContain(eventTypeEnum)
 		&& "There is no current event, use IsContain to check it before");
@@ -50,12 +50,7 @@ bool EventsStorage::IsContain(EEventType eventTypeEnum)
 {
 	auto currentEventIds = m_storage[m_active_storage_index].find(eventTypeEnum);
 
-	if (currentEventIds != m_storage[m_active_storage_index].end())
-	{
-		return true;
-	}
-
-	return false;
+	return currentEventIds != m_storage[m_active_storage_index].end();
 }
 
 void EventsStorage::SwapStorages()

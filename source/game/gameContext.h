@@ -22,6 +22,9 @@ namespace breakout
 	class AssetManager;
 
 	class SpriteRenderSystem;
+	class MovementSystem;
+	class GameplaySystem;
+	class PhysicsSystem;
 
 	class GameContext
 	{
@@ -43,6 +46,9 @@ namespace breakout
 		EntityComponentSystem& GetECS();
 
 		SpriteRenderSystem* GetSpriteRenderSystem();
+		MovementSystem* GetMovementSystem();
+		GameplaySystem* GetGameplaySystem();
+		PhysicsSystem* GetPhysicsSystem();
 
 	private:
 
@@ -56,5 +62,8 @@ namespace breakout
 		std::shared_ptr<GameWindow> m_mainWindow;
 
 		SpriteRenderSystem* m_spriteRenderSystem = nullptr;
+		MovementSystem* m_movementSystem = nullptr;
+		GameplaySystem* m_gameplaySystem = nullptr;
+		PhysicsSystem* m_physicsSystem = nullptr;
 	};
 }

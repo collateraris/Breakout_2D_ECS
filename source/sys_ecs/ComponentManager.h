@@ -10,6 +10,8 @@
 #include <any>
 #include <vector>
 
+#include <iostream>
+
 namespace breakout
 {
 	class ComponentManager
@@ -39,7 +41,12 @@ namespace breakout
 		void DeleteAll();
 
 		template<class componentStruct>
-		const std::vector<FreeListPoolElement<componentStruct>>& GetComponents();
+		void Delete(int componentId);
+
+		void Delete(EComponentType type, int componentId);
+
+		template<class componentStruct>
+		const std::unordered_set<FreeListPoolElement<componentStruct>*>& GetComponents();
 
 		template<class componentStruct>
 		bool IsContainAvailablePlace() const;
@@ -119,7 +126,7 @@ namespace breakout
 	}
 
 	template<class componentStruct>
-	const std::vector<FreeListPoolElement<componentStruct>>& ComponentManager::GetComponents()
+	void ComponentManager::Delete(int componentId)
 	{
 		EComponentType type = componentStruct::GetType();
 
@@ -127,7 +134,19 @@ namespace breakout
 		assert(foundIt != m_componentsPools.end());
 		assert(foundIt->second.has_value());
 
-		return std::any_cast<ComponentPool<componentStruct>>(&foundIt->second)->GetPoolElements();
+		std::any_cast<ComponentPool<componentStruct>>(&foundIt->second)->Deactivate(componentId);
+	}
+
+	template<class componentStruct>
+	const std::unordered_set<FreeListPoolElement<componentStruct>*>& ComponentManager::GetComponents()
+	{
+		EComponentType type = componentStruct::GetType();
+
+		auto foundIt = m_componentsPools.find(type);
+		assert(foundIt != m_componentsPools.end());
+		assert(foundIt->second.has_value());
+
+		return std::any_cast<ComponentPool<componentStruct>>(&foundIt->second)->GetActiveElements();
 	}
 
 	template<class componentStruct>

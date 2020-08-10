@@ -3,22 +3,25 @@
 #include <gameContext.h>
 #include <ConfigManager.h>
 
+#include <array>
 #include <iostream>
-
 
 using namespace breakout;
 
+MulticastDelegate<oglml::EKeyButtonCode, oglml::EActionCode, oglml::EKeyModeCode> g_keyButtonDelegate;
+
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
-
-void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 GameWindow::~GameWindow()
 {
 
+}
+
+MulticastDelegate<oglml::EKeyButtonCode, oglml::EActionCode, oglml::EKeyModeCode>& GameWindow::GetKeyButtonDelegate()
+{
+	return g_keyButtonDelegate;
 }
 
 void GameWindow::Init()
@@ -36,7 +39,6 @@ void GameWindow::Init()
 	m_width = windowConfig.GetAttribute<int>("width");
 	m_height = windowConfig.GetAttribute<int>("height");
 	
-
 	GLFWwindow* window = glfwCreateWindow(m_width, m_height, title.c_str(), nullptr, nullptr);
 	if (window == nullptr)
 	{
@@ -48,16 +50,8 @@ void GameWindow::Init()
 
 	//keycallback
 	glfwSetKeyCallback(window, key_callback);
-
-	//mousecallback
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	glfwSetCursorPosCallback(window, mouse_callback);
-
-	//scrollcallback
-	glfwSetScrollCallback(window, scroll_callback);
-
-	//framebuffer
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
 
 	glewExperimental = GL_TRUE;
 	if (glewInit() != GLEW_OK)
@@ -91,7 +85,7 @@ void GameWindow::SwapBuffers()
 
 void GameWindow::ClearColorBuffer()
 {
-	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
@@ -99,6 +93,15 @@ void GameWindow::Terminate()
 {
 	glfwTerminate();
 }
+
+void GameWindow::Update()
+{
+	PollEvents();
+	SwapBuffers();
+	ClearColorBuffer();
+
+	CalculateDeltaTime();
+};
 
 int GameWindow::GetWidth()
 {
@@ -110,34 +113,37 @@ int GameWindow::GetHeight()
 	return m_height;
 }
 
+float GameWindow::GetDeltaTime()
+{
+	return m_deltaTime;
+}
+
+void GameWindow::CalculateDeltaTime()
+{
+	static std::array<float, 2> deltaTimeStory = { 0.f , 0.f };
+	static bool currentDeltaTime = false;
+
+	deltaTimeStory[currentDeltaTime] = GetCurrentTime();
+	m_deltaTime = deltaTimeStory[currentDeltaTime] - deltaTimeStory[!currentDeltaTime];
+	currentDeltaTime = !currentDeltaTime;
+}
+
+float GameWindow::GetCurrentTime()
+{
+	return glfwGetTime();
+}
+
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
-	GLFWwindow* w = window;
-	w = nullptr;
-	int sum = key + scancode + action + mode;
-	sum++;
-}
+	oglml::EKeyButtonCode keyCode = oglml::InputDecoder::GetKeyButtonCodeFromGLFW3(key);
+	oglml::EActionCode actionCode = oglml::InputDecoder::GetActionCodeFromGLFW3(action);
+	oglml::EKeyModeCode modeCode = oglml::InputDecoder::GetKeyModeCodeFromGLFW3(mode);
 
-void mouse_callback(GLFWwindow* window, double xpos, double ypos)
-{
-	GLFWwindow* w = window;
-	w = nullptr;
-	double pos = xpos + ypos;
-	pos++;
-}
-
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-{
-	GLFWwindow* w = window;
-	w = nullptr;
-	double offset = xoffset + yoffset;
-	offset++;
+	g_keyButtonDelegate.Broadcast(keyCode, actionCode, modeCode);
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
-	GLFWwindow* w = window;
-	w = nullptr;
-	int sum = width + height;
-	sum++;
+	glViewport(0, 0, width, height);
 }
+

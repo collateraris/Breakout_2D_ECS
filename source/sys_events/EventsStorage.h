@@ -17,7 +17,7 @@ namespace breakout
 
 		void Put(BaseEvent& event);
 
-		const std::vector<BaseEvent>& GetAll(EEventType eventTypeEnum);
+		std::vector<BaseEvent>& GetAll(EEventType eventTypeEnum);
 
 		bool IsContain(EEventType eventTypeEnum);
 

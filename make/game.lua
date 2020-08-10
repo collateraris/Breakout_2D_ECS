@@ -28,7 +28,8 @@ project "Game"
         paths.tinyxml2.inc,
         paths.config,
         paths.events,
-		paths.gameState,
+        paths.gameState,
+        paths.gameplay,
 		paths.telemetry,
 		paths.input,
 		paths.memory,
@@ -38,6 +39,7 @@ project "Game"
 		paths.profile,
         paths.audio,
         paths.resource,
+        paths.physics,
         paths.lib_multimedia
     }
     
@@ -61,6 +63,7 @@ project "Game"
         "SysUI",
         "SysECS",
         "SysGameState",
+        "SysGameplay",
         "SysResource",
         "LibMultimedia",
         "opengl32",

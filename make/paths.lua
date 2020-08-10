@@ -19,6 +19,7 @@ paths.ui        = paths.source .. "/sys_ui"
 paths.ecs       = paths.source .. "/sys_ecs"
 paths.gameState = paths.source .. "/sys_gameState"
 paths.resource  = paths.source .. "/sys_resource"
+paths.gameplay  = paths.source .. "/sys_gameplay"
 paths.lib_multimedia = paths.source .. "/lib_multimedia"
 
 -----------------------------------------------------------------------------------------------------------------------

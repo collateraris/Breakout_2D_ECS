@@ -24,6 +24,8 @@ namespace breakout
 
 	protected:
 
+		void SetResource(int resourceId, ResourceType& resource);
+
 		virtual bool getFromFile(const std::string& path, ResourceType& resource) = 0;
 
 	private:
@@ -90,4 +92,9 @@ namespace breakout
 		return foundIt->second;
 	}
 
+	template <class ResourceType>
+	void ResourcesManager<ResourceType>::SetResource(int resourceId, ResourceType& resource)
+	{
+		m_resources[resourceId] = resource;
+	}
 }

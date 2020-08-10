@@ -9,6 +9,11 @@ project "SysPhysics"
     includedirs
     {
         paths.physics,
+        paths.game,
+        paths.ecs,
+        paths.memory,
+        paths.events,
+        paths.telemetry,
     }
     
     files
@@ -27,5 +32,6 @@ project "SysPhysics"
         {
             paths.physics .. "/**.h",
         },
+
     }
 -----------------------------------------------------------------------------------------------------------------------

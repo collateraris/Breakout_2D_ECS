@@ -12,8 +12,10 @@ project "SysECS"
         paths.memory,
         paths.animation,
         paths.game,
+        paths.physics,
         paths.lib_multimedia,
         paths.glm.inc,
+        paths.gameplay,
     }
     
     files

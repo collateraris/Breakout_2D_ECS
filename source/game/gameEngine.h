@@ -22,5 +22,7 @@ namespace breakout
     private:
 
         std::shared_ptr<GameWindow> m_window;
+
+        float m_msPerFrame = 16.f;
     };
 }
