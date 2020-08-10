@@ -28,6 +28,9 @@ void Sprite::Draw()
 	static const std::string colorUniform = "uColor";
 	static const unsigned int IMAGE_LAYOUT_POSITION = 0;
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	Shader::Use(m_shaderID);
 	Shader::SetInt(m_shaderID, imageUniform, IMAGE_LAYOUT_POSITION);
 	glm::mat4 model = glm::mat4(1.0f);
