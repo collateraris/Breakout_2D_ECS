@@ -153,7 +153,7 @@ namespace breakout
 	template<>
 	Vector2<float> Vector2<float>::normalized()
 	{
-		float invLen = length();
+		float invLen = 1.f / length();
 		return Vector2<float>({m_data[0] * invLen, m_data[1] * invLen });
 	}
 
@@ -194,7 +194,7 @@ namespace breakout
 		const auto& arr2 = v2.data();
 
 		T rx = std::clamp(arr1[0], -arr2[0], arr2[0]);
-		T ry = std::clamp(arr2[1], -arr2[1], arr2[1]);
+		T ry = std::clamp(arr1[1], -arr2[1], arr2[1]);
 
 		return Vector2<T>({rx, ry});
 	}
@@ -203,7 +203,7 @@ namespace breakout
 	Vector2<T> Vector2<T>::Clamp(const std::array<T, 2>& arr1, const std::array<T, 2>& arr2)
 	{
 		T rx = std::clamp(arr1[0], -arr2[0], arr2[0]);
-		T ry = std::clamp(arr2[1], -arr2[1], arr2[1]);
+		T ry = std::clamp(arr1[1], -arr2[1], arr2[1]);
 
 		return Vector2<T>({ rx, ry });
 	}

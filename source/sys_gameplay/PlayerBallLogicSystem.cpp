@@ -98,6 +98,7 @@ void PlayerBallLogicSystem::BlockCollition(const ColliderComponent& circleCollid
 			bestDir = static_cast<EDirection>(i);
 		}
 	}
+
 	auto& ballMovement = EntityComponentSystem::Get()
 		.GetComponentByEntityId<MovementComponent>(circleCollider.m_entityId);
 
@@ -111,29 +112,19 @@ void PlayerBallLogicSystem::BlockCollition(const ColliderComponent& circleCollid
 	if (bestDir == EDirection::LEFT || bestDir == EDirection::RIGHT) // horizontal collision
 	{
 		ballVelocity.x() *= -1.0f;
-		float penetration = ballRadius - std::abs(difference[0]);
+		float penetration = ballRadius - std::abs(difference.x());
 		ballPos.x() += bestDir == EDirection::LEFT ? penetration : -penetration;
 	}
 	else // vertical collision
 	{
 		ballVelocity.y() *= -1.0f;
-		float penetration = ballRadius - std::abs(difference[1]);
-		ballPos.y() += bestDir == EDirection::UP ? penetration : -penetration;
+		float penetration = ballRadius - std::abs(difference.y());
+		ballPos.y() += bestDir == EDirection::UP ? -penetration : penetration;
 	}
 
 	ballMovement.SetVelocity(ballVelocity.data());
-
-	auto IsPlayer = [&](const ColliderComponent& component) -> bool
-	{
-		return component.m_entityId == m_playerEntityId;
-	};
-
 	ballTransform.SetPosition(ballPos.data());
 
-	if (IsPlayer(squareCollider))
-	{
-		PaddlePlayerCollition(circleCollider, squareCollider);
-	}
 }
 
 void PlayerBallLogicSystem::CollitionResolution(const ColliderComponent& componentA, const ColliderComponent& componentB)
@@ -143,7 +134,21 @@ void PlayerBallLogicSystem::CollitionResolution(const ColliderComponent& compone
 	if (circleCollider.GetColliderType() != EColliderType::Circle || squareCollider.GetColliderType() != EColliderType::Square)
 		return;
 
-	//BlockCollition(circleCollider, squareCollider);	
+	auto IsPlayer = [&](const ColliderComponent& component) -> bool
+	{
+		return component.m_entityId == m_playerEntityId;
+	};
+
+	if (IsPlayer(squareCollider))
+	{
+		EPlayerBallState ballState = EntityComponentSystem::Get().GetComponentByEntityId<PlayerBallComponent>(circleCollider.m_entityId).state;
+		if (ballState != EPlayerBallState::IsStuckOnPlayerPaddle)
+			PaddlePlayerCollition(circleCollider, squareCollider);
+	}
+	else
+	{
+		BlockCollition(circleCollider, squareCollider);
+	}
 }
 
 void PlayerBallLogicSystem::SetPlayerEntityId()
@@ -251,17 +256,17 @@ void PlayerBallLogicSystem::MoveLogic(float dtMilliseconds)
 
 	if (ballPos.x() <= 0.0f)
 	{
-		ballMovement.SetVelocity({-ballVelocity.x(), -ballVelocity.y() });
+		ballMovement.SetVelocity({-ballVelocity.x(), ballVelocity.y() });
 		ballPos.x() = 0.f;
 	}
 	else if (ballPos.x() + ballSize.x() >= screenWidth)
 	{
-		ballMovement.SetVelocity({ -ballVelocity.x(), -ballVelocity.y() });
+		ballMovement.SetVelocity({ -ballVelocity.x(), ballVelocity.y() });
 		ballPos = { screenWidth - ballSize.x(), ballPos.y() };
 	}
 	if (ballPos.y() <= 0.0f)
 	{
-		ballMovement.SetVelocity({ -ballVelocity.x(), -ballVelocity.y() });
+		ballMovement.SetVelocity({ ballVelocity.x(), -ballVelocity.y() });
 		ballPos.y() = 0.f;
 	}
 

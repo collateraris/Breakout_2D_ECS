@@ -9,6 +9,7 @@
 #include <Vector2.h>
 
 #include <unordered_set>
+#include <vector>
 #include <algorithm>
 
 using namespace breakout;
@@ -38,32 +39,23 @@ void CollisionSystem::CollisionDetection(float dtMilliseconds)
 {
     const auto& colliderComponents = EntityComponentSystem::Get().GetAllComponentsByType<ColliderComponent>();
 
-    unsigned int outerCounter = 0;
-    unsigned int innerCounter = 0;
+    std::vector<FreeListPoolElement<ColliderComponent>*> componentsList(colliderComponents.begin(), colliderComponents.end());
+    std::size_t availableComponentNumber = componentsList.size();
 
-    std::list<FreeListPoolElement<ColliderComponent>*> componentsList(colliderComponents.begin(), colliderComponents.end());
-
-    for (const auto& outerIt : componentsList)
+    for (std::size_t outerInd = 0; outerInd < availableComponentNumber; ++outerInd)
     {
-        outerCounter++;
 
-        if (!outerIt->IsActive())
+        if (!componentsList[outerInd]->IsActive())
             continue;
 
-        innerCounter = 0;
-        for (const auto& innerIt : componentsList)
+        for (std::size_t innerInd = outerInd + 1; innerInd < availableComponentNumber; ++innerInd)
         {
-            innerCounter++;
 
-            //optimization :triangle
-            if (outerCounter <= innerCounter)
+            if (!componentsList[innerInd]->IsActive())
                 continue;
 
-            if (!innerIt->IsActive())
-                continue;
-
-            const ColliderComponent& A = (*outerIt).GetContainer();
-            const ColliderComponent& B = (*innerIt).GetContainer();
+            const ColliderComponent& A = componentsList[outerInd]->GetContainer();
+            const ColliderComponent& B = componentsList[innerInd]->GetContainer();
             if (CheckCollision(A, B))
             {
                 CollisionResolution(A, B);
