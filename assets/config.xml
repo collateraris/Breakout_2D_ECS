@@ -39,6 +39,7 @@
 	<assets>
 		<shaders>
 			<shader id="0" name="sprite_render_0" path="assets/shaders/sprite_render_0"></shader>
+			<shader id="1" name="particle" path="assets/shaders/particle"></shader>
 		</shaders>
 		<textures>
 			<texture id="0" name="awesomeface" path="assets/textures/awesomeface.png" alpha="1"></texture>
@@ -46,6 +47,7 @@
 			<texture id="2" name="block_solid" path="assets/textures/block_solid.png" alpha="0"></texture>
 			<texture id="3" name="block" path="assets/textures/block.png" alpha="0"></texture>
 			<texture id="4" name="paddle" path="assets/textures/paddle.png" alpha="1"></texture>
+			<texture id="5" name="particle" path="assets/textures/particle.png" alpha="1"></texture>
 		</textures>
 	</assets>
 

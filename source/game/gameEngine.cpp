@@ -10,12 +10,12 @@
 #include <AssetsManager.h>
 #include <EntityComponentSystem.h>
 #include <ECSBreakout.h>
+#include <RenderSystem.h>
 #include <GameplaySystem.h>
 #include <PhysicsSystem.h>
 
 #include <bindings/AssetsBindings.h>
 
-#include <SpriteRenderSystem.h>
 #include <StringConstants.h>
 
 #include <chrono>
@@ -49,6 +49,7 @@ void GameEngine::Init()
 
     GameContext::Get().GetPhysicsSystem()->Init();
     GameContext::Get().GetGameplaySystem()->Init();
+    GameContext::Get().GetRenderSystem()->Init();
 
     ECSBreakout::Init();
 
@@ -74,8 +75,7 @@ void GameEngine::Start()
 
         GameContext::Get().GetPhysicsSystem()->Update(deltaTime);
         GameContext::Get().GetGameplaySystem()->Update(deltaTime);
-
-        Render();
+        GameContext::Get().GetRenderSystem()->Update(deltaTime);
 
         GameContext::Get().GetEventsStorage().SwapStorages();
 
@@ -86,9 +86,4 @@ void GameEngine::Start()
     }
 
     m_window->Terminate();
-}
-
-void GameEngine::Render()
-{
-    GameContext::Get().GetSpriteRenderSystem()->Render();
 }

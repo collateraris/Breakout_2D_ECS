@@ -48,3 +48,15 @@ void QuadRender::Draw()
     glBindVertexArray(0);
 }
 
+void QuadRender::DrawArraysInstanced(unsigned int instancedNumber)
+{
+    glBindVertexArray(quadVAO);
+    glDrawArraysInstanced(GL_TRIANGLES, 0, 6, instancedNumber);
+    glBindVertexArray(0);
+}
+
+void QuadRender::BindVAO()
+{
+    glBindVertexArray(quadVAO);
+}
+

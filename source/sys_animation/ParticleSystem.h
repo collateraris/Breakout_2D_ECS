@@ -4,28 +4,23 @@
 
 namespace breakout
 {
-	class SpriteRenderSystem : public BaseSystem
+	class ParticleRenderSystem : public BaseSystem
 	{
 
     public:
 
         static EBaseSystemType GetType()
         {
-            return EBaseSystemType::SpriteRender;
+            return EBaseSystemType::Particle;
         }
 
-        SpriteRenderSystem()
+        ParticleRenderSystem()
             : BaseSystem() {}
 
 
-        virtual ~SpriteRenderSystem() {};
+        virtual ~ParticleRenderSystem() {};
 
         virtual void Init() override;
         virtual void Update(float dtMilliseconds) override;
-
-    protected:
-
-        void Render();
-
 	};
 }

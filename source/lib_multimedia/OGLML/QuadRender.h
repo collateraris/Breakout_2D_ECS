@@ -10,6 +10,10 @@ namespace oglml
 
 		void Draw();
 
+		void DrawArraysInstanced(unsigned int instancedNumber);
+
+		void BindVAO();
+
 	private:
 
 		QuadRender();
