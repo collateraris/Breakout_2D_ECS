@@ -20,12 +20,12 @@
 	</systems>
 	
 	<components>
-		<component id="1" name="Sprite" poolSize="120"></component>
-		<component id="2" name="Transform" poolSize="120"></component>
+		<component id="1" name="Sprite" poolSize="140"></component>
+		<component id="2" name="Transform" poolSize="140"></component>
 		<component id="3" name="Movement" poolSize="2"></component>
 		<component id="4" name="Player" poolSize="1"></component>
 		<component id="5" name="PlayerBall" poolSize="1"></component>
-		<component id="6" name="Collider" poolSize="120"></component>
+		<component id="6" name="Collider" poolSize="140"></component>
 	</components>
 	
 	<gameMaps>

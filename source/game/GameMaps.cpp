@@ -82,6 +82,10 @@ void GameMaps::GenerateBlocks(const std::vector<std::vector<unsigned int>>& tile
     const float unitWidth = static_cast<float>(lvlWidth) / tileDataWidth;
     const float unitHeight = static_cast<float>(lvlHeight) / tileDataHeight;
 
+    const float errorPercent = 0.05f;
+    const float errorWidth = unitWidth * errorPercent;
+    const float errorHeight = unitHeight * errorPercent;
+
     //init color
     std::vector<std::array<float, 3>> colors =
     {
@@ -116,7 +120,7 @@ void GameMaps::GenerateBlocks(const std::vector<std::vector<unsigned int>>& tile
         transformComponent.SetScale(size);
 
         auto& colliderComponent = ecs.GetComponentByEntityId<ColliderComponent>(entityId);
-        colliderComponent.SetSize(size[0], size[1]).SetPosition(pos);
+        colliderComponent.SetSize(size[0] - errorWidth, size[1] - errorHeight).SetPosition(pos);
 
         auto& spriteComponent = ecs.GetComponentByEntityId<SpriteComponent>(entityId);
         spriteComponent.Sprite().SetColor(color);

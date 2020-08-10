@@ -51,6 +51,9 @@ void CollisionSystem::CollisionDetection(float dtMilliseconds)
         for (std::size_t innerInd = outerInd + 1; innerInd < availableComponentNumber; ++innerInd)
         {
 
+            if (!componentsList[outerInd]->IsActive())
+                break;
+
             if (!componentsList[innerInd]->IsActive())
                 continue;
 
@@ -89,7 +92,7 @@ bool CollisionSystem::CheckCollision(const ColliderComponent& A, const ColliderC
 bool CollisionSystem::CheckAABB_AABBCollision(const ColliderComponent& A, const ColliderComponent& B) const
 {
     return  A.GetPosition()[0] + A.GetWidth() > B.GetPosition()[0] &&
-        B.GetPosition()[0] + B.GetWidth() > A.GetPosition()[0] &&
+        B.GetPosition()[0] + B.GetWidth() > A.GetPosition()[0]  &&
         A.GetPosition()[1] + A.GetHeight() > B.GetPosition()[1] &&
         B.GetPosition()[1] + B.GetHeight() > A.GetPosition()[1];
 }

@@ -203,7 +203,7 @@ int CreateBlock()
 int CreatePlayerPaddle()
 {
 	auto& ecs = GameContext::Get().GetECS();
-	int entityId = ecs.CreateEntityByEntityTypeId(static_cast<int>(EEntityType::Block));
+	int entityId = ecs.CreateEntityByEntityTypeId(static_cast<int>(EEntityType::PlayerPaddle));
 
 	ecs.AddComponentByEntityId<PlayerComponent>(entityId);
 
@@ -282,6 +282,8 @@ int CreatePlayerBall()
 	float screenWidth = window->GetWidth();
 	float screenHeight = window->GetHeight();
 	sprite.SetScreenSize(screenWidth, screenHeight);
+	transformComponent.SetPosition({0., screenHeight});
+	colliderComponent.SetPosition({ 0., screenHeight });
 
 	auto& texture = TexturesManager::Get().GetResource(static_cast<int>(ETextureAssetId::Awersome));
 	sprite.SetTexture(texture);
@@ -334,7 +336,7 @@ void ECSBreakout::CreateWorld()
 {
 	ECSBreakout::CreateComponent(EEntityType::Background);
 
-	GameMaps::Get().LoadMap(EGameMapLevels::Space_invader);
+	GameMaps::Get().LoadMap(EGameMapLevels::Standard);
 
 	ECSBreakout::CreateComponent(EEntityType::PlayerPaddle);
 	ECSBreakout::CreateComponent(EEntityType::PlayerBall);
