@@ -10,10 +10,7 @@ QuadRender::QuadRender()
     float vertices[] = {
         // positions        // texture Coords
         0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-        1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
         0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-
-        0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
         1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
         1.0f, 0.0f, 0.0f, 1.0f, 0.0f
     };
@@ -44,14 +41,14 @@ QuadRender& QuadRender::Get()
 void QuadRender::Draw()
 {
     glBindVertexArray(quadVAO);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     glBindVertexArray(0);
 }
 
 void QuadRender::DrawArraysInstanced(unsigned int instancedNumber)
 {
     glBindVertexArray(quadVAO);
-    glDrawArraysInstanced(GL_TRIANGLES, 0, 6, instancedNumber);
+    glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, instancedNumber);
     glBindVertexArray(0);
 }
 
