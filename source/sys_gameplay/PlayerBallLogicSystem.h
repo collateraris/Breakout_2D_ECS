@@ -43,6 +43,8 @@ namespace breakout
         void SetPlayerBallEntityId();
         void SetInitPosition();
 
+        void BallParticlesShow();
+
         void BlockCollition(const ColliderComponent&, const ColliderComponent&) const;
         void PaddlePlayerCollition(const ColliderComponent&, const ColliderComponent&) const;
 

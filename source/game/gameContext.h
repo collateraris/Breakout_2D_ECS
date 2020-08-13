@@ -21,7 +21,7 @@ namespace breakout
 	class EntityComponentSystem;
 	class AssetManager;
 
-	class SpriteRenderSystem;
+	class RenderSystem;
 	class MovementSystem;
 	class GameplaySystem;
 	class PhysicsSystem;
@@ -45,7 +45,7 @@ namespace breakout
 
 		EntityComponentSystem& GetECS();
 
-		SpriteRenderSystem* GetSpriteRenderSystem();
+		RenderSystem* GetRenderSystem();
 		MovementSystem* GetMovementSystem();
 		GameplaySystem* GetGameplaySystem();
 		PhysicsSystem* GetPhysicsSystem();
@@ -61,7 +61,7 @@ namespace breakout
 
 		std::shared_ptr<GameWindow> m_mainWindow;
 
-		SpriteRenderSystem* m_spriteRenderSystem = nullptr;
+		RenderSystem* m_renderSystem = nullptr;
 		MovementSystem* m_movementSystem = nullptr;
 		GameplaySystem* m_gameplaySystem = nullptr;
 		PhysicsSystem* m_physicsSystem = nullptr;

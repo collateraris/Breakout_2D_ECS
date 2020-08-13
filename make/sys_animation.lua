@@ -9,6 +9,7 @@ project "SysAnimation"
     includedirs
     {
         paths.animation,
+        paths.physics,
         paths.ecs,
         paths.lib_multimedia,
         paths.game,

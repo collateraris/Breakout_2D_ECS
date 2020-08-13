@@ -11,6 +11,7 @@ namespace breakout
 		Player = 4,
 		PlayerBall = 5,
 		Collider = 6,
+		Particles = 7,
 		MAX,
 	};
 

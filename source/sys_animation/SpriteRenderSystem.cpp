@@ -22,7 +22,7 @@ void SpriteRenderSystem::Init()
 
 void SpriteRenderSystem::Update(float dtMilliseconds)
 {
-
+	Render();
 }
 
 void SpriteRenderSystem::Render()
@@ -43,6 +43,5 @@ void SpriteRenderSystem::Render()
 		sprite.SetRotateAngle(transformComponent.GetRotation());
 
 		sprite.Draw();
-
 	}
 }

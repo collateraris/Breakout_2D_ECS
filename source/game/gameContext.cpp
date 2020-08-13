@@ -11,7 +11,7 @@
 
 #include <EntityComponentSystem.h>
 #include <SystemManager.h>
-#include <SpriteRenderSystem.h>
+#include <RenderSystem.h>
 #include <MovementSystem.h>
 #include <GameplaySystem.h>
 #include <PhysicsSystem.h>
@@ -22,7 +22,7 @@ GameContext::GameContext()
 {
 	m_mainWindow = std::make_shared<GameWindow>();
 
-	m_spriteRenderSystem = SystemManager::Get().CreateSystem<SpriteRenderSystem>();
+	m_renderSystem = SystemManager::Get().CreateSystem<RenderSystem>();
 	m_movementSystem = SystemManager::Get().CreateSystem<MovementSystem>();
 	m_gameplaySystem = SystemManager::Get().CreateSystem<GameplaySystem>();
 	m_physicsSystem = SystemManager::Get().CreateSystem<PhysicsSystem>();
@@ -84,9 +84,9 @@ EntityComponentSystem& GameContext::GetECS()
 	return EntityComponentSystem::Get();
 }
 
-SpriteRenderSystem* GameContext::GetSpriteRenderSystem()
+RenderSystem* GameContext::GetRenderSystem()
 {
-	return m_spriteRenderSystem;
+	return m_renderSystem;
 }
 
 MovementSystem* GameContext::GetMovementSystem()

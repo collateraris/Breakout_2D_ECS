@@ -6,6 +6,7 @@
 #include <ColliderComponent.h>
 #include <PlayerBallComponent.h>
 #include <PlayerComponent.h>
+#include <ParticlesComponent.h>
 
 
 using namespace breakout;
@@ -47,6 +48,9 @@ void ComponentManager::Delete(EComponentType type, int componentId)
 		break;
 	case breakout::EComponentType::Collider:
 		Delete<ColliderComponent>(componentId);
+		break;
+	case breakout::EComponentType::Particles:
+		Delete<ParticlesComponent>(componentId);
 		break;
 	default:
 		break;

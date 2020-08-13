@@ -12,6 +12,7 @@
 #include <gameWindow.h>
 #include <components/TransformComponent.h>
 #include <MovementComponent.h>
+#include <ParticlesComponent.h>
 
 #include <EventManager.h>
 #include <Vector2.h>
@@ -58,6 +59,8 @@ void PlayerBallLogicSystem::Update(float dtMilliseconds)
 	default:
 		break;
 	}
+
+	BallParticlesShow();
 }
 
 void PlayerBallLogicSystem::PaddlePlayerCollition(const ColliderComponent& ballCollider, const ColliderComponent& playerCollider) const
@@ -124,6 +127,7 @@ void PlayerBallLogicSystem::BlockCollition(const ColliderComponent& circleCollid
 
 	ballMovement.SetVelocity(ballVelocity.data());
 	ballTransform.SetPosition(ballPos.data());
+
 
 }
 
@@ -274,6 +278,13 @@ void PlayerBallLogicSystem::MoveLogic(float dtMilliseconds)
 
 	auto& colliderComponent = GameContext::Get().GetECS().GetComponentByEntityId<ColliderComponent>(m_playerBallEntityId);
 	colliderComponent.SetPosition(ballPos.data());
+}
+
+void PlayerBallLogicSystem::BallParticlesShow()
+{
+	auto& ballTransform = GameContext::Get().GetECS().GetComponentByEntityId<TransformComponent>(m_playerBallEntityId);
+	Vector2<float> ballSize = ballTransform.GetScale();
+	GameContext::Get().GetECS().GetComponentByEntityId<ParticlesComponent>(m_playerBallEntityId).RespawnParticle(2, (ballSize * 0.5).data());
 }
 
 
