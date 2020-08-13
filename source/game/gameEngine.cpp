@@ -55,7 +55,7 @@ void GameEngine::Init()
 
     auto fpsOptions = GameContext::Get().GetConfigManager().GetRoot().GetPath(FPSStr).GetChildren();
     m_msPerFrame = 1000 / (fpsOptions[0].GetAttribute<float>(FPSStr));
-
+         
     LOG("Game Engine Init");
 }
 

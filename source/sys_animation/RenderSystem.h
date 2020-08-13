@@ -4,7 +4,7 @@
 
 namespace breakout
 {
-    class ParticleRenderSystem;
+    class ParticlesRenderSystem;
     class SpriteRenderSystem;
 
 	class RenderSystem : public BaseSystem
@@ -26,7 +26,7 @@ namespace breakout
 
     private:
 
-        ParticleRenderSystem* m_particleRender = nullptr;
+        ParticlesRenderSystem* m_particlesRender = nullptr;
         SpriteRenderSystem* m_spriteRender = nullptr;
 
 	};

@@ -1,4 +1,4 @@
-#include <OGLML/Particle.h>
+#include <OGLML/Particles.h>
 
 #include <OGLML/Texture2D.h>
 #include <OGLML/Shader.h>
@@ -10,35 +10,35 @@
 
 using namespace oglml;
 
-Particle::Particle()
+Particles::Particles()
 {
 	glGenBuffers(1, &m_colorsVBO);
 	glGenBuffers(1, &m_offsetsVBO);
 }
 
-void Particle::SetNumber(std::size_t size)
+void Particles::SetNumber(std::size_t size)
 {
 	assert(size > 0);
 
 	m_particleNumber = size;
 }
 
-void Particle::SetOrthoParams(float width, float height)
+void Particles::SetOrthoParams(float width, float height)
 {
 	m_projection = glm::ortho(0.0f, width, height, 0.0f, -1.0f, 1.0f);
 }
 
-void Particle::SetTexture(Texture2D& texture)
+void Particles::SetTexture(Texture2D& texture)
 {
 	m_textureID = texture.GetTextureID();
 }
 
-void Particle::SetShader(Shader& shader)
+void Particles::SetShader(Shader& shader)
 {
 	m_shaderID = shader.GetProgramID();
 }
 
-void Particle::BufferColorsData(const std::vector<ColorsData>& colors)
+void Particles::BufferColorsData(const std::vector<ColorsData>& colors)
 {
 	assert(colors.size() == m_particleNumber);
 
@@ -47,7 +47,7 @@ void Particle::BufferColorsData(const std::vector<ColorsData>& colors)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void Particle::BufferOffsetsData(const std::vector<OffsetsData>& offsets)
+void Particles::BufferOffsetsData(const std::vector<OffsetsData>& offsets)
 {
 	assert(offsets.size() == m_particleNumber);
 
@@ -56,7 +56,7 @@ void Particle::BufferOffsetsData(const std::vector<OffsetsData>& offsets)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void Particle::Draw()
+void Particles::Draw()
 {
 	static const std::string imageUniform = "uSprite";
 	static const std::string projectionUniform = "uProjection";
@@ -78,7 +78,7 @@ void Particle::Draw()
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Particle::BindData()
+void Particles::BindData()
 {
 	QuadRender::Get().BindVAO();
 

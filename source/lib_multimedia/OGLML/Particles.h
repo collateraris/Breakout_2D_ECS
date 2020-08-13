@@ -11,15 +11,15 @@ namespace oglml
 	class Texture2D;
 	class Shader;
 
-	class Particle
+	class Particles
 	{
 		using ColorsData = std::array<float, 3>;
 		using OffsetsData = std::array<float, 2>;
 
 	public:
 
-		Particle();
-		~Particle() = default;
+		Particles();
+		~Particles() = default;
 
 		void SetNumber(std::size_t size);
 		void SetOrthoParams(float width, float height);

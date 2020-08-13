@@ -2,7 +2,7 @@
 
 #include <SystemManager.h>
 
-#include <ParticleSystem.h>
+#include <ParticlesSystem.h>
 #include <SpriteRenderSystem.h>
 
 using namespace breakout;
@@ -11,18 +11,18 @@ RenderSystem::RenderSystem()
     : BaseSystem()
 {
     m_spriteRender = SystemManager::Get().CreateSystem<SpriteRenderSystem>();
-    m_particleRender = SystemManager::Get().CreateSystem<ParticleRenderSystem>();
+    m_particlesRender = SystemManager::Get().CreateSystem<ParticlesRenderSystem>();
 }
 
 void RenderSystem::Init()
 {
     m_spriteRender->Init();
-    m_particleRender->Init();
+    m_particlesRender->Init();
 }
 
 void RenderSystem::Update(float dtMilliseconds)
 {
     m_spriteRender->Update(dtMilliseconds);
-    m_particleRender->Update(dtMilliseconds);
+    m_particlesRender->Update(dtMilliseconds);
 }
 

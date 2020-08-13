@@ -13,7 +13,7 @@ namespace breakout
 		Physics = 6,
 		Collision = 7,
 		DamagableColliderLogic = 8,
-		Particle = 9,
+		Particles = 9,
 		Render = 10,
 		MAX
 	};

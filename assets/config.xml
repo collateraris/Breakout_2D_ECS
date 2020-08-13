@@ -26,6 +26,7 @@
 		<component id="4" name="Player" poolSize="1"></component>
 		<component id="5" name="PlayerBall" poolSize="1"></component>
 		<component id="6" name="Collider" poolSize="140"></component>
+		<component id="7" name="Particles" poolSize="1"></component>
 	</components>
 	
 	<gameMaps>
