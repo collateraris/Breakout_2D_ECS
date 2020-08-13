@@ -23,6 +23,7 @@
 #include <MovementComponent.h>
 #include <PlayerComponent.h>
 #include <PlayerBallComponent.h>
+#include <ParticlesComponent.h>
 #include <ColliderComponent.h>
 
 #include <LogManager.h>
@@ -285,6 +286,13 @@ int CreatePlayerBall()
 	transformComponent.SetPosition({0., screenHeight});
 	colliderComponent.SetPosition({ 0., screenHeight });
 
+	auto& particlesTexture = TexturesManager::Get().GetResource(static_cast<int>(ETextureAssetId::Particle));
+	auto& particlesShader = ShadersManager::Get().GetResource(static_cast<int>(EShaderAssetId::Particle));
+	auto& particlesComponent = ecs.AddComponentByEntityId<ParticlesComponent>(entityId);
+	particlesComponent.SetOrthoParams(screenWidth, screenHeight);
+	particlesComponent.SetTexture(particlesTexture);
+	particlesComponent.SetShader(particlesShader);
+
 	auto& texture = TexturesManager::Get().GetResource(static_cast<int>(ETextureAssetId::Awersome));
 	sprite.SetTexture(texture);
 
@@ -325,6 +333,9 @@ void ECSBreakout::InitComponentsPools()
 			break;
 		case breakout::EComponentType::Collider:
 			ComponentManager::Get().CreateComponentPool<ColliderComponent>(poolSize);
+			break;
+		case breakout::EComponentType::Particles:
+			ComponentManager::Get().CreateComponentPool<ParticlesComponent>(poolSize);
 			break;
 		default:
 			break;

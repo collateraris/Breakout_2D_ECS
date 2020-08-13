@@ -13,7 +13,7 @@ namespace oglml
 
 	class Particles
 	{
-		using ColorsData = std::array<float, 3>;
+		using ColorsData = std::array<float, 4>;
 		using OffsetsData = std::array<float, 2>;
 
 	public:

@@ -13,6 +13,7 @@ namespace breakout
 		RingListObjectPool();
 		~RingListObjectPool();
 
+		unsigned int GetNextElementIndex();
 		containerStruct& Next();
 		containerStruct& GetElement(unsigned int i);
 
@@ -39,10 +40,16 @@ namespace breakout
 	}
 
 	template<class containerStruct, unsigned int sizeArr>
+	unsigned int RingListObjectPool<containerStruct, sizeArr>::GetNextElementIndex()
+	{
+		return m_nextElement;
+	}
+
+	template<class containerStruct, unsigned int sizeArr>
 	containerStruct& RingListObjectPool<containerStruct, sizeArr>::Next()
 	{
 		containerStruct& container = m_poolObjects[m_nextElement];
-		m_nextElement = m_nextElement >= m_poolSize ? 0 : ++m_nextElement;
+		m_nextElement = (++m_nextElement) >= m_poolSize ? 0 : m_nextElement;
 		return container;
 	}
 

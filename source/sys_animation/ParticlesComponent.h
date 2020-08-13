@@ -2,6 +2,7 @@
 
 #include <Component.h>
 
+#include <RingListObjectPool.h>
 #include <OGLML/Particles.h>
 
 #include <vector>
@@ -16,10 +17,10 @@ namespace oglml
 
 namespace breakout
 {
+
 	class ParticlesComponent : public BaseComponent
 	{
-
-		using ColorsData = std::array<float, 3>;
+		using ColorsData = std::array<float, 4>;
 		using OffsetsData = std::array<float, 2>;
 		using VelocityData = std::array<float, 2>;
 		using LifeData = float;
@@ -36,27 +37,29 @@ namespace breakout
 		ParticlesComponent();
 		~ParticlesComponent();
 
-		void RespawnParticle(entityId id);
+		void RespawnParticle(unsigned int number, const OffsetsData& offset);
 
-		void SetNumber(int size);
 		void SetTexture(oglml::Texture2D& texture);
 		void SetShader(oglml::Shader& shader);
+		void SetOrthoParams(float width, float height);
+
+		void Draw();
+
+		void Update(float dtMilliseconds);
 
 	protected:
-
-		oglml::Particles& Particles();
 
 		void Resize();
 
 	private:
 
-		int m_particlesNumber = 0;
+		static const unsigned int m_particlesNumber = 500;
 
 		oglml::Particles m_particles;
 
 		std::vector<ColorsData> m_colors = {};
-		std::vector<OffsetsData> m_offsets = {};
+		std::vector<OffsetsData> m_positions = {};
 		std::vector<VelocityData> m_velocities = {};
-		std::vector<LifeData> m_life = {};
+		RingListObjectPool<LifeData, m_particlesNumber> m_lifes;
 	};
 }

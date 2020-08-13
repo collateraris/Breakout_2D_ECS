@@ -9,6 +9,7 @@ project "SysGameplay"
     includedirs
     {
         paths.gameplay,
+        paths.animation,
         paths.events,
         paths.game,
         paths.ecs,
@@ -17,6 +18,7 @@ project "SysGameplay"
         paths.physics,
         paths.GLFW.inc,
         paths.GL.inc,
+        paths.glm.inc,
     }
     
     files
