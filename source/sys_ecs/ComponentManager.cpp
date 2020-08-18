@@ -2,6 +2,7 @@
 
 #include <MovementComponent.h>
 #include <SpriteComponent.h>
+#include <SpriteColorComponent.h>
 #include <components/TransformComponent.h>
 #include <ColliderComponent.h>
 #include <PlayerBallComponent.h>
@@ -51,6 +52,9 @@ void ComponentManager::Delete(EComponentType type, int componentId)
 		break;
 	case breakout::EComponentType::Particles:
 		Delete<ParticlesComponent>(componentId);
+		break;
+	case breakout::EComponentType::SpriteColor:
+		Delete<SpriteColorComponent>(componentId);
 		break;
 	default:
 		break;

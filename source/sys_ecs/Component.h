@@ -12,6 +12,7 @@ namespace breakout
 		PlayerBall = 5,
 		Collider = 6,
 		Particles = 7,
+		SpriteColor = 8,
 		MAX,
 	};
 

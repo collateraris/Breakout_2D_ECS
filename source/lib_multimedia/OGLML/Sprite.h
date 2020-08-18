@@ -19,13 +19,19 @@ namespace oglml
 		void SetTexture(Texture2D& texture);
 		void SetShader(Shader& shader);
 
-		void Draw();
-
 		void SetScreenSize(float width, float height);
 		void SetRotateAngle(float rotate);
 		void SetColor(const std::array<float, 3>& color);
 		void SetPosition(const std::array<float, 2>& position);
 		void SetSize(const std::array<float, 2>& size);
+
+		float GetRotateAngle() const;
+		const glm::vec3& GetColor() const;
+		const glm::vec2& GetPosition() const;
+		const glm::vec2& GetSize() const;
+		const glm::mat4& GetProj() const;
+		unsigned int GetTextureID() const;
+		unsigned int GetShaderID() const;
 
 	private:
 
@@ -36,6 +42,6 @@ namespace oglml
 		glm::vec2 m_position = glm::vec2(0.);
 		glm::vec2 m_size = glm::vec2(1.);
 		glm::vec3 m_color = glm::vec3(1.);
-		float m_rotate = 0.5f;
+		float m_rotate = 0.f;
 	};
 }

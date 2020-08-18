@@ -65,8 +65,6 @@ void CollisionSystem::CollisionDetection(float dtMilliseconds)
             }
         }
     }
-
-
 }
 
 void CollisionSystem::CollisionResolution(const ColliderComponent& A, const ColliderComponent& B) const

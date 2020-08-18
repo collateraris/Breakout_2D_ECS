@@ -26,6 +26,5 @@ namespace breakout
     protected:
 
         void Render();
-
 	};
 }

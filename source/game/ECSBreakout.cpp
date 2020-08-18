@@ -19,6 +19,7 @@
 #include <OGLML/Texture2D.h>
 
 #include <SpriteComponent.h>
+#include <SpriteColorComponent.h>
 #include <components/TransformComponent.h>
 #include <MovementComponent.h>
 #include <PlayerComponent.h>
@@ -154,20 +155,23 @@ int CreateSolidBlock()
 
 	auto& transformComponent = ecs.AddComponentByEntityId<TransformComponent>(entityId);
 
-	auto& spriteComponent = ecs.AddComponentByEntityId<SpriteComponent>(entityId);
-	auto& sprite = spriteComponent.Sprite();
+	auto* spriteComponent = ecs.AddPrefabComponentByEntityId<SpriteComponent>(static_cast<int>(EEntityType::SolidBlock), entityId);
+	if (spriteComponent)
+	{
+		auto& sprite = spriteComponent->Sprite();
 
-	auto& texture = TexturesManager::Get().GetResource(static_cast<int>(ETextureAssetId::SolidBlock));
-	sprite.SetTexture(texture);
+		auto& texture = TexturesManager::Get().GetResource(static_cast<int>(ETextureAssetId::SolidBlock));
+		sprite.SetTexture(texture);
 
-	auto& shader = ShadersManager::Get().GetResource(static_cast<int>(EShaderAssetId::Sprite));
-	sprite.SetShader(shader);
+		auto& shader = ShadersManager::Get().GetResource(static_cast<int>(EShaderAssetId::Sprite));
+		sprite.SetShader(shader);
 
-	auto window = GameContext::Get().GetMainWindow();
+		auto window = GameContext::Get().GetMainWindow();
 
-	float screenWidth = window->GetWidth();
-	float screenHeight = window->GetHeight();
-	sprite.SetScreenSize(screenWidth, screenHeight);
+		float screenWidth = window->GetWidth();
+		float screenHeight = window->GetHeight();
+		sprite.SetScreenSize(screenWidth, screenHeight);
+	}
 
 	return entityId;
 }
@@ -183,20 +187,25 @@ int CreateBlock()
 
 	auto& transformComponent = ecs.AddComponentByEntityId<TransformComponent>(entityId);
 
-	auto& spriteComponent = ecs.AddComponentByEntityId<SpriteComponent>(entityId);
-	auto& sprite = spriteComponent.Sprite();
+	ecs.AddComponentByEntityId<SpriteColorComponent>(entityId);
 
-	auto& texture = TexturesManager::Get().GetResource(static_cast<int>(ETextureAssetId::Block));
-	sprite.SetTexture(texture);
+	auto* spriteComponent = ecs.AddPrefabComponentByEntityId<SpriteComponent>(static_cast<int>(EEntityType::Block), entityId);
+	if (spriteComponent)
+	{
+		auto& sprite = spriteComponent->Sprite();
 
-	auto& shader = ShadersManager::Get().GetResource(static_cast<int>(EShaderAssetId::Sprite));
-	sprite.SetShader(shader);
+		auto& texture = TexturesManager::Get().GetResource(static_cast<int>(ETextureAssetId::Block));
+		sprite.SetTexture(texture);
 
-	auto window = GameContext::Get().GetMainWindow();
+		auto& shader = ShadersManager::Get().GetResource(static_cast<int>(EShaderAssetId::Sprite));
+		sprite.SetShader(shader);
 
-	float screenWidth = window->GetWidth();
-	float screenHeight = window->GetHeight();
-	sprite.SetScreenSize(screenWidth, screenHeight);
+		auto window = GameContext::Get().GetMainWindow();
+
+		float screenWidth = window->GetWidth();
+		float screenHeight = window->GetHeight();
+		sprite.SetScreenSize(screenWidth, screenHeight);
+	}
 
 	return entityId;
 }
@@ -238,7 +247,7 @@ int CreatePlayerPaddle()
 		.SetPosition(playerSizePos);
 
 	auto& movementComponent = ecs.AddComponentByEntityId<MovementComponent>(entityId);
-	movementComponent.SetVelocity({2000.f, 0.f});
+	movementComponent.SetVelocity({2500.f, 0.f});
 
 	InputManager::Get().OnKeyPressed().BindLambda([&](oglml::EKeyButtonCode key, oglml::EKeyModeCode mode)
 	{
@@ -336,6 +345,9 @@ void ECSBreakout::InitComponentsPools()
 			break;
 		case breakout::EComponentType::Particles:
 			ComponentManager::Get().CreateComponentPool<ParticlesComponent>(poolSize);
+			break;
+		case breakout::EComponentType::SpriteColor:
+			ComponentManager::Get().CreateComponentPool<SpriteColorComponent>(poolSize);
 			break;
 		default:
 			break;
