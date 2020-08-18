@@ -9,6 +9,7 @@
 #include <ECSBreakout.h>
 
 #include <SpriteComponent.h>
+#include <SpriteColorComponent.h>
 #include <ColliderComponent.h>
 #include <components/TransformComponent.h>
 
@@ -122,8 +123,16 @@ void GameMaps::GenerateBlocks(const std::vector<std::vector<unsigned int>>& tile
         auto& colliderComponent = ecs.GetComponentByEntityId<ColliderComponent>(entityId);
         colliderComponent.SetSize(size[0] - errorWidth, size[1] - errorHeight).SetPosition(pos);
 
-        auto& spriteComponent = ecs.GetComponentByEntityId<SpriteComponent>(entityId);
-        spriteComponent.Sprite().SetColor(color);
+        if (ecs.IsContainComponentByEntityId<SpriteColorComponent>(entityId))
+        {
+            auto& spriteColorComponent = ecs.GetComponentByEntityId<SpriteColorComponent>(entityId);
+            spriteColorComponent.SetColor(color);
+        }
+        else
+        {
+            auto& spriteComponent = ecs.GetComponentByEntityId<SpriteComponent>(entityId);
+            spriteComponent.Sprite().SetColor(color);
+        }
     };
 
     for (unsigned int y = 0; y < tileDataHeight; ++y)

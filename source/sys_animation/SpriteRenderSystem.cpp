@@ -3,6 +3,7 @@
 #include <gameContext.h>
 #include <EntityComponentSystem.h>
 #include <SpriteComponent.h>
+#include <SpriteColorComponent.h>
 #include <components/TransformComponent.h>
 #include <FreeListPoolElement.h>
 
@@ -62,6 +63,12 @@ void SpriteRenderSystem::Render()
 				sprite.SetPosition(transformComponent.GetPosition());
 				sprite.SetSize(transformComponent.GetScale());
 				sprite.SetRotateAngle(transformComponent.GetRotation());
+
+				if (ecs.IsContainComponentByEntityId<SpriteColorComponent>(id))
+				{
+					auto& spriteColorComponent = ecs.GetComponentByEntityId<SpriteColorComponent>(id);
+					sprite.SetColor(spriteColorComponent.GetColor());
+				}
 
 				g_spriteInstancedRender.CollectSpriteData(sprite);			
 			}

@@ -21,12 +21,13 @@
 	
 	<components>
 		<component id="1" name="Sprite" poolSize="7"></component>
-		<component id="2" name="Transform" poolSize="140"></component>
+		<component id="2" name="Transform" poolSize="125"></component>
 		<component id="3" name="Movement" poolSize="2"></component>
 		<component id="4" name="Player" poolSize="1"></component>
 		<component id="5" name="PlayerBall" poolSize="1"></component>
-		<component id="6" name="Collider" poolSize="140"></component>
+		<component id="6" name="Collider" poolSize="125"></component>
 		<component id="7" name="Particles" poolSize="1"></component>
+		<component id="8" name="SpriteColor" poolSize="100"></component>
 	</components>
 	
 	<gameMaps>

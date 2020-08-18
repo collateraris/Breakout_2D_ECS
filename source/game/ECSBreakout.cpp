@@ -19,6 +19,7 @@
 #include <OGLML/Texture2D.h>
 
 #include <SpriteComponent.h>
+#include <SpriteColorComponent.h>
 #include <components/TransformComponent.h>
 #include <MovementComponent.h>
 #include <PlayerComponent.h>
@@ -186,6 +187,8 @@ int CreateBlock()
 
 	auto& transformComponent = ecs.AddComponentByEntityId<TransformComponent>(entityId);
 
+	ecs.AddComponentByEntityId<SpriteColorComponent>(entityId);
+
 	auto* spriteComponent = ecs.AddPrefabComponentByEntityId<SpriteComponent>(static_cast<int>(EEntityType::Block), entityId);
 	if (spriteComponent)
 	{
@@ -342,6 +345,9 @@ void ECSBreakout::InitComponentsPools()
 			break;
 		case breakout::EComponentType::Particles:
 			ComponentManager::Get().CreateComponentPool<ParticlesComponent>(poolSize);
+			break;
+		case breakout::EComponentType::SpriteColor:
+			ComponentManager::Get().CreateComponentPool<SpriteColorComponent>(poolSize);
 			break;
 		default:
 			break;
