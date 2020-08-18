@@ -14,7 +14,8 @@ project "SysAnimation"
         paths.lib_multimedia,
         paths.game,
         paths.memory,
-        paths.glm.inc
+        paths.glm.inc,
+        paths.GL.inc,
     }
     
     files

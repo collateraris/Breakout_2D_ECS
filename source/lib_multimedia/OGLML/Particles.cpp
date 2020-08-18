@@ -83,18 +83,18 @@ void Particles::BindData()
 	QuadRender::Get().BindVAO();
 
 	//COLORS
-	glEnableVertexAttribArray(2);
 	glBindBuffer(GL_ARRAY_BUFFER, m_colorsVBO);
+	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glVertexAttribDivisor(2, 1);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	//OFFSETS
-	glEnableVertexAttribArray(3);
 	glBindBuffer(GL_ARRAY_BUFFER, m_offsetsVBO);
+	glEnableVertexAttribArray(3);
 	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glVertexAttribDivisor(3, 1);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	glBindVertexArray(0);
 }

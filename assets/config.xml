@@ -8,9 +8,9 @@
 	></window>
 	
 	<FPS>
-		<fps id = "0" FPS = "30"></fps>
+		<fps id = "0" FPS = "60"></fps>
 	</FPS>
-	
+		
 	<systems>
 	<system
 		id="0"
@@ -20,7 +20,7 @@
 	</systems>
 	
 	<components>
-		<component id="1" name="Sprite" poolSize="140"></component>
+		<component id="1" name="Sprite" poolSize="7"></component>
 		<component id="2" name="Transform" poolSize="140"></component>
 		<component id="3" name="Movement" poolSize="2"></component>
 		<component id="4" name="Player" poolSize="1"></component>
