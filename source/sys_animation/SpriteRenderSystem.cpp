@@ -32,16 +32,37 @@ void SpriteRenderSystem::Render()
 
 	for (auto& component : spriteComponents)
 	{
-
 		auto& spriteComponent = static_cast<FreeListPoolElement<SpriteComponent>*>(component)->GetContainer();
 		int entityId = spriteComponent.m_entityId;
-		auto& transformComponent = ecs.GetComponentByEntityId<TransformComponent>(entityId);
+		
+		if (entityId == static_cast<int>(EEntityIdStatus::PREFABS_CONTAINER))
+		{
+			auto entityIdSet = ecs.GetAllEntityIdBoundWithPrefab(spriteComponent.m_componentId);
+			if (!entityIdSet)
+				continue;
 
-		auto& sprite = spriteComponent.Sprite();
-		sprite.SetPosition(transformComponent.GetPosition());
-		sprite.SetSize(transformComponent.GetScale());
-		sprite.SetRotateAngle(transformComponent.GetRotation());
+			for (auto& id : *entityIdSet)
+			{
+				auto& transformComponent = ecs.GetComponentByEntityId<TransformComponent>(id);
 
-		sprite.Draw();
+				auto& sprite = spriteComponent.Sprite();
+				sprite.SetPosition(transformComponent.GetPosition());
+				sprite.SetSize(transformComponent.GetScale());
+				sprite.SetRotateAngle(transformComponent.GetRotation());
+
+				sprite.Draw();
+			}
+		}
+		else
+		{
+			auto& transformComponent = ecs.GetComponentByEntityId<TransformComponent>(entityId);
+
+			auto& sprite = spriteComponent.Sprite();
+			sprite.SetPosition(transformComponent.GetPosition());
+			sprite.SetSize(transformComponent.GetScale());
+			sprite.SetRotateAngle(transformComponent.GetRotation());
+
+			sprite.Draw();
+		}
 	}
 }

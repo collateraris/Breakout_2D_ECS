@@ -1,6 +1,7 @@
 #include <EntityManager.h>
 
 #include <ComponentManager.h>
+#include <PrefabsManager.h>
 
 using namespace breakout;
 
@@ -41,9 +42,16 @@ void EntityManager::Delete(int entityId)
     assert(foundIt != m_entityStorage.end());
 
     auto& componentManager = ComponentManager::Get();
+    auto& prefabManager = PrefabsManager::Get();
 
     for (auto& componentsIdByType : foundIt->second)
     {
+        if (prefabManager.IsContains(entityId, componentsIdByType.second))
+        {
+            prefabManager.DeleteEntityId(entityId, componentsIdByType.second);
+            continue;
+        }
+
         componentManager.Delete(componentsIdByType.first, componentsIdByType.second);
     }
 

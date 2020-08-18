@@ -183,20 +183,23 @@ int CreateBlock()
 
 	auto& transformComponent = ecs.AddComponentByEntityId<TransformComponent>(entityId);
 
-	auto& spriteComponent = ecs.AddComponentByEntityId<SpriteComponent>(entityId);
-	auto& sprite = spriteComponent.Sprite();
+	auto* spriteComponent = ecs.AddPrefabComponentByEntityId<SpriteComponent>(static_cast<int>(EEntityType::Block), entityId);
+	if (spriteComponent)
+	{
+		auto& sprite = spriteComponent->Sprite();
 
-	auto& texture = TexturesManager::Get().GetResource(static_cast<int>(ETextureAssetId::Block));
-	sprite.SetTexture(texture);
+		auto& texture = TexturesManager::Get().GetResource(static_cast<int>(ETextureAssetId::Block));
+		sprite.SetTexture(texture);
 
-	auto& shader = ShadersManager::Get().GetResource(static_cast<int>(EShaderAssetId::Sprite));
-	sprite.SetShader(shader);
+		auto& shader = ShadersManager::Get().GetResource(static_cast<int>(EShaderAssetId::Sprite));
+		sprite.SetShader(shader);
 
-	auto window = GameContext::Get().GetMainWindow();
+		auto window = GameContext::Get().GetMainWindow();
 
-	float screenWidth = window->GetWidth();
-	float screenHeight = window->GetHeight();
-	sprite.SetScreenSize(screenWidth, screenHeight);
+		float screenWidth = window->GetWidth();
+		float screenHeight = window->GetHeight();
+		sprite.SetScreenSize(screenWidth, screenHeight);
+	}
 
 	return entityId;
 }

@@ -31,3 +31,8 @@ void EntityComponentSystem::EntityDestroy(int entityId)
 {
 	EntityManager::Get().Delete(entityId);
 }
+
+const EntityComponentSystem::EntityIdSet* EntityComponentSystem::GetAllEntityIdBoundWithPrefab(ComponentId componentId)
+{
+	return PrefabsManager::Get().GetAllEntityIdByComponentId(componentId);
+}
