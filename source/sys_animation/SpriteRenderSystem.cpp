@@ -20,7 +20,7 @@ using namespace breakout;
 
 static const size_t MAX_SPRITE_INSTANCE_FOR_DRAW = 150;
 
-oglml::SpriteInstansed<MAX_SPRITE_INSTANCE_FOR_DRAW> g_spriteInstancedRender;
+oglml::SpriteInstanced<MAX_SPRITE_INSTANCE_FOR_DRAW> g_spriteInstancedRender;
 
 void SpriteRenderSystem::Init()
 {
@@ -53,7 +53,7 @@ void SpriteRenderSystem::Render()
 			{
 				if (g_spriteInstancedRender.IsFull())
 				{
-					g_spriteInstancedRender.DrawInstansed();
+					g_spriteInstancedRender.DrawInstanced();
 					g_spriteInstancedRender.ClearSpriteData();
 				}
 
@@ -73,7 +73,7 @@ void SpriteRenderSystem::Render()
 				g_spriteInstancedRender.CollectSpriteData(sprite);			
 			}
 
-			g_spriteInstancedRender.DrawInstansed();
+			g_spriteInstancedRender.DrawInstanced();
 			g_spriteInstancedRender.ClearSpriteData();
 		}
 		else
@@ -85,9 +85,15 @@ void SpriteRenderSystem::Render()
 			sprite.SetSize(transformComponent.GetScale());
 			sprite.SetRotateAngle(transformComponent.GetRotation());
 
+			if (ecs.IsContainComponentByEntityId<SpriteColorComponent>(entityId))
+			{
+				auto& spriteColorComponent = ecs.GetComponentByEntityId<SpriteColorComponent>(entityId);
+				sprite.SetColor(spriteColorComponent.GetColor());
+			}
+
 			g_spriteInstancedRender.ClearSpriteData();
 			g_spriteInstancedRender.CollectSpriteData(sprite);
-			g_spriteInstancedRender.DrawInstansed();
+			g_spriteInstancedRender.DrawInstanced();
 			g_spriteInstancedRender.ClearSpriteData();
 		}
 	}

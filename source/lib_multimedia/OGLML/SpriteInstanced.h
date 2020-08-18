@@ -8,14 +8,14 @@
 namespace oglml
 {
 	template<size_t MAX_INSTANCE_RENDERING>
-	class SpriteInstansed
+	class SpriteInstanced
 	{
 	public:
-		SpriteInstansed();
-		~SpriteInstansed() = default;
+		SpriteInstanced();
+		~SpriteInstanced() = default;
 
 		void CollectSpriteData(const Sprite& sprite);
-		void DrawInstansed();
+		void DrawInstanced();
 		void ClearSpriteData();
 		bool IsFull();
 		void GenBuffers();
@@ -39,13 +39,13 @@ namespace oglml
 	};
 
 	template<size_t MAX_INSTANCE_RENDERING>
-	SpriteInstansed<MAX_INSTANCE_RENDERING>::SpriteInstansed()
+	SpriteInstanced<MAX_INSTANCE_RENDERING>::SpriteInstanced()
 	{
 		InitData();
 	}
 
 	template<size_t MAX_INSTANCE_RENDERING>
-	void SpriteInstansed<MAX_INSTANCE_RENDERING>::CollectSpriteData(const Sprite& sprite)
+	void SpriteInstanced<MAX_INSTANCE_RENDERING>::CollectSpriteData(const Sprite& sprite)
 	{
 		m_textureID = sprite.GetTextureID();
 		m_shaderID = sprite.GetShaderID();
@@ -68,7 +68,7 @@ namespace oglml
 	}
 
 	template<size_t MAX_INSTANCE_RENDERING>
-	void SpriteInstansed<MAX_INSTANCE_RENDERING>::DrawInstansed()
+	void SpriteInstanced<MAX_INSTANCE_RENDERING>::DrawInstanced()
 	{
 		static const std::string imageUniform = "uImage";
 		static const unsigned int IMAGE_LAYOUT_POSITION = 0;
@@ -90,20 +90,20 @@ namespace oglml
 	}
 
 	template<size_t MAX_INSTANCE_RENDERING>
-	void SpriteInstansed<MAX_INSTANCE_RENDERING>::ClearSpriteData()
+	void SpriteInstanced<MAX_INSTANCE_RENDERING>::ClearSpriteData()
 	{
 		InitData();
 	}
 
 	template<size_t MAX_INSTANCE_RENDERING>
-	void SpriteInstansed<MAX_INSTANCE_RENDERING>::GenBuffers()
+	void SpriteInstanced<MAX_INSTANCE_RENDERING>::GenBuffers()
 	{
 		glGenBuffers(1, &m_colorsVBO);
 		glGenBuffers(1, &m_projModelsVBO);
 	}
 
 	template<size_t MAX_INSTANCE_RENDERING>
-	void SpriteInstansed<MAX_INSTANCE_RENDERING>::BufferData()
+	void SpriteInstanced<MAX_INSTANCE_RENDERING>::BufferData()
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, m_colorsVBO);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * m_instances_number, m_colors.data(), GL_STATIC_DRAW);
@@ -115,7 +115,7 @@ namespace oglml
 	}
 
 	template<size_t MAX_INSTANCE_RENDERING>
-	void SpriteInstansed<MAX_INSTANCE_RENDERING>::BindData()
+	void SpriteInstanced<MAX_INSTANCE_RENDERING>::BindData()
 	{
 		QuadRender::Get().BindVAO();
 		//COLORS	
@@ -147,13 +147,13 @@ namespace oglml
 	}
 
 	template<size_t MAX_INSTANCE_RENDERING>
-	void SpriteInstansed<MAX_INSTANCE_RENDERING>::InitData()
+	void SpriteInstanced<MAX_INSTANCE_RENDERING>::InitData()
 	{
 		m_instances_number = 0;
 	}
 
 	template<size_t MAX_INSTANCE_RENDERING>
-	bool SpriteInstansed<MAX_INSTANCE_RENDERING>::IsFull()
+	bool SpriteInstanced<MAX_INSTANCE_RENDERING>::IsFull()
 	{
 		return !(m_instances_number < MAX_INSTANCE_RENDERING);
 	}
