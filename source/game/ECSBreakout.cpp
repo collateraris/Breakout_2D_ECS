@@ -362,7 +362,7 @@ void ECSBreakout::CreateWorld()
 {
 	ECSBreakout::CreateComponent(EEntityType::Background);
 
-	GameMaps::Get().LoadMap(EGameMapLevels::Standard);
+	GameMaps::Get().LoadMap(EGameMapLevels::Space_invader);
 
 	ECSBreakout::CreateComponent(EEntityType::PlayerPaddle);
 	ECSBreakout::CreateComponent(EEntityType::PlayerBall);

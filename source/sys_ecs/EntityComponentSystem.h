@@ -22,6 +22,7 @@ namespace breakout
 	class EntityComponentSystem
 	{
 		using ComponentId = int;
+		using ComponentUniqueId = int;
 
 		using ComponentIdCounter = unsigned int;
 
@@ -56,6 +57,9 @@ namespace breakout
 
 		const EntityIdSet* GetAllEntityIdBoundWithPrefab(ComponentId componentId);
 
+		ComponentId GetComponentId(ComponentUniqueId uniqueId);
+		void UnbindComponentUniqueId(ComponentUniqueId);
+
 	private:
 
 		EntityComponentSystem();
@@ -65,7 +69,13 @@ namespace breakout
 		void operator=(EntityComponentSystem&) = delete;
 		void operator=(EntityComponentSystem&&) = delete;
 
+		void BindComponentUniqueIdWithId(ComponentUniqueId, ComponentId);
+
 		std::array<ComponentIdCounter, static_cast<size_t>(EComponentType::MAX)> m_usedComponentsCounter = {0};
+
+		std::unordered_map<ComponentUniqueId, ComponentId> m_componentUniqueIdMap;
+
+		unsigned int m_usedComponentUniqueId = 0;
 	};
 
 	template<class componentStruct>
@@ -86,8 +96,10 @@ namespace breakout
 			component.m_componentId = static_cast<int>(componentId);
 		}
 		component.m_entityId = entityId;
+		component.m_componentUniqueId = m_usedComponentUniqueId++;
+		BindComponentUniqueIdWithId(component.m_componentUniqueId, component.m_componentId);
 
-		EntityManager::Get().AddComponentByEntityId<componentStruct>(component.m_entityId, component.m_componentId);
+		EntityManager::Get().AddComponentByEntityId<componentStruct>(component.m_entityId, component.m_componentId, component.m_componentUniqueId);
 
 		return component;
 	}
@@ -96,8 +108,8 @@ namespace breakout
 	componentStruct* EntityComponentSystem::AddPrefabComponentByEntityId(EntityTypeId typeId, EntityId entityId)
 	{
 		PrefabsManager& prefabsManager = PrefabsManager::Get();
-		ComponentId componentId = prefabsManager.GetPrefabComponentId(typeId);
-		if (componentId == static_cast<int>(EPrefabsIndexState::INDEX_NONE))
+		ComponentUniqueId componentUniqueId = prefabsManager.GetPrefabComponentUniqueId(typeId);
+		if (componentUniqueId == static_cast<int>(EPrefabsIndexState::INDEX_NONE))
 		{
 			EComponentType type = componentStruct::GetType();
 			auto& component = ComponentManager::Get().NextComponentActivate<componentStruct>();
@@ -107,14 +119,17 @@ namespace breakout
 				component.m_componentId = static_cast<int>(componentId);
 			}
 			component.m_entityId = static_cast<int>(EEntityIdStatus::PREFABS_CONTAINER);
-			prefabsManager.AddPrefabComponent(typeId, component.m_componentId);
-			prefabsManager.BindEntityIdWithComponentId(typeId, entityId);
-			EntityManager::Get().AddComponentByEntityId<componentStruct>(entityId, component.m_componentId);
+			component.m_componentUniqueId = m_usedComponentUniqueId++;
+			BindComponentUniqueIdWithId(component.m_componentUniqueId, component.m_componentId);
+
+			prefabsManager.AddPrefabComponent(typeId, component.m_componentUniqueId);
+			prefabsManager.BindEntityIdWithComponentUniqueId(typeId, entityId);
+			EntityManager::Get().AddComponentByEntityId<componentStruct>(entityId, component.m_componentId, component.m_componentUniqueId);
 			return &component;
 		}
 
-		prefabsManager.BindEntityIdWithComponentId(typeId, entityId);
-		EntityManager::Get().AddComponentByEntityId<componentStruct>(entityId, componentId);
+		prefabsManager.BindEntityIdWithComponentUniqueId(typeId, entityId);
+		EntityManager::Get().AddComponentByEntityId<componentStruct>(entityId, GetComponentId(componentUniqueId), componentUniqueId);
 		return nullptr;
 
 	}

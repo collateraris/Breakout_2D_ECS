@@ -44,7 +44,7 @@ void SpriteRenderSystem::Render()
 		
 		if (entityId == static_cast<int>(EEntityIdStatus::PREFABS_CONTAINER))
 		{
-			auto entityIdSet = ecs.GetAllEntityIdBoundWithPrefab(spriteComponent.m_componentId);
+			auto entityIdSet = ecs.GetAllEntityIdBoundWithPrefab(spriteComponent.m_componentUniqueId);
 			if (!entityIdSet)
 				continue;
 

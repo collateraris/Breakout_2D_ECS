@@ -12,7 +12,11 @@ namespace breakout
 	{
 		using ComponentId = int;
 
-		using ComponentsIdByType = std::unordered_map<EComponentType, ComponentId>;
+		using ComponentUniqueId = int;
+
+		using ComponentIdPair = std::pair<ComponentId, ComponentUniqueId>;
+
+		using ComponentsIdByType = std::unordered_map<EComponentType, ComponentIdPair>;
 
 		using EntityId = int;
 
@@ -29,7 +33,7 @@ namespace breakout
 		void Delete(int entityId);
 
 		template<class componentStruct>
-		void AddComponentByEntityId(int entityId, int componentId);
+		void AddComponentByEntityId(int entityId, int componentId, int componentUniqueId);
 
 		template<class componentStruct>
 		int GetComponentIdByEntityId(int entityId);
@@ -54,7 +58,7 @@ namespace breakout
 	};
 
 	template<class componentStruct>
-	void EntityManager::AddComponentByEntityId(int entityId, int componentId)
+	void EntityManager::AddComponentByEntityId(int entityId, int componentId, int componentUniqueId)
 	{
 		EComponentType componentType = componentStruct::GetType();
 
@@ -62,7 +66,7 @@ namespace breakout
 		if (foundEntityIt == m_entityStorage.end())
 		{
 			ComponentsIdByType components;
-			components[componentType] = componentId;
+			components.insert({ componentType, std::make_pair(componentId, componentUniqueId) });
 			m_entityStorage[entityId] = std::move(components);
 			return;
 		}
@@ -70,7 +74,7 @@ namespace breakout
 		auto foundComponentIt = foundEntityIt->second.find(componentType);
 		assert(foundComponentIt == foundEntityIt->second.end());
 
-		foundEntityIt->second[componentType] = componentId;
+		foundEntityIt->second.insert({ componentType, std::make_pair(componentId, componentUniqueId) });
 	}
 
 	template<class componentStruct>
@@ -84,7 +88,7 @@ namespace breakout
 		auto foundComponentIt = foundEntityIt->second.find(componentType);
 		assert(foundComponentIt != foundEntityIt->second.end());
 
-		return foundComponentIt->second;
+		return foundComponentIt->second.first;
 	}
 
 	template<class componentStruct>

@@ -287,7 +287,7 @@ void PlayerBallLogicSystem::MoveLogic(float dtMilliseconds)
 		ballMovement.SetVelocity({ ballVelocity.x(), -ballVelocity.y() });
 		ballPos.y() = 0.f;
 	}
-	else if (ballPos.y() + ballSize.y() >= screeHeight)
+	else if (ballPos.y() + ballSize.y() >= 1.25 * screeHeight)
 	{
 		SetInitPosition();
 		EntityComponentSystem::Get().GetComponentByEntityId<PlayerBallComponent>(m_playerBallEntityId).state = EPlayerBallState::IsStuckOnPlayerPaddle;
