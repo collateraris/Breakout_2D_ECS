@@ -51,6 +51,15 @@
 			<texture id="4" name="paddle" path="assets/textures/paddle.png" alpha="1"></texture>
 			<texture id="5" name="particle" path="assets/textures/particle.png" alpha="1"></texture>
 		</textures>
+		<sounds>
+			<sound id="0" name="HitNonSolidBlock" path="assets/sounds/non_solid_block.mp3"></sound>
+			<sound id="1" name="HitSolidBlock" path="assets/sounds/solid.wav"></sound>
+			<sound id="2" name="CatchPowerup" path="assets/sounds/powerup.wav"></sound>
+			<sound id="3" name="PaddlePass" path="assets/sounds/paddle.wav"></sound>
+		</sounds>
+		<music>
+			<track id="0" name="BreakoutMain" path="assets/music/breakout.mp3"></track>
+		</music>
 	</assets>
 
 </config>

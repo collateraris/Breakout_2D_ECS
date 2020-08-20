@@ -13,6 +13,7 @@
 #include <ResourcesManager.h>
 #include <TexturesManager.h>
 #include <ShadersManager.h>
+#include <AudioManager.h>
 
 #include <OGLML/Sprite.h>
 #include <OGLML/Shader.h>
@@ -54,6 +55,8 @@ int CreatePlayerBall();
 
 void ECSBreakout::Init()
 {
+	AudioManager::Get().PlayMusic(EMusicAssetId::BreakoutMain);
+
 	InitComponentsPools();
 
 	CreateWorld();

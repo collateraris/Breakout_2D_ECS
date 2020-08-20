@@ -9,6 +9,8 @@ namespace breakout
 
         void BindTextures();
         void BindShaders();
+        void BindSounds();
+        void BindMusics();
     }
 
 }

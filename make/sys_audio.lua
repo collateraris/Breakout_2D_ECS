@@ -10,6 +10,10 @@ project "SysAudio"
     {
         paths.audio,
         paths.game,
+        paths.resource,
+        paths.irrKlang.inc,
+        paths.lib_multimedia,
+        paths.glm.inc,
     }
     
     files

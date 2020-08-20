@@ -9,7 +9,13 @@ project "Game"
     postbuildcommands
     {
         "{MKDIR} " .. paths.build,
-        "{DELETE} " .. paths.build .. "/%{cfg.buildtarget.name}",		
+        "{DELETE} " .. paths.build .. "/%{cfg.buildtarget.name}",
+        "{COPY} " .. paths.irrKlang.bin .. "/ikpMP3.dll " .. paths.build,
+		"{COPY} " .. paths.irrKlang.bin .. "/ikpMP3.dll " .. paths.genDebug,
+        "{COPY} " .. paths.irrKlang.bin .. "/ikpMP3.dll " .. paths.genRelease,
+        "{COPY} " .. paths.irrKlang.bin .. "/irrKlang.dll " .. paths.build,
+		"{COPY} " .. paths.irrKlang.bin .. "/irrKlang.dll " .. paths.genDebug,
+		"{COPY} " .. paths.irrKlang.bin .. "/irrKlang.dll " .. paths.genRelease,		
 		"{COPY} " .. paths.root .. "/assets " .. paths.build .. "/assets",
 		"{COPY} " .. paths.root .. "/assets " .. paths.genDebug .. "/assets",
 		"{COPY} " .. paths.root .. "/assets " .. paths.genRelease .. "/assets",
@@ -26,6 +32,7 @@ project "Game"
         paths.glm.inc,
         paths.stb_image.inc,
         paths.tinyxml2.inc,
+        paths.irrKlang,
         paths.config,
         paths.events,
         paths.gameState,
@@ -40,13 +47,14 @@ project "Game"
         paths.audio,
         paths.resource,
         paths.physics,
-        paths.lib_multimedia
+        paths.lib_multimedia,
     }
     
     libdirs
     {
         paths.GL.lib,
-        paths.GLFW.lib
+        paths.GLFW.lib,
+        paths.irrKlang.lib,
     }
     
     links
@@ -68,7 +76,8 @@ project "Game"
         "LibMultimedia",
         "opengl32",
         "glfw3",
-        "glew32s"
+        "glew32s",
+        "irrKlang"
     }
     
     files

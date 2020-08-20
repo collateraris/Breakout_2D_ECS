@@ -5,6 +5,7 @@
 #include <PlayerComponent.h>
 #include <ColliderComponent.h>
 #include <CollisionSystem.h>
+#include <AudioManager.h>
 
 #include <EventsStorage.h>
 
@@ -147,11 +148,23 @@ void PlayerBallLogicSystem::CollitionResolution(const ColliderComponent& compone
 	{
 		EPlayerBallState ballState = EntityComponentSystem::Get().GetComponentByEntityId<PlayerBallComponent>(circleCollider.m_entityId).state;
 		if (ballState != EPlayerBallState::IsStuckOnPlayerPaddle)
+		{
+			AudioManager::Get().PlaySound(ESoundAssetId::PaddlePass);
 			PaddlePlayerCollition(circleCollider, squareCollider);
+		}
 	}
 	else
 	{
 		BlockCollition(circleCollider, squareCollider);
+
+		if (squareCollider.GetDamagableType() == EDamagableType::Saved)
+		{
+			AudioManager::Get().PlaySound(ESoundAssetId::HitSolidBlock);
+		}
+		else if (squareCollider.GetDamagableType() == EDamagableType::Destroyable)
+		{
+			AudioManager::Get().PlaySound(ESoundAssetId::HitNonSolidBlock);
+		}
 	}
 }
 

@@ -3,6 +3,8 @@
 #include <TexturesManager.h>
 #include <ShadersManager.h>
 
+#include <cassert>
+
 using namespace breakout;
 
 AssetManager::AssetManager()
@@ -93,4 +95,27 @@ bool AssetManager::Unload(breakout::EShaderAssetId shaderId)
 {
 	int id = static_cast<int>(shaderId);
 	return ShadersManager::Get().Unload(id);
+}
+
+void AssetManager::Bind(breakout::ESoundAssetId soundId, const std::string& soundPath)
+{
+	m_soundPaths[soundId] = soundPath;
+}
+
+const std::string& AssetManager::GetPath(breakout::ESoundAssetId soundId)
+{
+	assert(m_soundPaths.find(soundId) != m_soundPaths.end());
+	return m_soundPaths[soundId];
+}
+
+
+void AssetManager::Bind(breakout::EMusicAssetId musicId, const std::string& musicPath)
+{
+	m_musicPaths[musicId] = musicPath;
+}
+
+const std::string& AssetManager::GetPath(breakout::EMusicAssetId musicId)
+{
+	assert(m_musicPaths.find(musicId) != m_musicPaths.end());
+	return m_musicPaths[musicId];
 }
