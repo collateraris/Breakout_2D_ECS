@@ -270,6 +270,7 @@ void PlayerBallLogicSystem::MoveLogic(float dtMilliseconds)
 
 	auto window = GameContext::Get().GetMainWindow();
 	float screenWidth = window->GetWidth();
+	float screeHeight = window->GetHeight();
 
 	if (ballPos.x() <= 0.0f)
 	{
@@ -285,6 +286,12 @@ void PlayerBallLogicSystem::MoveLogic(float dtMilliseconds)
 	{
 		ballMovement.SetVelocity({ ballVelocity.x(), -ballVelocity.y() });
 		ballPos.y() = 0.f;
+	}
+	else if (ballPos.y() + ballSize.y() >= screeHeight)
+	{
+		SetInitPosition();
+		EntityComponentSystem::Get().GetComponentByEntityId<PlayerBallComponent>(m_playerBallEntityId).state = EPlayerBallState::IsStuckOnPlayerPaddle;
+		return;
 	}
 
 	ballTransform.SetPosition(ballPos.data());
