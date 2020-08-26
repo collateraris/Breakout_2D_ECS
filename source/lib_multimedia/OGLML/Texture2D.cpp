@@ -6,6 +6,7 @@
 #include <stb_image.h>
 
 #include <iostream>
+#include <cassert>
 
 using namespace oglml;
 
@@ -68,5 +69,30 @@ void Texture2D::operator=(Texture2D& texture)
 {
 	this->b_init = texture.b_init;
 	this->m_textureID = texture.m_textureID;
+}
+
+void Texture2D::Generate(Texture2DInfo& p)
+{
+	assert(p.width != -1);
+	assert(p.height != -1);
+	assert(p.wrap_s != -1);
+	assert(p.wrap_t != -1);
+	assert(p.min_filter != -1);
+	assert(p.max_filter != -1);
+
+	GLuint textureID;
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+	glTexImage2D(GL_TEXTURE_2D, 0, p.internalFormat, p.width, p.height, 0, p.format, p.type, p.pixels);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, p.wrap_s);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, p.wrap_t);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, p.min_filter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, p.max_filter);
+
+	m_textureID = textureID;
+	b_init = true;
 }
 
