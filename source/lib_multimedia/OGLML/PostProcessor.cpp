@@ -46,14 +46,14 @@ void PostProcessor::SetFrameBufferSize(int w, int h)
 	m_Height = h;
 }
 
-void PostProcessor::BeginRenderInFrameBuffer()
+void PostProcessor::BeginRenderInFramebuffer()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, m_MSFBO);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void PostProcessor::EndRenderInFrameBuffer()
+void PostProcessor::EndRenderInFramebuffer()
 {
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, m_MSFBO);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_FBO);

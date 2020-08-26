@@ -22,8 +22,8 @@ namespace oglml
 
 		void SetFrameBufferSize(int w, int h);
 
-		void BeginRenderInFrameBuffer();
-		void EndRenderInFrameBuffer();
+		void BeginRenderInFramebuffer();
+		void EndRenderInFramebuffer();
 
 		void Draw();
 

@@ -15,6 +15,7 @@ namespace breakout
 		DamagableColliderLogic = 8,
 		Particles = 9,
 		Render = 10,
+		PostProcessing = 11,
 		MAX
 	};
 
