@@ -5,6 +5,8 @@
 #include <MemoryManager.h>
 #include <LinearAllocator.h>
 
+#include <gameContext.h>
+
 #include <APostEffectState.h>
 #include <posteffects/PostEffectsFabric.h>
 
@@ -32,6 +34,10 @@ void PostEffectsStateManager::Init()
 {
 	auto globalAllocator = MemoryManager::Get().GetGlobalAllocator();
 	m_postProcessor = Allocate<oglml::PostProcessor>(globalAllocator.get());
+
+	int windowW, windowH;
+	GameContext::Get().GetMainWindowSize(windowW, windowH);
+	m_postProcessor->SetFrameBufferSize(windowW, windowH);
 
 	SwitchState(static_cast<int>(EPostEffectStates::Idle));
 }
@@ -64,4 +70,6 @@ void PostEffectsStateManager::SwitchState(EnumStateName stateId)
 	}
 
 	m_currState = m_states[stateId];
+
+	m_currState->Awake();
 }

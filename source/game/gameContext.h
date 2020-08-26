@@ -50,6 +50,8 @@ namespace breakout
 		GameplaySystem* GetGameplaySystem();
 		PhysicsSystem* GetPhysicsSystem();
 
+		void GetMainWindowSize(int& w, int&h);
+
 	private:
 
 		GameContext();

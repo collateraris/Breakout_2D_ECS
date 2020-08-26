@@ -103,3 +103,9 @@ PhysicsSystem* GameContext::GetPhysicsSystem()
 {
 	return m_physicsSystem;
 }
+
+void GameContext::GetMainWindowSize(int& w, int& h)
+{
+	w = m_mainWindow->GetWidth();
+	h = m_mainWindow->GetHeight();
+}
