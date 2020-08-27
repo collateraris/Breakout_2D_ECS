@@ -39,7 +39,7 @@ void PostEffectsStateManager::Init()
 	GameContext::Get().GetMainWindowSize(windowW, windowH);
 	m_postProcessor->Init(windowW, windowH);
 
-	SwitchState(static_cast<int>(EPostEffectStates::Chaos));
+	SwitchState(static_cast<int>(EPostEffectStates::Idle));
 }
 
 void PostEffectsStateManager::Begin()
