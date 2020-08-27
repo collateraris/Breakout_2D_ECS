@@ -30,7 +30,7 @@ namespace breakout
 
 	}
 
-	void IdlePostEffect::Draw()
+	void IdlePostEffect::Draw(float dtMilliseconds)
 	{
 
 	}

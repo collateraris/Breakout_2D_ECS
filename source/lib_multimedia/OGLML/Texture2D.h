@@ -11,7 +11,7 @@ namespace oglml
 		unsigned int format = 0;
 		unsigned int internalFormat = 0;
 		unsigned int type = 0;
-		void* pixels = nullptr;
+		unsigned char* pixels = nullptr;
 		int wrap_s = -1;
 		int wrap_t = -1;
 		int min_filter = -1;

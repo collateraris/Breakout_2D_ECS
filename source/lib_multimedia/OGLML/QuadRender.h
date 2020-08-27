@@ -14,6 +14,8 @@ namespace oglml
 
 		void BindVAO();
 
+		void DrawFullQuad();
+
 	private:
 
 		QuadRender();
@@ -24,6 +26,9 @@ namespace oglml
 		void operator=(QuadRender&&) = delete;
 
 		unsigned int VBO;
-		unsigned int quadVAO;
+		unsigned int VBOfull = 0;
+		unsigned int quadVAOv1;
+		unsigned int quadVAOfull;
 	};
+
 }

@@ -17,6 +17,6 @@ void PostProcessingSystem::PreUpdate(float dtMilliseconds)
 void PostProcessingSystem::Update(float dtMilliseconds)
 {
 	PostEffectsStateManager::Get().End();
-	PostEffectsStateManager::Get().Draw();
+	PostEffectsStateManager::Get().Draw(dtMilliseconds);
 }
 

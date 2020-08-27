@@ -7,29 +7,34 @@ using namespace oglml;
 
 QuadRender::QuadRender()
 {
-    float vertices[] = {
-        // positions        // texture Coords
-        0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-        0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-        1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-        1.0f, 0.0f, 0.0f, 1.0f, 0.0f
-    };
+    // 1/4of screen
+    {
+        float vertices[] = {
+            // positions        // texture Coords
+            0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+            0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+            1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+            1.0f, 0.0f, 0.0f, 1.0f, 0.0f
+        };
 
-    glGenVertexArrays(1, &quadVAO);
-    glGenBuffers(1, &VBO);
-    glBindVertexArray(quadVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+        glGenVertexArrays(1, &quadVAOv1);
+        glGenBuffers(1, &VBO);
+        glBindVertexArray(quadVAOv1);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    }
 }
 
 QuadRender::~QuadRender()
 {
-    glDeleteVertexArrays(1, &quadVAO);
+    glDeleteVertexArrays(1, &quadVAOv1);
+    glDeleteVertexArrays(1, &quadVAOfull);
     glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &VBOfull);
 }
 
 QuadRender& QuadRender::Get()
@@ -40,20 +45,48 @@ QuadRender& QuadRender::Get()
 
 void QuadRender::Draw()
 {
-    glBindVertexArray(quadVAO);
+    glBindVertexArray(quadVAOv1);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     glBindVertexArray(0);
 }
 
 void QuadRender::DrawArraysInstanced(unsigned int instancedNumber)
 {
-    glBindVertexArray(quadVAO);
+    glBindVertexArray(quadVAOv1);
     glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, instancedNumber);
     glBindVertexArray(0);
 }
 
 void QuadRender::BindVAO()
 {
-    glBindVertexArray(quadVAO);
+    glBindVertexArray(quadVAOv1);
+}
+
+void QuadRender::DrawFullQuad()
+{
+    if (!VBOfull)
+    {
+        float vertices[] = {
+            // positions        // texture Coords
+            -1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+            -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+            1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+            1.0f, -1.0f, 0.0f, 1.0f, 0.0f
+        };
+
+        glGenVertexArrays(1, &quadVAOfull);
+        glGenBuffers(1, &VBOfull);
+        glBindVertexArray(quadVAOfull);
+        glBindBuffer(GL_ARRAY_BUFFER, VBOfull);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    }
+
+    glBindVertexArray(quadVAOfull);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    glBindVertexArray(0);
 }
 

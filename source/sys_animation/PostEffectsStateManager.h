@@ -25,7 +25,7 @@ namespace breakout
 
 		void End();
 
-		void Draw();
+		void Draw(float dtMilliseconds);
 
 		void SwitchState(EnumStateName state);
 

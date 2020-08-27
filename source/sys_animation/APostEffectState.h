@@ -30,7 +30,7 @@ namespace breakout
 
 		virtual void End() = 0;
 
-		virtual void Draw() = 0;
+		virtual void Draw(float dtMilliseconds) = 0;
 
 	protected:
 

@@ -14,21 +14,20 @@ namespace oglml
 
 		~PostProcessor();
 
-		void Init();
+		void Init(int w, int h);
 
 		void SetShader(Shader& shader);
 
 		void SetShaderParams(std::function<void(unsigned int)>&);
 
-		void SetFrameBufferSize(int w, int h);
-
 		void BeginRenderInFramebuffer();
 		void EndRenderInFramebuffer();
 
-		void Draw();
+		void Draw(float dtMilliseconds);
 
 	private:
 
+		void SetFrameBufferSize(int w, int h);
 		void GenBuffers();
 		void GenFramebufferTexture();
 		void InitStorage();

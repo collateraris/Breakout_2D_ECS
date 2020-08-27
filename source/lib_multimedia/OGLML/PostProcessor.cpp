@@ -6,6 +6,7 @@
 
 #include <glew.h>
 #include <iostream>
+#include <string>
 #include <cassert>
 
 using namespace oglml;
@@ -17,11 +18,14 @@ PostProcessor::PostProcessor()
 
 PostProcessor::~PostProcessor()
 {
-
+	glDeleteFramebuffers(1, &m_FBO);
+	glDeleteFramebuffers(1, &m_MSFBO);
 }
 
-void PostProcessor::Init()
+void PostProcessor::Init(int w, int h)
 {
+	SetFrameBufferSize(w, h);
+
 	assert(m_Width != -1);
 	assert(m_Height != -1);
 
@@ -57,18 +61,22 @@ void PostProcessor::EndRenderInFramebuffer()
 {
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, m_MSFBO);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_FBO);
-	glBlitFramebuffer(0, 0, m_Width, m_Height, 0, 0, m_Width, m_Height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+	glBlitFramebuffer(0, 0, m_Width, m_Height, 0, 0, m_Width, m_Height, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0); // binds both READ and WRITE framebuffer to default framebuffer
 }
 
-void PostProcessor::Draw()
+void PostProcessor::Draw(float dtMilliseconds)
 {
+	static const std::string uniformSceneStr = "uScene";
+	static const std::string uniformTimeStr = "uTime";
 	Shader::Use(m_shaderId);
+	Shader::SetInt(m_shaderId, uniformSceneStr.c_str(), 0);
+	Shader::SetFloat(m_shaderId, uniformTimeStr.c_str(), dtMilliseconds);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, m_framebufferTextureId);
 
-	QuadRender::Get().Draw();
+	QuadRender::Get().DrawFullQuad();
 }
 
 void PostProcessor::GenBuffers()
@@ -90,6 +98,7 @@ void PostProcessor::GenFramebufferTexture()
 	par.wrap_t = GL_REPEAT;
 	par.min_filter = GL_LINEAR;
 	par.max_filter = GL_LINEAR;
+	par.type = GL_UNSIGNED_BYTE;
 
 	Texture2D tex;
 	tex.Generate(par);

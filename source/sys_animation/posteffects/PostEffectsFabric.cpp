@@ -2,6 +2,9 @@
 
 #include <APostEffectState.h>
 #include <posteffects/IdlePostEffect.h>
+#include <posteffects/ChaosPostEffect.h>
+#include <posteffects/ConfusePostEffect.h>
+#include <posteffects/ShakePostEffect.h>
 
 #include <MemoryManager.h>
 #include <LinearAllocator.h>
@@ -19,11 +22,11 @@ APostEffectState* PostEffectsFabric::GeneratePostEffect(LinearAllocator* allocat
 	case EPostEffectStates::Idle:
 		return Allocate<IdlePostEffect>(allocator, pp);
 	case EPostEffectStates::Confuse:
-		return Allocate<IdlePostEffect>(allocator, pp);
+		return Allocate<ConfusePostEffect>(allocator, pp);
 	case EPostEffectStates::Chaos:
-		return Allocate<IdlePostEffect>(allocator, pp);
+		return Allocate<ChaosPostEffect>(allocator, pp);
 	case EPostEffectStates::Shake:
-		return Allocate<IdlePostEffect>(allocator, pp);
+		return Allocate<ShakePostEffect>(allocator, pp);
 	default:
 		assert(false);
 		return nullptr;

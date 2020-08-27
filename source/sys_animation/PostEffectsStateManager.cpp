@@ -37,24 +37,27 @@ void PostEffectsStateManager::Init()
 
 	int windowW, windowH;
 	GameContext::Get().GetMainWindowSize(windowW, windowH);
-	m_postProcessor->SetFrameBufferSize(windowW, windowH);
+	m_postProcessor->Init(windowW, windowH);
 
-	SwitchState(static_cast<int>(EPostEffectStates::Idle));
+	SwitchState(static_cast<int>(EPostEffectStates::Chaos));
 }
 
 void PostEffectsStateManager::Begin()
 {
 	assert(m_currState != nullptr);
+	m_currState->Begin();
 }
 
 void PostEffectsStateManager::End()
 {
 	assert(m_currState != nullptr);
+	m_currState->End();
 }
 
-void PostEffectsStateManager::Draw()
+void PostEffectsStateManager::Draw(float dtMilliseconds)
 {
 	assert(m_currState != nullptr);
+	m_currState->Draw(dtMilliseconds);
 }
 
 void PostEffectsStateManager::SwitchState(EnumStateName stateId)

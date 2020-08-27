@@ -13,7 +13,8 @@ void main()
     for(int i = 0; i < KERNEL_SIZE; i++)
     {
         vec3 sceneOffset = texture(uScene, vTexCoords.st + uOffsets[i]).rgb;
-        color += vec4(sceneOffset * uEdgeKernel[i], 0.0);
+        sceneOffset *= uEdgeKernel[i];
+        color += vec4(sceneOffset, 0.);
     }
     color.a = 1.0;
 

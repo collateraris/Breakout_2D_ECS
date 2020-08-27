@@ -10,6 +10,7 @@ void main()
 {
     vTexCoords = aTex;
     float strength = 0.01;
+    gl_Position = vec4(aPos, 1.0f);
     gl_Position.x += cos(uTime * 10) * strength;        
     gl_Position.y += cos(uTime * 15) * strength; 
 }

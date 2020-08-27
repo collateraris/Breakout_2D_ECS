@@ -9,13 +9,13 @@ namespace oglml
 
 namespace breakout
 {
-	class IdlePostEffect : public APostEffectState
+	class ShakePostEffect : public APostEffectState
 	{
 	public:
 
-		IdlePostEffect(oglml::PostProcessor* pp);
+		ShakePostEffect(oglml::PostProcessor* pp);
 
-		virtual ~IdlePostEffect() override;
+		virtual ~ShakePostEffect() override;
 
 		virtual void Awake() override;
 
