@@ -10,6 +10,12 @@ namespace breakout
 		Block = 3,
 		PlayerPaddle = 4,
 		PlayerBall = 5,
+		SpeedPowerUp = 6,
+		StickyPowerUp = 7,
+		PassThroughPowerUp = 8,
+		PadSizeIncreasePowerUp = 9,
+		ConfusePowerUp = 10,
+		ChaosPowerUp = 11,
 		MAX,
     };
 

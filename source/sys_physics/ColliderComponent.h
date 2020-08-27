@@ -18,6 +18,7 @@ namespace breakout
 		None,
 		Saved,
 		Destroyable,
+		Intacted,
 	};
 
 	class ColliderComponent : public BaseComponent

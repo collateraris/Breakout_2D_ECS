@@ -13,6 +13,7 @@ namespace breakout
 		Collider = 6,
 		Particles = 7,
 		SpriteColor = 8,
+		PowerUp = 9,
 		MAX,
 	};
 
