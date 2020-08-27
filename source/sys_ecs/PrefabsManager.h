@@ -13,7 +13,7 @@ namespace breakout
 
 	class PrefabsManager
 	{
-		using ComponentId = int;
+		using ComponentUniqueId = int;
 		using EntityId = int;
 		using EntityIdSet = std::unordered_set<EntityId>;
 		using EntityTypeId = int;
@@ -22,17 +22,17 @@ namespace breakout
 
 		static PrefabsManager& Get();
 
-		int GetPrefabComponentId(EntityTypeId type);
+		int GetPrefabComponentUniqueId(EntityTypeId type);
 
-		void AddPrefabComponent(EntityTypeId type, ComponentId componentId);
+		void AddPrefabComponent(EntityTypeId type, ComponentUniqueId componentId);
 
-		void BindEntityIdWithComponentId(EntityTypeId type, EntityId id);
+		void BindEntityIdWithComponentUniqueId(EntityTypeId type, EntityId id);
 
-		void DeleteEntityId(EntityId id, ComponentId componentId);
+		void DeleteEntityId(EntityId id, ComponentUniqueId componentId);
 
-		bool IsContains(EntityId id, ComponentId componentId);
+		bool IsContains(EntityId id, ComponentUniqueId componentId);
 
-		const EntityIdSet* GetAllEntityIdByComponentId(ComponentId componentId);
+		const EntityIdSet* GetAllEntityIdByComponentUniqueId(ComponentUniqueId componentId);
 
 	private:
 
@@ -43,7 +43,7 @@ namespace breakout
 		void operator=(PrefabsManager&) = delete;
 		void operator=(PrefabsManager&&) = delete;
 
-		std::unordered_map<ComponentId, EntityIdSet> m_EntityIdStorage;
-		std::unordered_map<EntityTypeId, ComponentId> m_ComponentIdStorage;
+		std::unordered_map<ComponentUniqueId, EntityIdSet> m_EntityIdStorage;
+		std::unordered_map<EntityTypeId, ComponentUniqueId> m_ComponentIdStorage;
 	};
 }

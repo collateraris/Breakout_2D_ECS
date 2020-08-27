@@ -42,6 +42,9 @@
 		<shaders>
 			<shader id="0" name="sprite_render_0" path="assets/shaders/sprite_render_0"></shader>
 			<shader id="1" name="particle" path="assets/shaders/particle"></shader>
+			<shader id="2" name="chaos_post_effect" path="assets/shaders/post_effects/chaos"></shader>
+			<shader id="3" name="confuse_post_effect" path="assets/shaders/post_effects/confuse"></shader>
+			<shader id="4" name="shake_post_effect" path="assets/shaders/post_effects/shake"></shader>
 		</shaders>
 		<textures>
 			<texture id="0" name="awesomeface" path="assets/textures/awesomeface.png" alpha="1"></texture>
@@ -51,6 +54,15 @@
 			<texture id="4" name="paddle" path="assets/textures/paddle.png" alpha="1"></texture>
 			<texture id="5" name="particle" path="assets/textures/particle.png" alpha="1"></texture>
 		</textures>
+		<sounds>
+			<sound id="0" name="HitNonSolidBlock" path="assets/sounds/non_solid_block.mp3"></sound>
+			<sound id="1" name="HitSolidBlock" path="assets/sounds/solid.wav"></sound>
+			<sound id="2" name="CatchPowerup" path="assets/sounds/powerup.wav"></sound>
+			<sound id="3" name="PaddlePass" path="assets/sounds/paddle.wav"></sound>
+		</sounds>
+		<music>
+			<track id="0" name="BreakoutMain" path="assets/music/breakout.mp3"></track>
+		</music>
 	</assets>
 
 </config>

@@ -34,5 +34,24 @@ void EntityComponentSystem::EntityDestroy(int entityId)
 
 const EntityComponentSystem::EntityIdSet* EntityComponentSystem::GetAllEntityIdBoundWithPrefab(ComponentId componentId)
 {
-	return PrefabsManager::Get().GetAllEntityIdByComponentId(componentId);
+	return PrefabsManager::Get().GetAllEntityIdByComponentUniqueId(componentId);
+}
+
+EntityComponentSystem::ComponentId EntityComponentSystem::GetComponentId(ComponentUniqueId uniqueId)
+{
+	auto& foundComponentIt = m_componentUniqueIdMap.find(uniqueId);
+	if (foundComponentIt == m_componentUniqueIdMap.end())
+		return -1;
+	return foundComponentIt->second;
+}
+
+void EntityComponentSystem::BindComponentUniqueIdWithId(ComponentUniqueId uniqueId, ComponentId id)
+{
+	m_componentUniqueIdMap[uniqueId] = id;
+}
+
+void EntityComponentSystem::UnbindComponentUniqueId(ComponentUniqueId uniqueId)
+{
+	assert(m_componentUniqueIdMap.find(uniqueId) != m_componentUniqueIdMap.end());
+	m_componentUniqueIdMap.erase(uniqueId);
 }

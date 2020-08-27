@@ -4,6 +4,20 @@
 
 namespace oglml
 {
+	struct Texture2DInfo
+	{
+		int width = -1;
+		int height = -1;
+		unsigned int format = 0;
+		unsigned int internalFormat = 0;
+		unsigned int type = 0;
+		unsigned char* pixels = nullptr;
+		int wrap_s = -1;
+		int wrap_t = -1;
+		int min_filter = -1;
+		int max_filter = -1;
+	};
+
 	class Texture2D
 	{
 	public:
@@ -14,6 +28,8 @@ namespace oglml
 		unsigned int GetTextureID();
 
 		void operator=(Texture2D&);
+
+		void Generate(Texture2DInfo& params);
 
 	private:
 

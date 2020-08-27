@@ -45,6 +45,12 @@ paths.tinyxml2      = {}
 paths.tinyxml2.root = paths.root .. "/libraries/tinyxml2"
 paths.tinyxml2.inc  = paths.tinyxml2.root .. "/include"
 -----------------------------------------------------------------------------------------------------------------------
+paths.irrKlang      = {}
+paths.irrKlang.root = paths.root .. "/libraries/irrKlang"
+paths.irrKlang.inc  = paths.irrKlang.root .. "/include"
+paths.irrKlang.bin  = paths.irrKlang.root .. "/bin"
+paths.irrKlang.lib  = paths.irrKlang.root .. "/lib"
+-----------------------------------------------------------------------------------------------------------------------
 paths.build     = paths.root .. "/.bin"
 paths.genPrj    = paths.root .. "/.gen/prj"
 paths.genDebug  = paths.root .. "/.gen/bin/Debug/Breakout"

@@ -19,6 +19,8 @@ project "SysGameplay"
         paths.GLFW.inc,
         paths.GL.inc,
         paths.glm.inc,
+        paths.audio,
+        paths.resource,
     }
     
     files

@@ -14,6 +14,9 @@ namespace breakout
     {
         AssetsBindings::BindShaders();
         AssetsBindings::BindTextures();
+        AssetsBindings::BindSounds();
+        AssetsBindings::BindMusics();
+
     }
 
     void AssetsBindings::BindTextures()
@@ -38,6 +41,32 @@ namespace breakout
         {
             EShaderAssetId id = static_cast<EShaderAssetId>(shader.GetAttribute<int>(idStr));
             std::string path = shader.GetAttribute<std::string>(pathStr);
+            assetManager.Bind(id, path);
+        }
+    }
+
+    void AssetsBindings::BindSounds()
+    {
+        auto sounds = GameContext::Get().GetConfigManager().GetRoot().GetPath(assetsSoundsStr).GetChildren();
+        auto& assetManager = GameContext::Get().GetAssetManager();
+
+        for (auto& sound : sounds)
+        {
+            ESoundAssetId id = static_cast<ESoundAssetId>(sound.GetAttribute<int>(idStr));
+            std::string path = sound.GetAttribute<std::string>(pathStr);
+            assetManager.Bind(id, path);
+        }
+    }
+
+    void AssetsBindings::BindMusics()
+    {
+        auto musics = GameContext::Get().GetConfigManager().GetRoot().GetPath(assetsMusicsStr).GetChildren();
+        auto& assetManager = GameContext::Get().GetAssetManager();
+
+        for (auto& music : musics)
+        {
+            EMusicAssetId id = static_cast<EMusicAssetId>(music.GetAttribute<int>(idStr));
+            std::string path = music.GetAttribute<std::string>(pathStr);
             assetManager.Bind(id, path);
         }
     }

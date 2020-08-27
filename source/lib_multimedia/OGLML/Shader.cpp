@@ -66,6 +66,26 @@ void Shader::SetInt(unsigned int programID, const std::string& uniform, int valu
     glUniform1i(glGetUniformLocation(programID, uniform.c_str()), value);
 }
 
+void Shader::SetFloat(unsigned int programID, const std::string& uniform, float value)
+{
+    glUniform1f(glGetUniformLocation(programID, uniform.c_str()), value);
+}
+
+void Shader::SetVector2fv(unsigned int programID, const std::string& uniform, int size, float* beginArr)
+{
+    glUniform2fv(glGetUniformLocation(programID, uniform.c_str()), size, beginArr);
+}
+
+void Shader::SetIntv(unsigned int programID, const std::string& uniform, int size, int* beginArr)
+{
+    glUniform1iv(glGetUniformLocation(programID, uniform.c_str()), size, beginArr);
+}
+
+void Shader::SetFloatv(unsigned int programID, const std::string& uniform, int size, float* beginArr)
+{
+    glUniform1fv(glGetUniformLocation(programID, uniform.c_str()), size, beginArr);
+}
+
 bool Shader::Compile(const std::string& vertexCode, const std::string& fragmentCode)
 {
 	const GLchar* vShaderCode = vertexCode.c_str();

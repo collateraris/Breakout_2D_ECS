@@ -5,6 +5,7 @@
 #include <PlayerComponent.h>
 #include <ColliderComponent.h>
 #include <CollisionSystem.h>
+#include <AudioManager.h>
 
 #include <EventsStorage.h>
 
@@ -147,11 +148,23 @@ void PlayerBallLogicSystem::CollitionResolution(const ColliderComponent& compone
 	{
 		EPlayerBallState ballState = EntityComponentSystem::Get().GetComponentByEntityId<PlayerBallComponent>(circleCollider.m_entityId).state;
 		if (ballState != EPlayerBallState::IsStuckOnPlayerPaddle)
+		{
+			AudioManager::Get().PlaySound(ESoundAssetId::PaddlePass);
 			PaddlePlayerCollition(circleCollider, squareCollider);
+		}
 	}
 	else
 	{
 		BlockCollition(circleCollider, squareCollider);
+
+		if (squareCollider.GetDamagableType() == EDamagableType::Saved)
+		{
+			AudioManager::Get().PlaySound(ESoundAssetId::HitSolidBlock);
+		}
+		else if (squareCollider.GetDamagableType() == EDamagableType::Destroyable)
+		{
+			AudioManager::Get().PlaySound(ESoundAssetId::HitNonSolidBlock);
+		}
 	}
 }
 
@@ -257,6 +270,7 @@ void PlayerBallLogicSystem::MoveLogic(float dtMilliseconds)
 
 	auto window = GameContext::Get().GetMainWindow();
 	float screenWidth = window->GetWidth();
+	float screeHeight = window->GetHeight();
 
 	if (ballPos.x() <= 0.0f)
 	{
@@ -272,6 +286,12 @@ void PlayerBallLogicSystem::MoveLogic(float dtMilliseconds)
 	{
 		ballMovement.SetVelocity({ ballVelocity.x(), -ballVelocity.y() });
 		ballPos.y() = 0.f;
+	}
+	else if (ballPos.y() + ballSize.y() >= 1.25 * screeHeight)
+	{
+		SetInitPosition();
+		EntityComponentSystem::Get().GetComponentByEntityId<PlayerBallComponent>(m_playerBallEntityId).state = EPlayerBallState::IsStuckOnPlayerPaddle;
+		return;
 	}
 
 	ballTransform.SetPosition(ballPos.data());

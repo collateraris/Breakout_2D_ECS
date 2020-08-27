@@ -57,7 +57,7 @@ void ParticlesComponent::Update(float dtMilliseconds)
 	for (int i = 0; i < m_particlesNumber; ++i)
 	{
 		float& life = m_lifes.GetElement(i);
-		life -= dtMilliseconds;
+		life -= dtMilliseconds * 3.f;
 
 		if (life > 0.f)
 		{

@@ -22,6 +22,7 @@ namespace breakout
 
 		int m_componentId = -1;
 		int m_entityId = -1;
+		int m_componentUniqueId = -1;
 
 		static EComponentType GetType()
 		{

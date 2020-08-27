@@ -2,6 +2,8 @@
 
 #include <TextureAssetId.h>
 #include <ShaderAssetId.h>
+#include <SoundAssetId.h>
+#include <MusicAssetId.h>
 
 #include <OGLML/Texture2D.h>
 #include <OGLML/Shader.h>
@@ -31,6 +33,12 @@ namespace breakout
 		bool Load(breakout::EShaderAssetId shaderId);
 		bool Unload(breakout::EShaderAssetId shaderId);
 
+		void Bind(breakout::ESoundAssetId soundId, const std::string& soundPath);
+		const std::string& GetPath(breakout::ESoundAssetId soundId);
+
+		void Bind(breakout::EMusicAssetId musicId, const std::string& musicPath);
+		const std::string& GetPath(breakout::EMusicAssetId musicId);
+
 	private:
 
 		AssetManager();
@@ -42,5 +50,7 @@ namespace breakout
 
 		std::unordered_map<breakout::ETextureAssetId, std::string> m_texturesPaths;
 		std::unordered_map<breakout::EShaderAssetId, std::string> m_shadersPaths;
+		std::unordered_map<breakout::ESoundAssetId, std::string> m_soundPaths;
+		std::unordered_map<breakout::EMusicAssetId, std::string> m_musicPaths;
 	};
 }
