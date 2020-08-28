@@ -62,6 +62,8 @@ namespace breakout
 
 		bool IsSameEntityType(EntityTypeId, EntityId) const;
 
+		bool IsExistEntityId(EntityId) const;
+
 	private:
 
 		EntityComponentSystem();

@@ -23,12 +23,12 @@ void DamagableColliderLogicSystem::CollitionResolution(const ColliderComponent& 
 {
 	auto& ecs = EntityComponentSystem::Get();
 
-	if (componentA.GetDamagableType() == EDamagableType::Destroyable)
+	if (ecs.IsExistEntityId(componentA.m_entityId) && componentA.GetDamagableType() == EDamagableType::Destroyable)
 	{
 		ecs.EntityDestroy(componentA.m_entityId);
 	}
 
-	if (componentB.GetDamagableType() == EDamagableType::Destroyable)
+	if (ecs.IsExistEntityId(componentB.m_entityId) && componentB.GetDamagableType() == EDamagableType::Destroyable)
 	{
 		ecs.EntityDestroy(componentB.m_entityId);
 	}

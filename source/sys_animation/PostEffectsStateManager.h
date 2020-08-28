@@ -29,6 +29,8 @@ namespace breakout
 
 		void SwitchState(EnumStateName state);
 
+		bool IsActiveState(EnumStateName stateId) const;
+
 	private:
 
 		PostEffectsStateManager();
@@ -41,6 +43,7 @@ namespace breakout
 		std::unordered_map<EnumStateName, APostEffectState*> m_states = {};
 
 		APostEffectState* m_currState = nullptr;
+		EnumStateName m_currStateType = -1;
 
 		oglml::PostProcessor* m_postProcessor = nullptr;
 	};

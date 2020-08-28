@@ -64,6 +64,9 @@ void PostEffectsStateManager::SwitchState(EnumStateName stateId)
 {
 	assert(m_postProcessor != nullptr);
 
+	if (IsActiveState(stateId))
+		return;
+
 	auto& foundIt = m_states.find(stateId);
 	if (foundIt == m_states.end())
 	{
@@ -73,6 +76,12 @@ void PostEffectsStateManager::SwitchState(EnumStateName stateId)
 	}
 
 	m_currState = m_states[stateId];
+	m_currStateType = stateId;
 
 	m_currState->Awake();
+}
+
+bool PostEffectsStateManager::IsActiveState(EnumStateName stateId) const
+{
+	return m_currStateType == stateId;
 }

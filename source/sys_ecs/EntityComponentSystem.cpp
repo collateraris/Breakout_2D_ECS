@@ -60,3 +60,8 @@ bool EntityComponentSystem::IsSameEntityType(EntityTypeId typeId, EntityId entit
 {
 	return EntityManager::Get().IsSameEntityType(typeId, entityId);
 }
+
+bool EntityComponentSystem::IsExistEntityId(EntityId entityId) const
+{
+	return EntityManager::Get().IsExistEntityId(entityId);
+}

@@ -4,6 +4,8 @@
 
 #include <Vector2.h>
 
+#include <vector>
+
 namespace breakout
 {
     class ColliderComponent;
@@ -36,10 +38,28 @@ namespace breakout
 
         void SpawnPowerUps(TransformComponent& initPosition);
 
+        void ActivatePowerUp(PowerUpEntityId);
+        void DeactivatePowerUp(PowerUpEntityId);
+
         void MoveLogic(PowerUpEntityId, float dtMilliseconds);
+        void TimerLogic(PowerUpEntityId, float dtMilliseconds);
+        void PowerUpOutsideLogic(PowerUpEntityId);
+
+        void ActivateTimer(PowerUpEntityId, float duration, float decaySpeed);
+
+        void SwitchPostEffect(PowerUpEntityId, int new_effect);
+        void TrySetIdlePostEffect(PowerUpEntityId);
 
     private:
 
+        void AddCandidateToDieList(PowerUpEntityId);
+        void DeleteEntityFromDieList();
+
         int m_playerEntityId = -1;
+
+        std::vector<int> m_dieListCandidate = {};
+        int m_currentDieListPos = 0;
+
+        int m_currPostEffectEntityId = 0;
     };
 }

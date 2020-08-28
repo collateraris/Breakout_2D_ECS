@@ -10,7 +10,6 @@
 #include <EventsStorage.h>
 
 #include <gameContext.h>
-#include <gameWindow.h>
 #include <components/TransformComponent.h>
 #include <MovementComponent.h>
 #include <ParticlesComponent.h>
@@ -136,9 +135,13 @@ void PlayerBallLogicSystem::BlockCollition(const ColliderComponent& circleCollid
 
 void PlayerBallLogicSystem::CollitionResolution(const ColliderComponent& componentA, const ColliderComponent& componentB)
 {
+	auto& ecs = EntityComponentSystem::Get();
+	if (!(ecs.IsExistEntityId(componentA.m_entityId) && ecs.IsExistEntityId(componentB.m_entityId)))
+		return;
+
+
 	const auto& circleCollider = componentA.GetColliderType() == EColliderType::Circle ? componentA : componentB;
 	const auto& squareCollider = componentB.GetColliderType() == EColliderType::Square ? componentB : componentA;
-	auto& ecs = EntityComponentSystem::Get();
 	if (!ecs.IsSameEntityType(static_cast<int>(EEntityType::PlayerBall), circleCollider.m_entityId) 
 		|| squareCollider.GetColliderType() != EColliderType::Square
 		|| squareCollider.GetDamagableType() == EDamagableType::Intacted)
@@ -273,9 +276,10 @@ void PlayerBallLogicSystem::MoveLogic(float dtMilliseconds)
 	Vector2<float> ballVelocity = ballMovement.GetVelocity();
 	ballPos += ballVelocity * dtMilliseconds;
 
-	auto window = GameContext::Get().GetMainWindow();
-	float screenWidth = window->GetWidth();
-	float screeHeight = window->GetHeight();
+	int w, h;
+	GameContext::Get().GetMainWindowSize(w, h);
+	float screenWidth = static_cast<float>(w), 
+		screeHeight = static_cast<float>(h);
 
 	if (ballPos.x() <= 0.0f)
 	{

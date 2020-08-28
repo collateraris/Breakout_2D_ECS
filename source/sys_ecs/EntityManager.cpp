@@ -74,3 +74,8 @@ bool EntityManager::IsSameEntityType(EntityTypeId typeId, EntityId entityId) con
 
     return std::binary_search(entityArr.begin(), entityArr.end(), entityId);
 }
+
+bool EntityManager::IsExistEntityId(EntityId entityId) const
+{
+    return m_entityStorage.find(entityId) != m_entityStorage.end();
+}

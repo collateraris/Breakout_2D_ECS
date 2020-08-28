@@ -28,6 +28,7 @@
 #include <ParticlesComponent.h>
 #include <ColliderComponent.h>
 #include <PowerUpComponent.h>
+#include <TimerComponent.h>
 
 #include <LogManager.h>
 
@@ -359,6 +360,8 @@ int CreateSpeedPowerUp()
 	colliderComponent.SetColliderType(EColliderType::Square)
 		.SetDamagableType(EDamagableType::Intacted);
 
+	ecs.AddComponentByEntityId<TimerComponent>(entityId);
+
 	auto* powerUpComponent = ecs.AddPrefabComponentByEntityId<PowerUpComponent>(static_cast<int>(EEntityType::SpeedPowerUp), entityId);
 	if (powerUpComponent)
 		powerUpComponent->powerUpType = EPowerUpType::Speed;
@@ -396,6 +399,8 @@ int CreateStickyPowerUp()
 	auto& colliderComponent = ecs.AddComponentByEntityId<ColliderComponent>(entityId);
 	colliderComponent.SetColliderType(EColliderType::Square)
 		.SetDamagableType(EDamagableType::Intacted);
+
+	ecs.AddComponentByEntityId<TimerComponent>(entityId);
 
 	auto* powerUpComponent = ecs.AddPrefabComponentByEntityId<PowerUpComponent>(static_cast<int>(EEntityType::StickyPowerUp), entityId);
 	if (powerUpComponent)
@@ -435,6 +440,8 @@ int CreatePassThroughPowerUp()
 	colliderComponent.SetColliderType(EColliderType::Square)
 		.SetDamagableType(EDamagableType::Intacted);
 
+	ecs.AddComponentByEntityId<TimerComponent>(entityId);
+
 	auto* powerUpComponent = ecs.AddPrefabComponentByEntityId<PowerUpComponent>(static_cast<int>(EEntityType::PassThroughPowerUp), entityId);
 	if (powerUpComponent)
 		powerUpComponent->powerUpType = EPowerUpType::PassThrough;
@@ -472,6 +479,8 @@ int CreatePadSizeIncreasePowerUp()
 	auto& colliderComponent = ecs.AddComponentByEntityId<ColliderComponent>(entityId);
 	colliderComponent.SetColliderType(EColliderType::Square)
 		.SetDamagableType(EDamagableType::Intacted);
+
+	ecs.AddComponentByEntityId<TimerComponent>(entityId);
 
 	auto* powerUpComponent = ecs.AddPrefabComponentByEntityId<PowerUpComponent>(static_cast<int>(EEntityType::PadSizeIncreasePowerUp), entityId);
 	if (powerUpComponent)
@@ -511,6 +520,8 @@ int CreateConfusePowerUp()
 	colliderComponent.SetColliderType(EColliderType::Square)
 		.SetDamagableType(EDamagableType::Intacted);
 
+	ecs.AddComponentByEntityId<TimerComponent>(entityId);
+
 	auto* powerUpComponent = ecs.AddPrefabComponentByEntityId<PowerUpComponent>(static_cast<int>(EEntityType::ConfusePowerUp), entityId);
 	if (powerUpComponent)
 		powerUpComponent->powerUpType = EPowerUpType::Confuse;
@@ -548,6 +559,8 @@ int CreateChaosPowerUp()
 	auto& colliderComponent = ecs.AddComponentByEntityId<ColliderComponent>(entityId);
 	colliderComponent.SetColliderType(EColliderType::Square)
 		.SetDamagableType(EDamagableType::Intacted);
+
+	ecs.AddComponentByEntityId<TimerComponent>(entityId);
 
 	auto* powerUpComponent = ecs.AddPrefabComponentByEntityId<PowerUpComponent>(static_cast<int>(EEntityType::ChaosPowerUp), entityId);
 	if (powerUpComponent)
@@ -615,6 +628,9 @@ void ECSBreakout::InitComponentsPools()
 			break;
 		case breakout::EComponentType::PowerUp:
 			ComponentManager::Get().CreateComponentPool<PowerUpComponent>(poolSize);
+			break;
+		case breakout::EComponentType::Timer:
+			ComponentManager::Get().CreateComponentPool<TimerComponent>(poolSize);
 			break;
 		default:
 			break;

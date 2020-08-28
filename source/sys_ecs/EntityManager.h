@@ -34,6 +34,8 @@ namespace breakout
 
 		bool IsSameEntityType(EntityTypeId, EntityId) const;
 
+		bool IsExistEntityId(EntityId) const;
+
 		template<class componentStruct>
 		void AddComponentByEntityId(int entityId, int componentId, int componentUniqueId);
 
@@ -85,6 +87,7 @@ namespace breakout
 		EComponentType componentType = componentStruct::GetType();
 
 		auto foundEntityIt = m_entityStorage.find(entityId);
+		if (foundEntityIt == m_entityStorage.end())
 		assert(foundEntityIt != m_entityStorage.end());
 
 		auto foundComponentIt = foundEntityIt->second.find(componentType);
