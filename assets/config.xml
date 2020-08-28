@@ -20,7 +20,7 @@
 	</systems>
 	
 	<components>
-		<component id="1" name="Sprite" poolSize="7"></component>
+		<component id="1" name="Sprite" poolSize="10"></component>
 		<component id="2" name="Transform" poolSize="125"></component>
 		<component id="3" name="Movement" poolSize="2"></component>
 		<component id="4" name="Player" poolSize="1"></component>
@@ -28,6 +28,8 @@
 		<component id="6" name="Collider" poolSize="125"></component>
 		<component id="7" name="Particles" poolSize="1"></component>
 		<component id="8" name="SpriteColor" poolSize="100"></component>
+		<component id="9" name="PowerUp" poolSize="3"></component>
+		<component id="10" name="Timer" poolSize="10"></component>
 	</components>
 	
 	<gameMaps>
@@ -53,6 +55,12 @@
 			<texture id="3" name="block" path="assets/textures/block.png" alpha="0"></texture>
 			<texture id="4" name="paddle" path="assets/textures/paddle.png" alpha="1"></texture>
 			<texture id="5" name="particle" path="assets/textures/particle.png" alpha="1"></texture>
+			<texture id="6" name="speed_powerup" path="assets/textures/powerup_speed.png" alpha="1"></texture>
+			<texture id="7" name="sticky_powerup" path="assets/textures/powerup_sticky.png" alpha="1"></texture>
+			<texture id="8" name="pass_through_powerup" path="assets/textures/powerup_passthrough.png" alpha="1"></texture>
+			<texture id="9" name="pad_size_increase_powerup" path="assets/textures/powerup_increase.png" alpha="1"></texture>
+			<texture id="10" name="confuse_powerup" path="assets/textures/powerup_confuse.png" alpha="1"></texture>
+			<texture id="11" name="chaos_powerup" path="assets/textures/powerup_chaos.png" alpha="1"></texture>
 		</textures>
 		<sounds>
 			<sound id="0" name="HitNonSolidBlock" path="assets/sounds/non_solid_block.mp3"></sound>
@@ -64,5 +72,14 @@
 			<track id="0" name="BreakoutMain" path="assets/music/breakout.mp3"></track>
 		</music>
 	</assets>
+	
+	<initData>
+		<init id="0" name="playerPaddleSize" val1="100" val2="20"></init>
+		<init id="1" name="playerPaddleVelocity" val1="2500" val2="0"></init>
+		<init id="2" name="playerBallSize" val1="25.5" val2="25.5"></init>
+		<init id="3" name="playerBallVelocity" val1="100" val2="-350"></init>
+		<init id="4" name="powerUpSize" val1="60" val2="20"></init>
+		<init id="5" name="powerUpVelocity" val1="0" val2="150"></init>
+	</initData>
 
 </config>

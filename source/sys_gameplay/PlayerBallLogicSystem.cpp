@@ -10,12 +10,12 @@
 #include <EventsStorage.h>
 
 #include <gameContext.h>
-#include <gameWindow.h>
 #include <components/TransformComponent.h>
 #include <MovementComponent.h>
 #include <ParticlesComponent.h>
 
 #include <EventManager.h>
+#include <ECSBreakout.h>
 #include <Vector2.h>
 
 #include <algorithm>
@@ -79,7 +79,8 @@ void PlayerBallLogicSystem::PaddlePlayerCollition(const ColliderComponent& ballC
 	auto& ballMovement = EntityComponentSystem::Get().GetComponentByEntityId<MovementComponent>(ballCollider.m_entityId);
 	Vector2<float> oldVelocity = ballMovement.GetVelocity();
 	Vector2<float> newVelocity = ballMovement.GetVelocity();
-	newVelocity.x() = m_ballInitVelocity[0] * percentage * strength;
+	const auto& initVelocity = ECSBreakout::GetInitGameData().data[static_cast<int>(EBreakoutInitGameDataId::playerBallVelocity)];
+	newVelocity.x() = initVelocity[0] * percentage * strength;
 	newVelocity = newVelocity.normalized() * oldVelocity.length();
 	newVelocity.y() = -1.0f * abs(newVelocity.y());
 	ballMovement.SetVelocity(newVelocity.data());
@@ -134,9 +135,16 @@ void PlayerBallLogicSystem::BlockCollition(const ColliderComponent& circleCollid
 
 void PlayerBallLogicSystem::CollitionResolution(const ColliderComponent& componentA, const ColliderComponent& componentB)
 {
+	auto& ecs = EntityComponentSystem::Get();
+	if (!(ecs.IsExistEntityId(componentA.m_entityId) && ecs.IsExistEntityId(componentB.m_entityId)))
+		return;
+
+
 	const auto& circleCollider = componentA.GetColliderType() == EColliderType::Circle ? componentA : componentB;
 	const auto& squareCollider = componentB.GetColliderType() == EColliderType::Square ? componentB : componentA;
-	if (circleCollider.GetColliderType() != EColliderType::Circle || squareCollider.GetColliderType() != EColliderType::Square)
+	if (!ecs.IsSameEntityType(static_cast<int>(EEntityType::PlayerBall), circleCollider.m_entityId) 
+		|| squareCollider.GetColliderType() != EColliderType::Square
+		|| squareCollider.GetDamagableType() == EDamagableType::Intacted)
 		return;
 
 	auto IsPlayer = [&](const ColliderComponent& component) -> bool
@@ -268,9 +276,10 @@ void PlayerBallLogicSystem::MoveLogic(float dtMilliseconds)
 	Vector2<float> ballVelocity = ballMovement.GetVelocity();
 	ballPos += ballVelocity * dtMilliseconds;
 
-	auto window = GameContext::Get().GetMainWindow();
-	float screenWidth = window->GetWidth();
-	float screeHeight = window->GetHeight();
+	int w, h;
+	GameContext::Get().GetMainWindowSize(w, h);
+	float screenWidth = static_cast<float>(w), 
+		screeHeight = static_cast<float>(h);
 
 	if (ballPos.x() <= 0.0f)
 	{

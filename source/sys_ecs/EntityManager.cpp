@@ -4,6 +4,7 @@
 #include <PrefabsManager.h>
 #include <EntityComponentSystem.h>
 
+#include <algorithm>
 
 using namespace breakout;
 
@@ -63,4 +64,18 @@ void EntityManager::Delete(int entityId)
 
     foundIt->second.clear();
     m_entityStorage.erase(foundIt->first);
+}
+
+bool EntityManager::IsSameEntityType(EntityTypeId typeId, EntityId entityId) const 
+{
+    auto& foundEntityArrIt = m_entityTypeStorage.find(typeId);
+    assert(foundEntityArrIt != m_entityTypeStorage.end());
+    auto& entityArr = foundEntityArrIt->second;
+
+    return std::binary_search(entityArr.begin(), entityArr.end(), entityId);
+}
+
+bool EntityManager::IsExistEntityId(EntityId entityId) const
+{
+    return m_entityStorage.find(entityId) != m_entityStorage.end();
 }

@@ -3,7 +3,7 @@
 #include <Component.h>
 
 #include <unordered_map>
-#include <list>
+#include <vector>
 #include <cassert>
 
 namespace breakout
@@ -22,7 +22,7 @@ namespace breakout
 
 		using EntityTypeId = int;
 
-		using EntityIdList = std::list<int>;
+		using EntityIdList = std::vector<int>;
 
 	public:
 
@@ -31,6 +31,10 @@ namespace breakout
 		int Create(int entityTypeId);
 
 		void Delete(int entityId);
+
+		bool IsSameEntityType(EntityTypeId, EntityId) const;
+
+		bool IsExistEntityId(EntityId) const;
 
 		template<class componentStruct>
 		void AddComponentByEntityId(int entityId, int componentId, int componentUniqueId);
@@ -83,6 +87,7 @@ namespace breakout
 		EComponentType componentType = componentStruct::GetType();
 
 		auto foundEntityIt = m_entityStorage.find(entityId);
+		if (foundEntityIt == m_entityStorage.end())
 		assert(foundEntityIt != m_entityStorage.end());
 
 		auto foundComponentIt = foundEntityIt->second.find(componentType);

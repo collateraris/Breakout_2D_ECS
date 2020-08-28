@@ -7,6 +7,7 @@ namespace breakout
     class PlayerLogicSystem;
     class PlayerBallLogicSystem;
     class DamagableColliderLogicSystem;
+    class PowerUpLogicSystem;
 
     class GameplaySystem : public BaseSystem
     {
@@ -30,5 +31,6 @@ namespace breakout
         PlayerLogicSystem* m_playerLogic = nullptr;
         PlayerBallLogicSystem* m_playerBallLogic = nullptr;
         DamagableColliderLogicSystem* m_damageableColliderLogic = nullptr;
+        PowerUpLogicSystem* m_powerUpLogic = nullptr;
     };
 }

@@ -49,7 +49,6 @@ void LinearAllocator::Deallocate(void* p)
 
     m_deallocatedMemorySize += additionalSize + size;
     ++m_deallocationsNumber;
-
 }
 
 void LinearAllocator::Clear()

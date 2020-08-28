@@ -52,6 +52,5 @@ namespace breakout
 
         int m_playerEntityId = -1;
         int m_playerBallEntityId = -1;
-        std::array<float, 2> m_ballInitVelocity = {100, -350};
     };
 }

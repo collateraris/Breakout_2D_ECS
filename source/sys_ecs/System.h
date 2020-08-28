@@ -16,6 +16,7 @@ namespace breakout
 		Particles = 9,
 		Render = 10,
 		PostProcessing = 11,
+		PowerUpLogic = 12,
 		MAX
 	};
 

@@ -18,36 +18,6 @@ PrefabsManager& PrefabsManager::Get()
 	return prefabsManager;
 }
 
-int PrefabsManager::GetPrefabComponentUniqueId(EntityTypeId type)
-{
-	auto foundComponentIt = m_ComponentIdStorage.find(type);
-	if (foundComponentIt == m_ComponentIdStorage.end())
-		return static_cast<int>(EPrefabsIndexState::INDEX_NONE);
-	return foundComponentIt->second;
-}
-
-void PrefabsManager::AddPrefabComponent(EntityTypeId type, ComponentUniqueId componentId)
-{
-	m_ComponentIdStorage[type] = componentId;
-}
-
-void PrefabsManager::BindEntityIdWithComponentUniqueId(EntityTypeId type, EntityId id)
-{
-	auto foundComponentIt = m_ComponentIdStorage.find(type);
-	assert(foundComponentIt != m_ComponentIdStorage.end());
-
-	ComponentUniqueId componentId = foundComponentIt->second;
-	auto foundEntityIt = m_EntityIdStorage.find(componentId);
-	if (foundEntityIt == m_EntityIdStorage.end())
-	{
-		m_EntityIdStorage[componentId] = { id };
-	}
-	else
-	{
-		m_EntityIdStorage[componentId].insert(id);
-	}
-}
-
 void PrefabsManager::DeleteEntityId(EntityId id, ComponentUniqueId componentId)
 {
 	assert(m_EntityIdStorage.find(componentId) != m_EntityIdStorage.end());

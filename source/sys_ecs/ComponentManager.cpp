@@ -8,7 +8,8 @@
 #include <PlayerBallComponent.h>
 #include <PlayerComponent.h>
 #include <ParticlesComponent.h>
-
+#include <PowerUpComponent.h>
+#include <TimerComponent.h>
 
 using namespace breakout;
 
@@ -55,6 +56,12 @@ void ComponentManager::Delete(EComponentType type, int componentId)
 		break;
 	case breakout::EComponentType::SpriteColor:
 		Delete<SpriteColorComponent>(componentId);
+		break;
+	case breakout::EComponentType::PowerUp:
+		Delete<PowerUpComponent>(componentId);
+		break;
+	case breakout::EComponentType::Timer:
+		Delete<TimerComponent>(componentId);
 		break;
 	default:
 		break;

@@ -9,10 +9,10 @@ namespace breakout
 {
 	enum class EPostEffectStates
 	{
-		Idle,
-		Confuse,
-		Chaos,
-		Shake,
+		Idle = 0,
+		Confuse = 1,
+		Chaos = 2,
+		Shake = 3,
 		MAX
 	};
 
