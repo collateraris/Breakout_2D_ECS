@@ -55,7 +55,7 @@ namespace breakout
 
 		int CreateEntityByEntityTypeId(int entityTypeId);
 
-		const EntityIdSet* GetAllEntityIdBoundWithPrefab(ComponentId componentId);
+		const EntityIdSet* GetAllEntityIdBoundWithPrefab(ComponentUniqueId componentId);
 
 		ComponentId GetComponentId(ComponentUniqueId uniqueId);
 		void UnbindComponentUniqueId(ComponentUniqueId);

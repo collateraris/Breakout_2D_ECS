@@ -36,3 +36,4 @@ std::vector<XPath> XPath::GetChildren() const
 
     return children;
 }
+

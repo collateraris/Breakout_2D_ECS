@@ -42,6 +42,8 @@
 
 using namespace breakout;
 
+BreakoutInitGameData g_initData;
+
 int CreateAwersomeEntity();
 
 int CreateBackground();
@@ -64,6 +66,8 @@ int CreateChaosPowerUp();
 void ECSBreakout::Init()
 {
 	AudioManager::Get().PlayMusic(EMusicAssetId::BreakoutMain);
+
+	LoadInitDataFromConfig();
 
 	InitComponentsPools();
 
@@ -264,7 +268,7 @@ int CreatePlayerPaddle()
 	float screenHeight = window->GetHeight();
 	sprite.SetScreenSize(screenWidth, screenHeight);
 
-	const std::array<float, 2> playerSize = { 100.0f, 20.0f };
+	const std::array<float, 2>& playerSize = ECSBreakout::GetInitGameData().data[static_cast<int>(EBreakoutInitGameDataId::playerPaddleSize)];
 	const std::array<float, 2> playerSizePos = { screenWidth * 0.5f - playerSize[0] * 0.5f,
 		screenHeight - playerSize[1] };
 	transformComponent.SetPosition(playerSizePos);
@@ -277,7 +281,8 @@ int CreatePlayerPaddle()
 		.SetPosition(playerSizePos);
 
 	auto& movementComponent = ecs.AddComponentByEntityId<MovementComponent>(entityId);
-	movementComponent.SetVelocity({2500.f, 0.f});
+	const std::array<float, 2>& playerVelocity = ECSBreakout::GetInitGameData().data[static_cast<int>(EBreakoutInitGameDataId::playerPaddleVelocity)];
+	movementComponent.SetVelocity(playerVelocity);
 
 	InputManager::Get().OnKeyPressed().BindLambda([&](oglml::EKeyButtonCode key, oglml::EKeyModeCode mode)
 	{
@@ -305,7 +310,7 @@ int CreatePlayerBall()
 
 	ecs.AddComponentByEntityId<PlayerBallComponent>(entityId);
 
-	const std::array<float, 2> ballSize = { 25.5f, 25.5f };
+	const std::array<float, 2>& ballSize = ECSBreakout::GetInitGameData().data[static_cast<int>(EBreakoutInitGameDataId::playerBallSize)];
 	auto& transformComponent = ecs.AddComponentByEntityId<TransformComponent>(entityId);
 	transformComponent.SetScale(ballSize);
 
@@ -339,7 +344,8 @@ int CreatePlayerBall()
 	sprite.SetShader(shader);
 
 	auto& movementComponent = ecs.AddComponentByEntityId<MovementComponent>(entityId);
-	movementComponent.SetVelocity({ 100.0f, -350.0f });
+	const std::array<float, 2>& ballVelocity  = ECSBreakout::GetInitGameData().data[static_cast<int>(EBreakoutInitGameDataId::playerBallVelocity)];
+	movementComponent.SetVelocity(ballVelocity);
 
 	return entityId;
 }
@@ -358,6 +364,8 @@ int CreateSpeedPowerUp()
 		powerUpComponent->powerUpType = EPowerUpType::Speed;
 
 	auto& transformComponent = ecs.AddComponentByEntityId<TransformComponent>(entityId);
+	const auto& powerUpSize = ECSBreakout::GetInitGameData().data[static_cast<int>(EBreakoutInitGameDataId::powerUpSize)];
+	transformComponent.SetScale(powerUpSize);
 
 	auto* spriteComponent = ecs.AddPrefabComponentByEntityId<SpriteComponent>(static_cast<int>(EEntityType::SpeedPowerUp), entityId);
 	if (spriteComponent)
@@ -394,6 +402,8 @@ int CreateStickyPowerUp()
 		powerUpComponent->powerUpType = EPowerUpType::Sticky;
 
 	auto& transformComponent = ecs.AddComponentByEntityId<TransformComponent>(entityId);
+	const auto& powerUpSize = ECSBreakout::GetInitGameData().data[static_cast<int>(EBreakoutInitGameDataId::powerUpSize)];
+	transformComponent.SetScale(powerUpSize);
 
 	auto* spriteComponent = ecs.AddPrefabComponentByEntityId<SpriteComponent>(static_cast<int>(EEntityType::StickyPowerUp), entityId);
 	if (spriteComponent)
@@ -430,6 +440,8 @@ int CreatePassThroughPowerUp()
 		powerUpComponent->powerUpType = EPowerUpType::PassThrough;
 
 	auto& transformComponent = ecs.AddComponentByEntityId<TransformComponent>(entityId);
+	const auto& powerUpSize = ECSBreakout::GetInitGameData().data[static_cast<int>(EBreakoutInitGameDataId::powerUpSize)];
+	transformComponent.SetScale(powerUpSize);
 
 	auto* spriteComponent = ecs.AddPrefabComponentByEntityId<SpriteComponent>(static_cast<int>(EEntityType::PassThroughPowerUp), entityId);
 	if (spriteComponent)
@@ -466,6 +478,8 @@ int CreatePadSizeIncreasePowerUp()
 		powerUpComponent->powerUpType = EPowerUpType::PadSizeIncrease;
 
 	auto& transformComponent = ecs.AddComponentByEntityId<TransformComponent>(entityId);
+	const auto& powerUpSize = ECSBreakout::GetInitGameData().data[static_cast<int>(EBreakoutInitGameDataId::powerUpSize)];
+	transformComponent.SetScale(powerUpSize);
 
 	auto* spriteComponent = ecs.AddPrefabComponentByEntityId<SpriteComponent>(static_cast<int>(EEntityType::PadSizeIncreasePowerUp), entityId);
 	if (spriteComponent)
@@ -502,6 +516,8 @@ int CreateConfusePowerUp()
 		powerUpComponent->powerUpType = EPowerUpType::Confuse;
 
 	auto& transformComponent = ecs.AddComponentByEntityId<TransformComponent>(entityId);
+	const auto& powerUpSize = ECSBreakout::GetInitGameData().data[static_cast<int>(EBreakoutInitGameDataId::powerUpSize)];
+	transformComponent.SetScale(powerUpSize);
 
 	auto* spriteComponent = ecs.AddPrefabComponentByEntityId<SpriteComponent>(static_cast<int>(EEntityType::ConfusePowerUp), entityId);
 	if (spriteComponent)
@@ -538,6 +554,8 @@ int CreateChaosPowerUp()
 		powerUpComponent->powerUpType = EPowerUpType::Chaos;
 
 	auto& transformComponent = ecs.AddComponentByEntityId<TransformComponent>(entityId);
+	const auto& powerUpSize = ECSBreakout::GetInitGameData().data[static_cast<int>(EBreakoutInitGameDataId::powerUpSize)];
+	transformComponent.SetScale(powerUpSize);
 
 	auto* spriteComponent = ecs.AddPrefabComponentByEntityId<SpriteComponent>(static_cast<int>(EEntityType::ChaosPowerUp), entityId);
 	if (spriteComponent)
@@ -612,4 +630,22 @@ void ECSBreakout::CreateWorld()
 
 	ECSBreakout::CreateComponent(EEntityType::PlayerPaddle);
 	ECSBreakout::CreateComponent(EEntityType::PlayerBall);
+}
+
+void ECSBreakout::LoadInitDataFromConfig()
+{
+	auto initDatas = GameContext::Get().GetConfigManager().GetRoot().GetPath(initDataStr).GetChildren();
+	for (auto& data : initDatas)
+	{
+		int id = data.GetAttribute<int>(idStr);
+		float val1  = data.GetAttribute<float>(val1Str);
+		float val2 = data.GetAttribute<float>(val2Str);
+
+		g_initData.data[id] = {val1, val2};
+	}
+}
+
+const BreakoutInitGameData& ECSBreakout::GetInitGameData()
+{
+	return g_initData;
 }

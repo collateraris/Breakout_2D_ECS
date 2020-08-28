@@ -2,6 +2,13 @@
 
 using namespace breakout;
 
+void TransformComponent::operator=(const TransformComponent& outer)
+{
+	SetPosition(outer.GetPosition());
+	SetRotation(outer.GetRotation());
+	SetScale(outer.GetScale());
+}
+
 const std::array<float, 2>& TransformComponent::GetPosition() const
 {
 	return m_position;

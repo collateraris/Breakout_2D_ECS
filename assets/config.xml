@@ -71,5 +71,14 @@
 			<track id="0" name="BreakoutMain" path="assets/music/breakout.mp3"></track>
 		</music>
 	</assets>
+	
+	<initData>
+		<init id="0" name="playerPaddleSize" val1="100" val2="20"></init>
+		<init id="1" name="playerPaddleVelocity" val1="2500" val2="0"></init>
+		<init id="2" name="playerBallSize" val1="25.5" val2="25.5"></init>
+		<init id="3" name="playerBallVelocity" val1="100" val2="-350"></init>
+		<init id="4" name="powerUpSize" val1="60" val2="20"></init>
+		<init id="5" name="powerUpVelocity" val1="0" val2="150"></init>
+	</initData>
 
 </config>

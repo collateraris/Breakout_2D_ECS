@@ -16,6 +16,7 @@
 #include <ParticlesComponent.h>
 
 #include <EventManager.h>
+#include <ECSBreakout.h>
 #include <Vector2.h>
 
 #include <algorithm>
@@ -79,7 +80,8 @@ void PlayerBallLogicSystem::PaddlePlayerCollition(const ColliderComponent& ballC
 	auto& ballMovement = EntityComponentSystem::Get().GetComponentByEntityId<MovementComponent>(ballCollider.m_entityId);
 	Vector2<float> oldVelocity = ballMovement.GetVelocity();
 	Vector2<float> newVelocity = ballMovement.GetVelocity();
-	newVelocity.x() = m_ballInitVelocity[0] * percentage * strength;
+	const auto& initVelocity = ECSBreakout::GetInitGameData().data[static_cast<int>(EBreakoutInitGameDataId::playerBallVelocity)];
+	newVelocity.x() = initVelocity[0] * percentage * strength;
 	newVelocity = newVelocity.normalized() * oldVelocity.length();
 	newVelocity.y() = -1.0f * abs(newVelocity.y());
 	ballMovement.SetVelocity(newVelocity.data());

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <array>
+
 namespace breakout
 {
 	enum class EEntityType : int
@@ -19,6 +21,22 @@ namespace breakout
 		MAX,
     };
 
+	enum class EBreakoutInitGameDataId
+	{
+		playerPaddleSize = 0,
+		playerPaddleVelocity = 1,
+		playerBallSize = 2,
+		playerBallVelocity = 3,
+		powerUpSize = 4,
+		powerUpVelocity = 5,
+		MAX = 6
+	};
+
+	struct BreakoutInitGameData
+	{
+		std::array<std::array<float, 2>, 6> data;
+	};
+
 	class ECSBreakout
 	{
 	public:
@@ -27,10 +45,15 @@ namespace breakout
 
 		static int CreateComponent(EEntityType);
 
+		static const BreakoutInitGameData& GetInitGameData();
+
 	private:
+
+		static void LoadInitDataFromConfig();
 
 		static void InitComponentsPools();
 
 		static void CreateWorld();
+
 	};
 }

@@ -5,10 +5,11 @@
 namespace breakout
 {
     class ColliderComponent;
+    class TransformComponent;
 
     class PowerUpLogicSystem : public BaseSystem
     {
-
+        using PowerUpEntityId = int;
     public:
 
         static EBaseSystemType GetType()
@@ -29,6 +30,11 @@ namespace breakout
 
     protected:
 
+        bool ShouldSpawn(unsigned int chance);
+
+        void SpawnPowerUps(TransformComponent& initPosition);
+
+        void MoveLogic(PowerUpEntityId, float dtMilliseconds);
 
     private:
 

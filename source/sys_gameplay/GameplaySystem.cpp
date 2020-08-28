@@ -37,6 +37,7 @@ void GameplaySystem::Update(float dtMilliseconds)
 {
     m_playerLogic->Update(dtMilliseconds);
     m_playerBallLogic->Update(dtMilliseconds);
-    m_damageableColliderLogic->Update(dtMilliseconds);
     m_powerUpLogic->Update(dtMilliseconds);
+
+    m_damageableColliderLogic->Update(dtMilliseconds);
 }

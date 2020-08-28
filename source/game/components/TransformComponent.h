@@ -15,6 +15,8 @@ namespace breakout
 			return EComponentType::Transform;
 		};
 
+		void operator=(const TransformComponent&);
+
 		const std::array<float, 2>& GetPosition() const;
 		TransformComponent& SetPosition(const std::array<float, 2>& newPosition);
 

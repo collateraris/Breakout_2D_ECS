@@ -5,6 +5,7 @@
 #include <sstream>
 #include <vector>
 #include <memory>
+#include <stdlib.h>
 
 #include <tinyxml2.h>
 
@@ -30,6 +31,9 @@ namespace breakout
 
             template<typename T>
             T GetAttribute(const std::string& name) const;
+
+            template<>
+            float XPath::GetAttribute<float>(const std::string& name) const;
 
             template<typename T>
             void SetAttribute(const std::string& name, const T& val) const;
@@ -67,6 +71,21 @@ namespace breakout
             std::stringstream ss(text);
             T val;
             ss >> val;
+            return val;
+        };
+
+        template<>
+        float XPath::GetAttribute<float>(const std::string& name) const
+        {
+
+            const txml::XMLAttribute* attr = root->FindAttribute(name.c_str());
+            std::string text = "";
+
+            assert(attr != nullptr);
+            if (attr != nullptr)
+                text = attr->Value();
+
+            float val = ::atof(text.c_str());
             return val;
         };
 

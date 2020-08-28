@@ -32,9 +32,9 @@ void EntityComponentSystem::EntityDestroy(int entityId)
 	EntityManager::Get().Delete(entityId);
 }
 
-const EntityComponentSystem::EntityIdSet* EntityComponentSystem::GetAllEntityIdBoundWithPrefab(ComponentId componentId)
+const EntityComponentSystem::EntityIdSet* EntityComponentSystem::GetAllEntityIdBoundWithPrefab(ComponentUniqueId uniqueId)
 {
-	return PrefabsManager::Get().GetAllEntityIdByComponentUniqueId(componentId);
+	return PrefabsManager::Get().GetAllEntityIdByComponentUniqueId(uniqueId);
 }
 
 EntityComponentSystem::ComponentId EntityComponentSystem::GetComponentId(ComponentUniqueId uniqueId)
