@@ -50,12 +50,16 @@ namespace breakout
         void SwitchPostEffect(PowerUpEntityId, int new_effect);
         void TrySetIdlePostEffect(PowerUpEntityId);
 
+        void SetPlayerEntityId();
+        void SetPlayerBallEntityId();
+
     private:
 
         void AddCandidateToDieList(PowerUpEntityId);
         void DeleteEntityFromDieList();
 
         int m_playerEntityId = -1;
+        int m_playerBallEntityId = -1;
 
         std::vector<int> m_dieListCandidate = {};
         int m_currentDieListPos = 0;

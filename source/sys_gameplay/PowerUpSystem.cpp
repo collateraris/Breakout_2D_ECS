@@ -3,6 +3,8 @@
 #include <components/TransformComponent.h>
 #include <ColliderComponent.h>
 #include <TimerComponent.h>
+#include <PlayerBallComponent.h>
+#include <PlayerComponent.h>
 #include <CollisionSystem.h>
 #include <PowerUpComponent.h>
 #include <FreeListPoolElement.h>
@@ -26,6 +28,12 @@ void PowerUpLogicSystem::Init()
 
 void PowerUpLogicSystem::Update(float dtMilliseconds)
 {
+    if (m_playerEntityId == -1)
+    {
+        SetPlayerEntityId();
+        SetPlayerBallEntityId();
+    }
+
     auto& ecs = EntityComponentSystem::Get();
     const auto& allPowerUpComponents = ecs.GetAllComponentsByType<PowerUpComponent>();
 
@@ -318,4 +326,26 @@ void PowerUpLogicSystem::ActivateTimer(PowerUpEntityId id, float duration, float
     timer.m_Duration = duration;
     timer.m_DecaySpeed = decaySpeed;
     timer.bActivated = true;
+}
+
+void PowerUpLogicSystem::SetPlayerEntityId()
+{
+    auto& playerComponents = EntityComponentSystem::Get().GetAllComponentsByType<PlayerComponent>();
+
+    for (auto& player : playerComponents)
+    {
+        m_playerEntityId = player->GetContainer().m_entityId;
+        break;
+    }
+}
+
+void PowerUpLogicSystem::SetPlayerBallEntityId()
+{
+    auto& ballComponents = EntityComponentSystem::Get().GetAllComponentsByType<PlayerBallComponent>();
+
+    for (auto& ball : ballComponents)
+    {
+        m_playerBallEntityId = ball->GetContainer().m_entityId;
+        break;
+    }
 }
