@@ -55,3 +55,8 @@ void EntityComponentSystem::UnbindComponentUniqueId(ComponentUniqueId uniqueId)
 	assert(m_componentUniqueIdMap.find(uniqueId) != m_componentUniqueIdMap.end());
 	m_componentUniqueIdMap.erase(uniqueId);
 }
+
+bool EntityComponentSystem::IsSameEntityType(EntityTypeId typeId, EntityId entityId)  const
+{
+	return EntityManager::Get().IsSameEntityType(typeId, entityId);
+}

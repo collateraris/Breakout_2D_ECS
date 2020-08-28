@@ -60,6 +60,8 @@ namespace breakout
 		ComponentId GetComponentId(ComponentUniqueId uniqueId);
 		void UnbindComponentUniqueId(ComponentUniqueId);
 
+		bool IsSameEntityType(EntityTypeId, EntityId) const;
+
 	private:
 
 		EntityComponentSystem();
@@ -108,7 +110,7 @@ namespace breakout
 	componentStruct* EntityComponentSystem::AddPrefabComponentByEntityId(EntityTypeId typeId, EntityId entityId)
 	{
 		PrefabsManager& prefabsManager = PrefabsManager::Get();
-		ComponentUniqueId componentUniqueId = prefabsManager.GetPrefabComponentUniqueId(typeId);
+		ComponentUniqueId componentUniqueId = prefabsManager.GetPrefabComponentUniqueId<componentStruct>(typeId);
 		if (componentUniqueId == static_cast<int>(EPrefabsIndexState::INDEX_NONE))
 		{
 			EComponentType type = componentStruct::GetType();
@@ -122,13 +124,13 @@ namespace breakout
 			component.m_componentUniqueId = m_usedComponentUniqueId++;
 			BindComponentUniqueIdWithId(component.m_componentUniqueId, component.m_componentId);
 
-			prefabsManager.AddPrefabComponent(typeId, component.m_componentUniqueId);
-			prefabsManager.BindEntityIdWithComponentUniqueId(typeId, entityId);
+			prefabsManager.AddPrefabComponent<componentStruct>(typeId, component.m_componentUniqueId);
+			prefabsManager.BindEntityIdWithComponentUniqueId<componentStruct>(typeId, entityId);
 			EntityManager::Get().AddComponentByEntityId<componentStruct>(entityId, component.m_componentId, component.m_componentUniqueId);
 			return &component;
 		}
 
-		prefabsManager.BindEntityIdWithComponentUniqueId(typeId, entityId);
+		prefabsManager.BindEntityIdWithComponentUniqueId<componentStruct>(typeId, entityId);
 		EntityManager::Get().AddComponentByEntityId<componentStruct>(entityId, GetComponentId(componentUniqueId), componentUniqueId);
 		return nullptr;
 

@@ -29,8 +29,8 @@ void GameplaySystem::Init()
 
     m_playerLogic->Init();
     m_playerBallLogic->Init();
-    m_damageableColliderLogic->Init();
     m_powerUpLogic->Init();
+    m_damageableColliderLogic->Init();
 }
 
 void GameplaySystem::Update(float dtMilliseconds)

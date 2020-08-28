@@ -2,6 +2,8 @@
 
 #include <System.h>
 
+#include <Vector2.h>
+
 namespace breakout
 {
     class ColliderComponent;

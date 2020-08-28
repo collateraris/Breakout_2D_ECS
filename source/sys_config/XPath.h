@@ -33,7 +33,7 @@ namespace breakout
             T GetAttribute(const std::string& name) const;
 
             template<>
-            float XPath::GetAttribute<float>(const std::string& name) const;
+            float GetAttribute<float>(const std::string& name) const;
 
             template<typename T>
             void SetAttribute(const std::string& name, const T& val) const;

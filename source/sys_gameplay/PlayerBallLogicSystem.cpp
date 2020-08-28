@@ -138,7 +138,10 @@ void PlayerBallLogicSystem::CollitionResolution(const ColliderComponent& compone
 {
 	const auto& circleCollider = componentA.GetColliderType() == EColliderType::Circle ? componentA : componentB;
 	const auto& squareCollider = componentB.GetColliderType() == EColliderType::Square ? componentB : componentA;
-	if (circleCollider.GetColliderType() != EColliderType::Circle || squareCollider.GetColliderType() != EColliderType::Square)
+	auto& ecs = EntityComponentSystem::Get();
+	if (!ecs.IsSameEntityType(static_cast<int>(EEntityType::PlayerBall), circleCollider.m_entityId) 
+		|| squareCollider.GetColliderType() != EColliderType::Square
+		|| squareCollider.GetDamagableType() == EDamagableType::Intacted)
 		return;
 
 	auto IsPlayer = [&](const ColliderComponent& component) -> bool

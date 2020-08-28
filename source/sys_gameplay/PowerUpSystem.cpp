@@ -43,17 +43,30 @@ void PowerUpLogicSystem::Update(float dtMilliseconds)
 
 void PowerUpLogicSystem::MoveLogic(PowerUpEntityId entityId, float dtMilliseconds)
 {
+    auto& ecs = EntityComponentSystem::Get();
+    auto& powerUpTransform = ecs.GetComponentByEntityId<TransformComponent>(entityId);
 
+    Vector2<float> pos = powerUpTransform.GetPosition();
+    Vector2<float> powerUpVelocity = ECSBreakout::GetInitGameData().data[static_cast<int>(EBreakoutInitGameDataId::powerUpVelocity)];
+    pos += powerUpVelocity * dtMilliseconds;
+    powerUpTransform.SetPosition(pos.data());
 }
 
-void PowerUpLogicSystem::CollitionResolution(const ColliderComponent&, const ColliderComponent&)
+void PowerUpLogicSystem::CollitionResolution(const ColliderComponent& componentA, const ColliderComponent& componentB)
 {
+    const auto& circleCollider = componentA.GetColliderType() == EColliderType::Circle ? componentA : componentB;
+    const auto& squareCollider = componentB.GetColliderType() == EColliderType::Square ? componentB : componentA;
+    auto& ecs = EntityComponentSystem::Get();
+    if (!ecs.IsSameEntityType(static_cast<int>(EEntityType::PlayerBall), circleCollider.m_entityId)
+        || !ecs.IsSameEntityType(static_cast<int>(EEntityType::Block), squareCollider.m_entityId))
+        return;
 
+    auto& blockTransform = ecs.GetComponentByEntityId<TransformComponent>(squareCollider.m_entityId);
+    SpawnPowerUps(blockTransform);
 }
 
 bool PowerUpLogicSystem::ShouldSpawn(unsigned int chance)
 {
-	std::srand(std::time(nullptr));
 	unsigned int random = rand() % chance;
 	return random == 0;
 }

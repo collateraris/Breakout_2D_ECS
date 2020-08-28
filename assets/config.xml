@@ -55,7 +55,7 @@
 			<texture id="4" name="paddle" path="assets/textures/paddle.png" alpha="1"></texture>
 			<texture id="5" name="particle" path="assets/textures/particle.png" alpha="1"></texture>
 			<texture id="6" name="speed_powerup" path="assets/textures/powerup_speed.png" alpha="1"></texture>
-			<texture id="7" name="sticky_powerup" path="assets/textures/powerup_sticky.jpg" alpha="0"></texture>
+			<texture id="7" name="sticky_powerup" path="assets/textures/powerup_sticky.png" alpha="1"></texture>
 			<texture id="8" name="pass_through_powerup" path="assets/textures/powerup_passthrough.png" alpha="1"></texture>
 			<texture id="9" name="pad_size_increase_powerup" path="assets/textures/powerup_increase.png" alpha="1"></texture>
 			<texture id="10" name="confuse_powerup" path="assets/textures/powerup_confuse.png" alpha="1"></texture>
