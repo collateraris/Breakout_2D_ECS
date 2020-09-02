@@ -47,6 +47,7 @@
 			<shader id="2" name="chaos_post_effect" path="assets/shaders/post_effects/chaos"></shader>
 			<shader id="3" name="confuse_post_effect" path="assets/shaders/post_effects/confuse"></shader>
 			<shader id="4" name="shake_post_effect" path="assets/shaders/post_effects/shake"></shader>
+			<shader id="5" name="text_2d" path="assets/shaders/text_2d"></shader>
 		</shaders>
 		<textures>
 			<texture id="0" name="awesomeface" path="assets/textures/awesomeface.png" alpha="1"></texture>
@@ -62,6 +63,9 @@
 			<texture id="10" name="confuse_powerup" path="assets/textures/powerup_confuse.png" alpha="1"></texture>
 			<texture id="11" name="chaos_powerup" path="assets/textures/powerup_chaos.png" alpha="1"></texture>
 		</textures>
+		<fonts>
+			<font id="0" name="ocraext" path="assets/fonts/ocraext.ttf"></font>
+		</fonts>
 		<sounds>
 			<sound id="0" name="HitNonSolidBlock" path="assets/sounds/non_solid_block.mp3"></sound>
 			<sound id="1" name="HitSolidBlock" path="assets/sounds/solid.wav"></sound>

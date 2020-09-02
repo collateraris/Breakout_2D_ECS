@@ -2,6 +2,11 @@
 
 #include <TexturesManager.h>
 #include <ShadersManager.h>
+#include <FontsManager.h>
+
+#include <OGLML/Texture2D.h>
+#include <OGLML/Shader.h>
+#include <OGLML/Font.h>
 
 #include <cassert>
 
@@ -97,6 +102,33 @@ bool AssetManager::Unload(breakout::EShaderAssetId shaderId)
 	return ShadersManager::Get().Unload(id);
 }
 
+//----------------------------------------------------------------------------------------
+
+void AssetManager::Bind(breakout::EFontsAssetId fontId, const std::string& fontPath)
+{
+	m_fontsPaths[fontId] = fontPath;
+}
+
+bool AssetManager::Get(breakout::EFontsAssetId fontId, oglml::Font& font)
+{
+	int id = static_cast<int>(fontId);
+	return FontsManager::Get().GetResource(id, font);
+}
+
+bool AssetManager::Load(breakout::EFontsAssetId fontId)
+{
+	int id = static_cast<int>(fontId);
+	return FontsManager::Get().Load(id, m_fontsPaths[fontId]);
+}
+
+bool AssetManager::Unload(breakout::EFontsAssetId fontId)
+{
+	int id = static_cast<int>(fontId);
+	return FontsManager::Get().Unload(id);
+}
+
+//----------------------------------------------------------------------------------------
+
 void AssetManager::Bind(breakout::ESoundAssetId soundId, const std::string& soundPath)
 {
 	m_soundPaths[soundId] = soundPath;
@@ -108,6 +140,7 @@ const std::string& AssetManager::GetPath(breakout::ESoundAssetId soundId)
 	return m_soundPaths[soundId];
 }
 
+//----------------------------------------------------------------------------------------
 
 void AssetManager::Bind(breakout::EMusicAssetId musicId, const std::string& musicPath)
 {

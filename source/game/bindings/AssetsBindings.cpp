@@ -10,13 +10,14 @@
 
 namespace breakout
 {
+
     void AssetsBindings::BindAll()
     {
         AssetsBindings::BindShaders();
         AssetsBindings::BindTextures();
         AssetsBindings::BindSounds();
         AssetsBindings::BindMusics();
-
+        AssetsBindings::BindFonts();
     }
 
     void AssetsBindings::BindTextures()
@@ -67,6 +68,19 @@ namespace breakout
         {
             EMusicAssetId id = static_cast<EMusicAssetId>(music.GetAttribute<int>(idStr));
             std::string path = music.GetAttribute<std::string>(pathStr);
+            assetManager.Bind(id, path);
+        }
+    }
+
+    void AssetsBindings::BindFonts()
+    {
+        auto fonts = GameContext::Get().GetConfigManager().GetRoot().GetPath(assetsFontsStr).GetChildren();
+        auto& assetManager = GameContext::Get().GetAssetManager();
+
+        for (auto& font : fonts)
+        {
+            EFontsAssetId id = static_cast<EFontsAssetId>(font.GetAttribute<int>(idStr));
+            std::string path = font.GetAttribute<std::string>(pathStr);
             assetManager.Bind(id, path);
         }
     }
