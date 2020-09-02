@@ -13,6 +13,7 @@ project "LibMultimedia"
         paths.GLFW.inc,
         paths.glm.inc,
         paths.stb_image.inc,
+        paths.freetype2.inc,
     }
     
     files

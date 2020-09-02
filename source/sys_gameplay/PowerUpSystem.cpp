@@ -194,7 +194,7 @@ void PowerUpLogicSystem::SpawnPowerUps(TransformComponent& initPosition)
         return;
     }
 
-    if (ShouldSpawn(15) || true) // negative powerups should spawn more often
+    if (ShouldSpawn(15)) // negative powerups should spawn more often
     {
         int confusePowerUpId = ECSBreakout::CreateComponent(EEntityType::ConfusePowerUp);
         auto& transform = EntityComponentSystem::Get()
@@ -206,7 +206,7 @@ void PowerUpLogicSystem::SpawnPowerUps(TransformComponent& initPosition)
         return;
     }
 
-    if (ShouldSpawn(15) || true)
+    if (ShouldSpawn(15))
     {
         int chaosPowerUpId = ECSBreakout::CreateComponent(EEntityType::ChaosPowerUp);
         auto& transform = EntityComponentSystem::Get()

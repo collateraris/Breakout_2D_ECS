@@ -51,6 +51,12 @@ paths.irrKlang.inc  = paths.irrKlang.root .. "/include"
 paths.irrKlang.bin  = paths.irrKlang.root .. "/bin"
 paths.irrKlang.lib  = paths.irrKlang.root .. "/lib"
 -----------------------------------------------------------------------------------------------------------------------
+paths.freetype2      = {}
+paths.freetype2.root = paths.root .. "/libraries/freetype2"
+paths.freetype2.inc  = paths.freetype2.root .. "/include"
+paths.freetype2.bin  = paths.freetype2.root .. "/bin"
+paths.freetype2.lib  = paths.freetype2.root .. "/lib"
+-----------------------------------------------------------------------------------------------------------------------
 paths.build     = paths.root .. "/.bin"
 paths.genPrj    = paths.root .. "/.gen/prj"
 paths.genDebug  = paths.root .. "/.gen/bin/Debug/Breakout"
