@@ -35,6 +35,8 @@ namespace oglml
 
 		void SetFillColor(const Color& color);
 
+		void SetOffset(float x, float y, float scale);
+
 		void Draw();
 
 	private:
@@ -44,7 +46,10 @@ namespace oglml
 		unsigned int m_characterSize = 0;
 		glm::vec3 m_fillColor = {1.f, 1.f, 1.f};
 		unsigned int m_shaderId = 0;
-		glm::mat4 m_projection = glm::ortho(0.0f, 800.0f, 600.0f, 0.0f, -1.0f, 1.0f);
+		glm::mat4 m_projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
+		float m_x_offset = 0.f;
+		float m_y_offset = 0.f;
+		float m_scale_offset = 0.f;
 
 	};
 }

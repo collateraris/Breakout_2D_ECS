@@ -4,6 +4,6 @@ namespace breakout
 {
 	enum class EFontsAssetId
 	{
-		ocraext
+		ocraext = 0
 	};
 }

@@ -38,6 +38,10 @@ void AssetManager::LoadAll()
 	for (auto& path : m_shadersPaths)
 		shadersManager.Load(static_cast<int>(path.first), path.second);
 
+	FontsManager& fontsManager = FontsManager::Get();
+	for (auto& path : m_fontsPaths)
+		fontsManager.Load(static_cast<int>(path.first), path.second);
+
 }
 
 void AssetManager::UnloadAll()
@@ -50,6 +54,9 @@ void AssetManager::UnloadAll()
 	for (auto& path : m_shadersPaths)
 		shadersManager.Unload(static_cast<int>(path.first));
 
+	FontsManager& fontsManager = FontsManager::Get();
+	for (auto& path : m_fontsPaths)
+		fontsManager.Unload(static_cast<int>(path.first));
 }
 
 //----------------------------------------------------------------------------------------

@@ -7,7 +7,7 @@ using namespace oglml;
 
 DynamicQuadRender::DynamicQuadRender()
 {
-    const short int VERTEX_NUM = 6;
+    const short int VERTEX_NUM = 4;
     const short int VERTEX_COORD_TEX_COORD_NUM = 5;
     const short int VERTEX_COORD_NUM = 3;
     const short int TEX_COORD_NUM = 2;
