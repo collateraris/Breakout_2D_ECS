@@ -18,6 +18,7 @@
 #include <sstream>
 #include <fstream>
 #include <cassert>
+#include <algorithm>
 
 using namespace breakout;
 
@@ -39,6 +40,8 @@ GameMaps& GameMaps::Get()
 
 void GameMaps::LoadMap(EGameMapLevels levels)
 {
+    m_currLevel = levels;
+
     auto gameLevels = GameContext::Get().GetConfigManager().GetRoot().GetPath(gameMapsStr).GetChildren();
     int id = static_cast<int>(levels);
     auto gameLvl = gameLevels[id];
@@ -103,12 +106,14 @@ void GameMaps::GenerateBlocks(const std::vector<std::vector<unsigned int>>& tile
     auto CreateSolidBlock = [&]() -> int
     {
         int entityId = ECSBreakout::CreateComponent(EEntityType::SolidBlock);
+        m_usedEntityId.push_back(entityId);
         return entityId;
     };
 
     auto CreateBlock = [&]() -> int
     {
         int entityId = ECSBreakout::CreateComponent(EEntityType::Block);
+        m_usedEntityId.push_back(entityId);
         return entityId;
     };
 
@@ -153,4 +158,43 @@ void GameMaps::GenerateBlocks(const std::vector<std::vector<unsigned int>>& tile
             }
         }
     }
+}
+
+void GameMaps::NextLevel()
+{
+    DestroyCurrLevel();
+
+    int currLevelId = static_cast<int>(m_currLevel);
+    int firstLevelId = static_cast<int>(EGameMapLevels::Standard);
+    int lastLevelId = static_cast<int>(EGameMapLevels::MAX);
+    int nextLevel = (currLevelId + 1) % lastLevelId;
+    nextLevel = std::clamp(nextLevel, firstLevelId, lastLevelId);
+
+    EGameMapLevels newLevel = static_cast<EGameMapLevels>(nextLevel);
+    LoadMap(newLevel);
+}
+
+void GameMaps::PrevLevel()
+{
+    DestroyCurrLevel();
+
+    int currLevelId = static_cast<int>(m_currLevel);
+    int firstLevelId = static_cast<int>(EGameMapLevels::Standard);
+    int lastLevelId = static_cast<int>(EGameMapLevels::MAX);
+    int prevLevel = currLevelId - 1;
+    prevLevel = prevLevel < firstLevelId ? lastLevelId - 1 : prevLevel;
+
+    EGameMapLevels newLevel = static_cast<EGameMapLevels>(prevLevel);
+    LoadMap(newLevel);
+}
+
+void GameMaps::DestroyCurrLevel()
+{
+    auto& ecs = EntityComponentSystem::Get();
+    for (int entityId : m_usedEntityId)
+    {
+        ecs.EntityDestroy(entityId);
+    }
+
+    m_usedEntityId.clear();
 }

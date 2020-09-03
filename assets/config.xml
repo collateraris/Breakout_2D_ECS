@@ -84,6 +84,7 @@
 		<init id="3" name="playerBallVelocity" val1="100" val2="-350"></init>
 		<init id="4" name="powerUpSize" val1="60" val2="20"></init>
 		<init id="5" name="powerUpVelocity" val1="0" val2="150"></init>
+		<init id="6" name="playerLives" val1="5" val2="0"></init>
 	</initData>
 
 </config>

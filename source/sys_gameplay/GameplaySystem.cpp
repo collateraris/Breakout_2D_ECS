@@ -6,6 +6,8 @@
 #include <DamagableColliderLogicSystem.h>
 #include <PowerUpSystem.h>
 
+#include <GameStateManager.h>
+
 using namespace breakout;
 
 GameplaySystem::GameplaySystem()
@@ -35,6 +37,9 @@ void GameplaySystem::Init()
 
 void GameplaySystem::Update(float dtMilliseconds)
 {
+    if (GameStateManager::Get().GetCurrentState() != EGameState::GAME)
+        return;
+
     m_playerLogic->Update(dtMilliseconds);
     m_playerBallLogic->Update(dtMilliseconds);
     m_powerUpLogic->Update(dtMilliseconds);

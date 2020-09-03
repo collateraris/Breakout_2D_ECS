@@ -36,6 +36,7 @@
 #include <GameMaps.h>
 
 #include <EventsStorage.h>
+#include <GameStateManager.h>
 
 #include <cassert>
 #include <array>
@@ -73,6 +74,8 @@ void ECSBreakout::Init()
 	InitComponentsPools();
 
 	CreateWorld();
+
+	InitGameStateController();
 }
 
 int ECSBreakout::CreateComponent(EEntityType type)
@@ -664,4 +667,45 @@ void ECSBreakout::LoadInitDataFromConfig()
 const BreakoutInitGameData& ECSBreakout::GetInitGameData()
 {
 	return g_initData;
+}
+
+void ECSBreakout::InitGameStateController()
+{
+	InputManager::Get().OnKeyPressed().BindLambda([&](oglml::EKeyButtonCode key, oglml::EKeyModeCode mode)
+	{
+		EGameState currGameState = GameStateManager::Get().GetCurrentState();
+
+		switch (currGameState)
+		{
+		case EGameState::MAIN_MENU:
+			if (key == oglml::EKeyButtonCode::KEY_ENTER
+				|| key == oglml::EKeyButtonCode::KEY_SPACE)
+			{
+				GameStateManager::Get().SwitchState(EGameState::GAME);
+			}
+			else if (key == oglml::EKeyButtonCode::KEY_A)
+			{
+				GameMaps::Get().PrevLevel();
+			}
+			else if (key == oglml::EKeyButtonCode::KEY_D)
+			{
+				GameMaps::Get().NextLevel();
+			}
+			break;
+		case EGameState::GAME:
+			if (key == oglml::EKeyButtonCode::KEY_ENTER)
+			{
+				GameStateManager::Get().SwitchState(EGameState::PAUSE);
+			}
+			break;
+		case EGameState::PAUSE:
+			if (key == oglml::EKeyButtonCode::KEY_ENTER)
+			{
+				GameStateManager::Get().SwitchState(EGameState::GAME);
+			}
+			break;
+		default:
+			break;
+		}
+	});
 }
