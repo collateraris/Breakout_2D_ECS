@@ -15,6 +15,7 @@ namespace breakout
 		SpriteColor = 8,
 		PowerUp = 9,
 		Timer = 10,
+		Health = 11,
 		MAX,
 	};
 

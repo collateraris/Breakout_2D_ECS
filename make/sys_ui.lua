@@ -9,6 +9,9 @@ project "SysUI"
     includedirs
     {
         paths.ui,
+        paths.ecs,
+        paths.lib_multimedia,
+        paths.memory,
     }
     
     files

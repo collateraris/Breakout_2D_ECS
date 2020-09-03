@@ -5,6 +5,7 @@
 #include <ColliderComponent.h>
 
 #include <EventsStorage.h>
+#include <InputManager.h>
 
 #include <gameContext.h>
 #include <gameWindow.h>
@@ -17,6 +18,21 @@ using namespace breakout;
 
 void PlayerLogicSystem::Init()
 {
+	InputManager::Get().OnKeyPressed().BindLambda([&](oglml::EKeyButtonCode key, oglml::EKeyModeCode mode)
+	{
+		if (key == oglml::EKeyButtonCode::KEY_A)
+		{
+			EventsStorage::Get().Put(BaseEvent(EEventType::PLAYER_ACTION_MOVE_LEFT));
+		}
+		else if (key == oglml::EKeyButtonCode::KEY_D)
+		{
+			EventsStorage::Get().Put(BaseEvent(EEventType::PLAYER_ACTION_MOVE_RIGHT));
+		}
+		else if (key == oglml::EKeyButtonCode::KEY_SPACE)
+		{
+			EventsStorage::Get().Put(BaseEvent(EEventType::PLAYER_ACTION_SPACE_CLICK));
+		}
+	});
 }
 
 void PlayerLogicSystem::Update(float dtMilliseconds)
@@ -81,5 +97,6 @@ void PlayerLogicSystem::SetPosition(bool axis /* false - x, true - y*/, short in
 	auto& colliderComponent = GameContext::Get().GetECS().GetComponentByEntityId<ColliderComponent>(m_playerEntityId);
 	colliderComponent.SetPosition(pos);
 }
+
 
 

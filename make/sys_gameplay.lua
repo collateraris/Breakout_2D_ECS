@@ -22,6 +22,7 @@ project "SysGameplay"
         paths.audio,
         paths.resource,
         paths.gameState,
+        paths.input,
     }
     
     files

@@ -29,6 +29,7 @@
 #include <ColliderComponent.h>
 #include <PowerUpComponent.h>
 #include <TimerComponent.h>
+#include <HealthComponent.h>
 
 #include <LogManager.h>
 
@@ -288,21 +289,9 @@ int CreatePlayerPaddle()
 	const std::array<float, 2>& playerVelocity = ECSBreakout::GetInitGameData().data[static_cast<int>(EBreakoutInitGameDataId::playerPaddleVelocity)];
 	movementComponent.SetVelocity(playerVelocity);
 
-	InputManager::Get().OnKeyPressed().BindLambda([&](oglml::EKeyButtonCode key, oglml::EKeyModeCode mode)
-	{
-		if (key == oglml::EKeyButtonCode::KEY_A)
-		{
-			EventsStorage::Get().Put(BaseEvent(EEventType::PLAYER_ACTION_MOVE_LEFT));
-		}
-		else if (key == oglml::EKeyButtonCode::KEY_D)
-		{
-			EventsStorage::Get().Put(BaseEvent(EEventType::PLAYER_ACTION_MOVE_RIGHT));
-		}
-		else if (key == oglml::EKeyButtonCode::KEY_SPACE)
-		{
-			EventsStorage::Get().Put(BaseEvent(EEventType::PLAYER_ACTION_SPACE_CLICK));
-		}
-	});
+	float healthSize = ECSBreakout::GetInitGameData().data[static_cast<int>(EBreakoutInitGameDataId::playerLives)][0];
+	auto& health = ecs.AddComponentByEntityId<HealthComponent>(entityId);
+	health.SetHealth(healthSize);
 
 	return entityId;
 }
@@ -635,6 +624,9 @@ void ECSBreakout::InitComponentsPools()
 		case breakout::EComponentType::Timer:
 			ComponentManager::Get().CreateComponentPool<TimerComponent>(poolSize);
 			break;
+		case breakout::EComponentType::Health:
+			ComponentManager::Get().CreateComponentPool<HealthComponent>(poolSize);
+			break;
 		default:
 			break;
 		}
@@ -702,6 +694,13 @@ void ECSBreakout::InitGameStateController()
 			if (key == oglml::EKeyButtonCode::KEY_ENTER)
 			{
 				GameStateManager::Get().SwitchState(EGameState::GAME);
+			}
+			break;
+		case EGameState::GAME_OVER:
+			if (key == oglml::EKeyButtonCode::KEY_ENTER
+				|| key == oglml::EKeyButtonCode::KEY_SPACE)
+			{
+				GameStateManager::Get().SwitchState(EGameState::MAIN_MENU);
 			}
 			break;
 		default:

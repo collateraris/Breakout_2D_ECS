@@ -17,6 +17,7 @@ namespace breakout
 		Render = 10,
 		PostProcessing = 11,
 		PowerUpLogic = 12,
+		GUI = 13,
 		MAX
 	};
 

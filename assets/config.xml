@@ -30,6 +30,7 @@
 		<component id="8" name="SpriteColor" poolSize="100"></component>
 		<component id="9" name="PowerUp" poolSize="3"></component>
 		<component id="10" name="Timer" poolSize="10"></component>
+		<component id="11" name="Health" poolSize="1"></component>
 	</components>
 	
 	<gameMaps>

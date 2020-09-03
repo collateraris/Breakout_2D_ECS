@@ -29,7 +29,7 @@ GameMaps::GameMaps()
 
 GameMaps::~GameMaps()
 {
-
+    DestroyCurrLevel();
 }
 
 GameMaps& GameMaps::Get()

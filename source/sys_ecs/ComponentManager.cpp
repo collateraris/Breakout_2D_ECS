@@ -10,6 +10,7 @@
 #include <ParticlesComponent.h>
 #include <PowerUpComponent.h>
 #include <TimerComponent.h>
+#include <HealthComponent.h>
 
 using namespace breakout;
 
@@ -62,6 +63,9 @@ void ComponentManager::Delete(EComponentType type, int componentId)
 		break;
 	case breakout::EComponentType::Timer:
 		Delete<TimerComponent>(componentId);
+		break;
+	case breakout::EComponentType::Health:
+		Delete<HealthComponent>(componentId);
 		break;
 	default:
 		break;
