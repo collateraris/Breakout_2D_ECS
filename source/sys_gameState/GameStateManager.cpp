@@ -60,9 +60,13 @@ bool GameStateManager::IsPossibleToChangeState(EGameState newState) const
 		return newState == EGameState::MAIN_MENU || newState == EGameState::GAME || newState == EGameState::CLOSE_APP;
 		break;
 	case EGameState::GAME:
-		return newState == EGameState::GAME_OVER || newState == EGameState::PAUSE || newState == EGameState::CLOSE_APP;
+		return newState == EGameState::GAME_WIN 
+			|| newState == EGameState::GAME_OVER || newState == EGameState::PAUSE || newState == EGameState::CLOSE_APP;
 		break;
 	case EGameState::GAME_OVER:
+		return newState == EGameState::MAIN_MENU || newState == EGameState::CLOSE_APP;
+		break;
+	case EGameState::GAME_WIN:
 		return newState == EGameState::MAIN_MENU || newState == EGameState::CLOSE_APP;
 		break;
 	default:

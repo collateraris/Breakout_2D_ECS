@@ -15,6 +15,7 @@ namespace breakout
 		static EventManager& Get();
 
 		MulticastDelegate<const ColliderComponent&, const ColliderComponent&>& OnCollitionDetected();
+		MulticastDelegate<>& OnNewLevelLoaded();
 
 	private:
 
@@ -26,6 +27,7 @@ namespace breakout
 		void operator=(EventManager&&) = delete;
 
 		MulticastDelegate<const ColliderComponent&, const ColliderComponent&> OnCollitionDetectedDelegate;
+		MulticastDelegate<> OnNewLevelLoadedDelegate;
 	};
 }
 

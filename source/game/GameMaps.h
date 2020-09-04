@@ -28,6 +28,8 @@ namespace breakout
 
 		void PrevLevel();
 
+		int GetBlockNum() const;
+
 	private:
 
 		void DestroyCurrLevel();
@@ -46,5 +48,7 @@ namespace breakout
 		EGameMapLevels m_currLevel;
 
 		std::vector<int> m_usedEntityId = {};
+
+		int m_blocks = 0;
 	};
 }

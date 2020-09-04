@@ -18,6 +18,7 @@
 
 #include <EventManager.h>
 #include <ECSBreakout.h>
+#include <GameMaps.h>
 #include <Vector2.h>
 
 #include <algorithm>
@@ -37,7 +38,10 @@ enum class EDirection
 
 void PlayerBallLogicSystem::Init()
 {
-	EventManager::Get().OnCollitionDetected().BindObject(this, &PlayerBallLogicSystem::CollitionResolution);
+	auto& eventManager = EventManager::Get();
+
+	eventManager.OnCollitionDetected().BindObject(this, &PlayerBallLogicSystem::CollitionResolution);
+	eventManager.OnNewLevelLoaded().BindObject(this, &PlayerBallLogicSystem::SetInitLevelBlocks);
 }
 
 void PlayerBallLogicSystem::Update(float dtMilliseconds)
@@ -174,6 +178,7 @@ void PlayerBallLogicSystem::CollitionResolution(const ColliderComponent& compone
 		else if (squareCollider.GetDamagableType() == EDamagableType::Destroyable)
 		{
 			AudioManager::Get().PlaySound(ESoundAssetId::HitNonSolidBlock);
+			TryWin();
 		}
 	}
 }
@@ -198,6 +203,11 @@ void PlayerBallLogicSystem::SetPlayerBallEntityId()
 		m_playerBallEntityId = ball->GetContainer().m_entityId;
 		break;
 	}
+}
+
+void PlayerBallLogicSystem::SetInitLevelBlocks()
+{
+	m_levelBlocksNum = GameMaps::Get().GetBlockNum();
 }
 
 void PlayerBallLogicSystem::IsStuckOnPlayerPaddleLogic(float dtMilliseconds)
@@ -330,6 +340,24 @@ void PlayerBallLogicSystem::LossHealth()
 	{
 		health.SetHealth(ECSBreakout::GetInitGameData().data[static_cast<int>(EBreakoutInitGameDataId::playerLives)][0]);
 		GameStateManager::Get().SwitchState(EGameState::GAME_OVER);
+	}
+}
+
+void PlayerBallLogicSystem::LossLevelBlock()
+{
+	m_levelBlocksNum--;
+}
+
+void PlayerBallLogicSystem::TryWin()
+{
+	LossLevelBlock();
+
+	if (m_levelBlocksNum <= 0)
+	{
+		SetInitPosition();
+		EntityComponentSystem::Get().GetComponentByEntityId<PlayerBallComponent>(m_playerBallEntityId).state = EPlayerBallState::IsStuckOnPlayerPaddle;
+
+		GameStateManager::Get().SwitchState(EGameState::GAME_WIN);
 	}
 }
 

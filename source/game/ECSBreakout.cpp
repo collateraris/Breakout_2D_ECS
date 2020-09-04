@@ -690,14 +690,29 @@ void ECSBreakout::InitGameStateController()
 			{
 				GameStateManager::Get().SwitchState(EGameState::PAUSE);
 			}
+			else if (key == oglml::EKeyButtonCode::KEY_ESCAPE)
+			{
+				GameStateManager::Get().SwitchState(EGameState::PAUSE);
+			}
 			break;
 		case EGameState::PAUSE:
 			if (key == oglml::EKeyButtonCode::KEY_ENTER)
 			{
 				GameStateManager::Get().SwitchState(EGameState::GAME);
 			}
+			else if (key == oglml::EKeyButtonCode::KEY_ESCAPE)
+			{
+				GameStateManager::Get().SwitchState(EGameState::MAIN_MENU);
+			}
 			break;
 		case EGameState::GAME_OVER:
+			if (key == oglml::EKeyButtonCode::KEY_ENTER
+				|| key == oglml::EKeyButtonCode::KEY_SPACE)
+			{
+				GameStateManager::Get().SwitchState(EGameState::MAIN_MENU);
+			}
+			break;
+		case EGameState::GAME_WIN:
 			if (key == oglml::EKeyButtonCode::KEY_ENTER
 				|| key == oglml::EKeyButtonCode::KEY_SPACE)
 			{

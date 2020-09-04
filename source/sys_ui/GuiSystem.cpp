@@ -49,6 +49,9 @@ void GuiSystem::UpdateGUIByGameState()
 	case breakout::EGameState::GAME_OVER:
 		canvas = CanvasWidgetFabric::Get().GetCanvas(ECanvasType::GAME_OVER);
 		break;
+	case breakout::EGameState::GAME_WIN:
+		canvas = CanvasWidgetFabric::Get().GetCanvas(ECanvasType::GAME_WIN);
+		break;
 	default:
 		break;
 	}
