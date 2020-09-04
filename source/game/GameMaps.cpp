@@ -7,6 +7,7 @@
 #include <EntityComponentSystem.h>
 
 #include <ECSBreakout.h>
+#include <EventManager.h>
 
 #include <SpriteComponent.h>
 #include <SpriteColorComponent.h>
@@ -51,7 +52,17 @@ void GameMaps::LoadMap(EGameMapLevels levels)
     Load(path, tileData);
 
     assert(tileData.size() > 0);
+    m_blocks = 0;
     GenerateBlocks(tileData);
+
+    EventManager::Get().OnNewLevelLoaded().Broadcast();
+}
+
+void GameMaps::RebuildLevelMap()
+{
+    DestroyCurrLevel();
+
+    LoadMap(m_currLevel);
 }
 
 void GameMaps::Load(const std::string& path, std::vector<std::vector<unsigned int>>& tileData)
@@ -114,6 +125,7 @@ void GameMaps::GenerateBlocks(const std::vector<std::vector<unsigned int>>& tile
     {
         int entityId = ECSBreakout::CreateComponent(EEntityType::Block);
         m_usedEntityId.push_back(entityId);
+        m_blocks++;
         return entityId;
     };
 
@@ -198,4 +210,9 @@ void GameMaps::DestroyCurrLevel()
     }
 
     m_usedEntityId.clear();
+}
+
+int GameMaps::GetBlockNum() const
+{
+   return m_blocks;
 }

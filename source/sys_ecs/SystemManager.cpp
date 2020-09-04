@@ -24,7 +24,7 @@ void SystemManager::Reset()
 
 	for (auto& systemIt: m_systems)
 	{
-		Deallocate(globalAllocator.get(), systemIt.second);
+		deallocate(globalAllocator.get(), systemIt.second);
 	}
 
 	m_systems.clear();

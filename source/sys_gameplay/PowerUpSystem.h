@@ -48,10 +48,27 @@ namespace breakout
         void ActivateTimer(PowerUpEntityId, float duration, float decaySpeed);
 
         void SwitchPostEffect(PowerUpEntityId, int new_effect);
-        void TrySetIdlePostEffect(PowerUpEntityId);
+        void RestartPostEffect();
+        void TryRestartPostEffect(PowerUpEntityId);
+
+        void PlayerBallSpeedIncrease(PowerUpEntityId);
+        void RestartBallSpeed();
+        void TryRestartBallSpeed(PowerUpEntityId);
+
+        void PassThroughPlayerBall(PowerUpEntityId);
+        void RestartPassThrough();
+        void TryRestartPassThrough(PowerUpEntityId);
+
+        void PadSizeIncrease(PowerUpEntityId);
+        void RestartPadSize();
+        void TryRestartPadSize(PowerUpEntityId);
+
+        void PlayerBallSticky(PowerUpEntityId);
 
         void SetPlayerEntityId();
         void SetPlayerBallEntityId();
+
+        void Restart();
 
     private:
 
@@ -64,6 +81,9 @@ namespace breakout
         std::vector<int> m_dieListCandidate = {};
         int m_currentDieListPos = 0;
 
-        int m_currPostEffectEntityId = 0;
+        int m_currPostEffectEntityId = -1;
+        int m_currIncBallSpeedEntityId = -1;
+        int m_currPadSizeIncEntityId = -1;
+        int m_currPassThroughEntityId = -1;
     };
 }

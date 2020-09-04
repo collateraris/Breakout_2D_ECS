@@ -6,6 +6,8 @@
 
 #include <EventsStorage.h>
 #include <InputManager.h>
+#include <EventManager.h>
+#include <ECSBreakout.h>
 
 #include <gameContext.h>
 #include <gameWindow.h>
@@ -33,6 +35,8 @@ void PlayerLogicSystem::Init()
 			EventsStorage::Get().Put(BaseEvent(EEventType::PLAYER_ACTION_SPACE_CLICK));
 		}
 	});
+
+	EventManager::Get().OnGameEnded().BindObject(this, &PlayerLogicSystem::Restart);
 }
 
 void PlayerLogicSystem::Update(float dtMilliseconds)
@@ -61,13 +65,7 @@ void PlayerLogicSystem::Update(float dtMilliseconds)
 
 void PlayerLogicSystem::SetPlayerEntityId()
 {
-	auto& playerComponents = EntityComponentSystem::Get().GetAllComponentsByType<PlayerComponent>();
-
-	for (auto& player : playerComponents)
-	{
-		m_playerEntityId = player->GetContainer().m_entityId;
-		break;
-	}
+	m_playerEntityId = ECSBreakout::GetInitGameData().playerId;
 }
 
 void PlayerLogicSystem::MoveLeftAction(float dtMilliseconds)
@@ -96,6 +94,27 @@ void PlayerLogicSystem::SetPosition(bool axis /* false - x, true - y*/, short in
 	const auto& size = transformComponent.GetScale();
 	auto& colliderComponent = GameContext::Get().GetECS().GetComponentByEntityId<ColliderComponent>(m_playerEntityId);
 	colliderComponent.SetPosition(pos);
+}
+
+void PlayerLogicSystem::Restart()
+{
+	SetInitPos();
+}
+
+void PlayerLogicSystem::SetInitPos()
+{
+	auto window = GameContext::Get().GetMainWindow();
+	float screenWidth = window->GetWidth();
+	float screenHeight = window->GetHeight();
+
+	const std::array<float, 2>& playerSize = ECSBreakout::GetInitGameData().data[static_cast<int>(EBreakoutInitGameDataId::playerPaddleSize)];
+	const std::array<float, 2> playerPos = { screenWidth * 0.5f - playerSize[0] * 0.5f,
+		screenHeight - playerSize[1] };
+	auto& ecs = EntityComponentSystem::Get();
+	auto& transform = ecs.GetComponentByEntityId<TransformComponent>(m_playerEntityId);
+	transform.SetPosition(playerPos);
+
+	SetPosition(false, -1, 0);
 }
 
 

@@ -11,8 +11,8 @@ namespace breakout
         LinearAllocator(const size_t size);
         ~LinearAllocator() override;
 
-        void* Allocate(const size_t size) override;
-        void Deallocate(void* p) override final;
+        void* allocate(const size_t size) override;
+        void deallocate(void* p) override final;
 
         virtual void Clear();
 

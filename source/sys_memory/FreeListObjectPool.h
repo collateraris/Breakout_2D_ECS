@@ -61,6 +61,7 @@ namespace breakout
 	template<class freeListPoolElement>
 	freeListPoolElement& FreeListObjectPool<freeListPoolElement>::Activate()
 	{
+		if (!m_firstAvailable)
 		assert(m_firstAvailable != nullptr);
 
 		freeListPoolElement* newElement = m_firstAvailable;

@@ -37,6 +37,7 @@
 #include <GameMaps.h>
 
 #include <EventsStorage.h>
+#include <EventManager.h>
 #include <GameStateManager.h>
 
 #include <cassert>
@@ -273,16 +274,16 @@ int CreatePlayerPaddle()
 	sprite.SetScreenSize(screenWidth, screenHeight);
 
 	const std::array<float, 2>& playerSize = ECSBreakout::GetInitGameData().data[static_cast<int>(EBreakoutInitGameDataId::playerPaddleSize)];
-	const std::array<float, 2> playerSizePos = { screenWidth * 0.5f - playerSize[0] * 0.5f,
+	const std::array<float, 2> playerPos = { screenWidth * 0.5f - playerSize[0] * 0.5f,
 		screenHeight - playerSize[1] };
-	transformComponent.SetPosition(playerSizePos);
+	transformComponent.SetPosition(playerPos);
 	transformComponent.SetScale(playerSize);
 
 	auto& colliderComponent = ecs.AddComponentByEntityId<ColliderComponent>(entityId);
 	colliderComponent.SetColliderType(EColliderType::Square)
 		.SetDamagableType(EDamagableType::Saved)
 		.SetSize(playerSize[0], playerSize[1])
-		.SetPosition(playerSizePos);
+		.SetPosition(playerPos);
 
 	auto& movementComponent = ecs.AddComponentByEntityId<MovementComponent>(entityId);
 	const std::array<float, 2>& playerVelocity = ECSBreakout::GetInitGameData().data[static_cast<int>(EBreakoutInitGameDataId::playerPaddleVelocity)];
@@ -664,6 +665,11 @@ BreakoutInitGameData& ECSBreakout::GetInitGameData()
 
 void ECSBreakout::InitGameStateController()
 {
+	EventManager::Get().OnGameEnded().BindLambda([&]()
+	{
+		GameMaps::Get().RebuildLevelMap();
+	});
+
 	InputManager::Get().OnKeyPressed().BindLambda([&](oglml::EKeyButtonCode key, oglml::EKeyModeCode mode)
 	{
 		EGameState currGameState = GameStateManager::Get().GetCurrentState();
@@ -690,17 +696,35 @@ void ECSBreakout::InitGameStateController()
 			{
 				GameStateManager::Get().SwitchState(EGameState::PAUSE);
 			}
+			else if (key == oglml::EKeyButtonCode::KEY_ESCAPE)
+			{
+				GameStateManager::Get().SwitchState(EGameState::PAUSE);
+			}
 			break;
 		case EGameState::PAUSE:
 			if (key == oglml::EKeyButtonCode::KEY_ENTER)
 			{
 				GameStateManager::Get().SwitchState(EGameState::GAME);
 			}
+			else if (key == oglml::EKeyButtonCode::KEY_ESCAPE)
+			{
+				EventManager::Get().OnGameEnded().Broadcast();
+				GameStateManager::Get().SwitchState(EGameState::MAIN_MENU);
+			}
 			break;
 		case EGameState::GAME_OVER:
 			if (key == oglml::EKeyButtonCode::KEY_ENTER
 				|| key == oglml::EKeyButtonCode::KEY_SPACE)
 			{
+				EventManager::Get().OnGameEnded().Broadcast();
+				GameStateManager::Get().SwitchState(EGameState::MAIN_MENU);
+			}
+			break;
+		case EGameState::GAME_WIN:
+			if (key == oglml::EKeyButtonCode::KEY_ENTER
+				|| key == oglml::EKeyButtonCode::KEY_SPACE)
+			{
+				EventManager::Get().OnGameEnded().Broadcast();
 				GameStateManager::Get().SwitchState(EGameState::MAIN_MENU);
 			}
 			break;

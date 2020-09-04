@@ -31,12 +31,12 @@ CanvasWidgetFabric::~CanvasWidgetFabric()
 
 	for (auto& canvasWidget : m_canvasWidgets)
 	{
-		Deallocate<CanvasWidget>(allocator.get(), canvasWidget.second);
+		deallocate<CanvasWidget>(allocator.get(), canvasWidget.second);
 	}
 	
 	for (auto& textWidget: m_textWidgets )
 	{
-		Deallocate<TextWidget>(allocator.get(), textWidget);
+		deallocate<TextWidget>(allocator.get(), textWidget);
 	}
 }
 
@@ -70,6 +70,8 @@ CanvasWidget* CanvasWidgetFabric::BuildCanvas(ECanvasType type)
 		return BuildGamePause();
 	case breakout::ECanvasType::GAME_OVER:
 		return BuildGameOver();
+	case breakout::ECanvasType::GAME_WIN:
+		return BuildGameWin();
 	default:
 		assert(false);
 		return nullptr;
@@ -190,7 +192,7 @@ CanvasWidget* CanvasWidgetFabric::BuildGamePause()
 		auto& text = textWidget->GetText();
 		text.SetFont(font);
 		text.SetCharacterSize(24);
-		text.SetOffset(static_cast<float>(w) / 2.0f - 25.0f, static_cast<float>(h) / 2.0f, 1.25f);
+		text.SetOffset(290.0f, static_cast<float>(h) / 2.0f, 1.25f);
 		text.SetString(gamePauseTextStr);
 	}
 
@@ -225,17 +227,42 @@ CanvasWidget* CanvasWidgetFabric::BuildGameOver()
 		auto& text = textWidget->GetText();
 		text.SetFont(font);
 		text.SetCharacterSize(45);
-		text.SetOffset(static_cast<float>(w) / 2.0f - 100.0f, static_cast<float>(h) / 2.0f, 1.5f);
+		text.SetOffset(290.0f, static_cast<float>(h) / 2.0f, 1.f);
 		text.SetString(gameOverTextStr);
 	}
 
 	return gameOver;
 }
 
+CanvasWidget* CanvasWidgetFabric::BuildGameWin()
+{
+	CanvasWidget* gameWin = AllocateCanvasWidget(ECanvasType::GAME_OVER);
+
+	auto& assetManager = AssetManager::Get();
+
+	static oglml::Font font;
+	assetManager.Get(EFontsAssetId::ocraext, font);
+
+	int w, h;
+	GameContext::Get().GetMainWindowSize(w, h);
+
+	{
+		TextWidget* textWidget = AllocateTextWidget();
+		gameWin->AddChild(textWidget);
+		auto& text = textWidget->GetText();
+		text.SetFont(font);
+		text.SetCharacterSize(45);
+		text.SetOffset(290.0f, static_cast<float>(h) / 2.0f, 1.f);
+		text.SetString(youWONTextStr);
+	}
+
+	return gameWin;
+}
+
 CanvasWidget* CanvasWidgetFabric::AllocateCanvasWidget(ECanvasType type)
 {
 	auto allocator = MemoryManager::Get().GetGlobalAllocator();
-	CanvasWidget* canvas = Allocate<CanvasWidget>(allocator.get());
+	CanvasWidget* canvas = allocate<CanvasWidget>(allocator.get());
 	m_canvasWidgets.insert({type, canvas});
 
 	return canvas;
@@ -244,7 +271,7 @@ CanvasWidget* CanvasWidgetFabric::AllocateCanvasWidget(ECanvasType type)
 TextWidget* CanvasWidgetFabric::AllocateTextWidget()
 {
 	auto allocator = MemoryManager::Get().GetGlobalAllocator();
-	TextWidget* text = Allocate<TextWidget>(allocator.get());
+	TextWidget* text = allocate<TextWidget>(allocator.get());
 	m_textWidgets.push_back(text);
 
 	return text;

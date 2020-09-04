@@ -42,6 +42,7 @@ namespace breakout
         void SetPlayerEntityId();
         void SetPlayerBallEntityId();
         void SetInitPosition();
+        void SetInitLevelBlocks();
 
         void BallParticlesShow();
 
@@ -49,10 +50,15 @@ namespace breakout
         void PaddlePlayerCollition(const ColliderComponent&, const ColliderComponent&) const;
 
         void LossHealth();
+        void LossLevelBlock();
+        void TryWin();
+
+        void Restart();
 
     private:
 
         int m_playerEntityId = -1;
         int m_playerBallEntityId = -1;
+        int m_levelBlocksNum = -1;
     };
 }

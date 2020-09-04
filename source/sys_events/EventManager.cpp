@@ -24,3 +24,13 @@ MulticastDelegate<const ColliderComponent&, const ColliderComponent&>& EventMana
 {
 	return OnCollitionDetectedDelegate;
 }
+
+MulticastDelegate<>& EventManager::OnNewLevelLoaded()
+{
+	return OnNewLevelLoadedDelegate;
+}
+
+MulticastDelegate<>& EventManager::OnGameEnded()
+{
+	return OnGameEndedDelegate;
+}

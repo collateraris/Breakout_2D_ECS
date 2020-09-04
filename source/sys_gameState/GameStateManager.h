@@ -14,6 +14,7 @@ namespace breakout
 		PAUSE,
 		CLOSE_APP,
 		GAME_OVER,
+		GAME_WIN,
 	};
 
 	class GameStateChangeEvent : public BaseEvent

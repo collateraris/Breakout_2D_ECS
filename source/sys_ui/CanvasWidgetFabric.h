@@ -10,7 +10,8 @@ namespace breakout
 		MAIN_MENU,
 		GAME_ACTIVE,
 		GAME_PAUSE,
-		GAME_OVER
+		GAME_OVER,
+		GAME_WIN,
 	};
 
 	class CanvasWidget;
@@ -33,6 +34,7 @@ namespace breakout
 		CanvasWidget* BuildGameActive();
 		CanvasWidget* BuildGamePause();
 		CanvasWidget* BuildGameOver();
+		CanvasWidget* BuildGameWin();
 
 		CanvasWidget* AllocateCanvasWidget(ECanvasType);
 		TextWidget* AllocateTextWidget();

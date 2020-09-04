@@ -20,13 +20,13 @@ APostEffectState* PostEffectsFabric::GeneratePostEffect(LinearAllocator* allocat
 	switch (stateId)
 	{
 	case EPostEffectStates::Idle:
-		return Allocate<IdlePostEffect>(allocator, pp);
+		return allocate<IdlePostEffect>(allocator, pp);
 	case EPostEffectStates::Confuse:
-		return Allocate<ConfusePostEffect>(allocator, pp);
+		return allocate<ConfusePostEffect>(allocator, pp);
 	case EPostEffectStates::Chaos:
-		return Allocate<ChaosPostEffect>(allocator, pp);
+		return allocate<ChaosPostEffect>(allocator, pp);
 	case EPostEffectStates::Shake:
-		return Allocate<ShakePostEffect>(allocator, pp);
+		return allocate<ShakePostEffect>(allocator, pp);
 	default:
 		assert(false);
 		return nullptr;

@@ -87,7 +87,6 @@ namespace breakout
 		EComponentType componentType = componentStruct::GetType();
 
 		auto foundEntityIt = m_entityStorage.find(entityId);
-		if (foundEntityIt == m_entityStorage.end())
 		assert(foundEntityIt != m_entityStorage.end());
 
 		auto foundComponentIt = foundEntityIt->second.find(componentType);

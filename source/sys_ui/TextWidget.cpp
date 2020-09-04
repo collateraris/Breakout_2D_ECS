@@ -23,13 +23,13 @@ TextWidget::TextWidget()
 	oglml::TextInfo textInfo = { shader.GetProgramID(), w, h };
 
 	auto allocator = MemoryManager::Get().GetGlobalAllocator();
-	m_text = Allocate<oglml::Text>(allocator.get(), textInfo);
+	m_text = allocate<oglml::Text>(allocator.get(), textInfo);
 }
 
 TextWidget::~TextWidget()
 {
 	auto allocator = MemoryManager::Get().GetGlobalAllocator();
-	Deallocate<oglml::Text>(allocator.get(), m_text);
+	deallocate<oglml::Text>(allocator.get(), m_text);
 }
 
 void TextWidget::Draw()

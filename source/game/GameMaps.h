@@ -24,9 +24,13 @@ namespace breakout
 
 		void LoadMap(EGameMapLevels);
 
+		void RebuildLevelMap();
+
 		void NextLevel();
 
 		void PrevLevel();
+
+		int GetBlockNum() const;
 
 	private:
 
@@ -46,5 +50,7 @@ namespace breakout
 		EGameMapLevels m_currLevel;
 
 		std::vector<int> m_usedEntityId = {};
+
+		int m_blocks = 0;
 	};
 }

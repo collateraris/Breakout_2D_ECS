@@ -12,8 +12,8 @@ namespace breakout
 		Allocator(const size_t size);
 		virtual ~Allocator() = 0;
 
-		virtual void* Allocate(const size_t size) = 0;
-		virtual void Deallocate(void* p) = 0;
+		virtual void* allocate(const size_t size) = 0;
+		virtual void deallocate(void* p) = 0;
 
 	protected:
 
@@ -25,16 +25,16 @@ namespace breakout
 	};
 
 	template<typename T, typename... Args>
-	T* Allocate(Allocator* allocator, Args& ... args)
+	T* allocate(Allocator* allocator, Args& ... args)
 	{
-		return new (allocator->Allocate(sizeof(T))) T(args...);
+		return new (allocator->allocate(sizeof(T))) T(args...);
 	};
 
 	template<typename T>
-	void Deallocate(Allocator* allocator, T* object)
+	void deallocate(Allocator* allocator, T* object)
 	{
 		object->~T();
 
-		allocator->Deallocate(static_cast<void*>(object));
+		allocator->deallocate(static_cast<void*>(object));
 	};
 }

@@ -8,6 +8,7 @@ namespace breakout
 	{
 		IsStuckOnPlayerPaddle,
 		Move,
+		Sticky,
 	};
 
 	class PlayerBallComponent : public BaseComponent
