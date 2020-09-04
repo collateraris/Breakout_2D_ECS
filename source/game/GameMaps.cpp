@@ -58,6 +58,13 @@ void GameMaps::LoadMap(EGameMapLevels levels)
     EventManager::Get().OnNewLevelLoaded().Broadcast();
 }
 
+void GameMaps::RebuildLevelMap()
+{
+    DestroyCurrLevel();
+
+    LoadMap(m_currLevel);
+}
+
 void GameMaps::Load(const std::string& path, std::vector<std::vector<unsigned int>>& tileData)
 {
 	unsigned int tileCode;

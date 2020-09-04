@@ -61,6 +61,7 @@ void PlayerBallLogicSystem::Update(float dtMilliseconds)
 		IsStuckOnPlayerPaddleLogic(dtMilliseconds);
 		break;
 	case EPlayerBallState::Move:
+	case EPlayerBallState::Sticky:
 		MoveLogic(dtMilliseconds);
 		break;
 	default:
@@ -142,40 +143,74 @@ void PlayerBallLogicSystem::BlockCollition(const ColliderComponent& circleCollid
 void PlayerBallLogicSystem::CollitionResolution(const ColliderComponent& componentA, const ColliderComponent& componentB)
 {
 	auto& ecs = EntityComponentSystem::Get();
-	if (!(ecs.IsExistEntityId(componentA.m_entityId) && ecs.IsExistEntityId(componentB.m_entityId)))
+	if (!ecs.IsExistEntityId(componentA.m_entityId) || !ecs.IsExistEntityId(componentB.m_entityId))
 		return;
 
+	const ColliderComponent* playerBall = nullptr;
+	const ColliderComponent* Block = nullptr;
+	const ColliderComponent* Player = nullptr;
 
-	const auto& circleCollider = componentA.GetColliderType() == EColliderType::Circle ? componentA : componentB;
-	const auto& squareCollider = componentB.GetColliderType() == EColliderType::Square ? componentB : componentA;
-	if (!ecs.IsSameEntityType(static_cast<int>(EEntityType::PlayerBall), circleCollider.m_entityId) 
-		|| squareCollider.GetColliderType() != EColliderType::Square
-		|| squareCollider.GetDamagableType() == EDamagableType::Intacted)
-		return;
-
-	auto IsPlayer = [&](const ColliderComponent& component) -> bool
+	auto FindPlayerBall = [&](const ColliderComponent& candidate)
 	{
-		return component.m_entityId == m_playerEntityId;
+		if (ecs.IsSameEntityType(static_cast<int>(EEntityType::PlayerBall), candidate.m_entityId))
+		{
+			playerBall = &candidate;
+		}
 	};
 
-	if (IsPlayer(squareCollider))
+	auto FindBlock = [&](const ColliderComponent& candidate)
 	{
-		EPlayerBallState ballState = EntityComponentSystem::Get().GetComponentByEntityId<PlayerBallComponent>(circleCollider.m_entityId).state;
-		if (ballState != EPlayerBallState::IsStuckOnPlayerPaddle)
+		if (ecs.IsSameEntityType(static_cast<int>(EEntityType::Block), candidate.m_entityId)
+			|| ecs.IsSameEntityType(static_cast<int>(EEntityType::SolidBlock), candidate.m_entityId))
+		{
+			Block = &candidate;
+		}
+	};
+
+	auto FindPlayer = [&](const ColliderComponent& candidate)
+	{
+		if (ecs.IsSameEntityType(static_cast<int>(EEntityType::PlayerPaddle), candidate.m_entityId))
+		{
+			Player = &candidate;
+		}
+	};
+
+	FindBlock(componentA);
+	FindPlayer(componentA);
+	FindPlayerBall(componentA);
+
+	FindBlock(componentB);
+	FindPlayer(componentB);
+	FindPlayerBall(componentB);
+
+	if (playerBall && playerBall->GetDamagableType() == EDamagableType::Intacted)
+	{
+		return;
+	}
+
+	if (playerBall && Player)
+	{
+		EPlayerBallState& ballState = EntityComponentSystem::Get().GetComponentByEntityId<PlayerBallComponent>(playerBall->m_entityId).state;
+		if (ballState == EPlayerBallState::Sticky)
+		{
+			SetInitPosition();
+			ballState = EPlayerBallState::IsStuckOnPlayerPaddle;
+		}
+		else if (ballState != EPlayerBallState::IsStuckOnPlayerPaddle)
 		{
 			AudioManager::Get().PlaySound(ESoundAssetId::PaddlePass);
-			PaddlePlayerCollition(circleCollider, squareCollider);
+			PaddlePlayerCollition(*playerBall, *Player);
 		}
 	}
-	else
+	else if (playerBall && Block)
 	{
-		BlockCollition(circleCollider, squareCollider);
+		BlockCollition(*playerBall, *Block);
 
-		if (squareCollider.GetDamagableType() == EDamagableType::Saved)
+		if (Block->GetDamagableType() == EDamagableType::Saved)
 		{
 			AudioManager::Get().PlaySound(ESoundAssetId::HitSolidBlock);
 		}
-		else if (squareCollider.GetDamagableType() == EDamagableType::Destroyable)
+		else if (Block->GetDamagableType() == EDamagableType::Destroyable)
 		{
 			AudioManager::Get().PlaySound(ESoundAssetId::HitNonSolidBlock);
 			TryWin();
@@ -354,6 +389,9 @@ void PlayerBallLogicSystem::TryWin()
 
 	if (m_levelBlocksNum <= 0)
 	{
+		auto& health = GameContext::Get().GetECS().GetComponentByEntityId<HealthComponent>(m_playerEntityId);
+		health.SetHealth(ECSBreakout::GetInitGameData().data[static_cast<int>(EBreakoutInitGameDataId::playerLives)][0]);
+
 		SetInitPosition();
 		EntityComponentSystem::Get().GetComponentByEntityId<PlayerBallComponent>(m_playerBallEntityId).state = EPlayerBallState::IsStuckOnPlayerPaddle;
 

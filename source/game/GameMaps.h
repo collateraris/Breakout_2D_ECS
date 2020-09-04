@@ -24,6 +24,8 @@ namespace breakout
 
 		void LoadMap(EGameMapLevels);
 
+		void RebuildLevelMap();
+
 		void NextLevel();
 
 		void PrevLevel();

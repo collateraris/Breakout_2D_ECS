@@ -702,6 +702,7 @@ void ECSBreakout::InitGameStateController()
 			}
 			else if (key == oglml::EKeyButtonCode::KEY_ESCAPE)
 			{
+				GameMaps::Get().RebuildLevelMap();
 				GameStateManager::Get().SwitchState(EGameState::MAIN_MENU);
 			}
 			break;
@@ -709,6 +710,7 @@ void ECSBreakout::InitGameStateController()
 			if (key == oglml::EKeyButtonCode::KEY_ENTER
 				|| key == oglml::EKeyButtonCode::KEY_SPACE)
 			{
+				GameMaps::Get().RebuildLevelMap();
 				GameStateManager::Get().SwitchState(EGameState::MAIN_MENU);
 			}
 			break;
@@ -716,6 +718,7 @@ void ECSBreakout::InitGameStateController()
 			if (key == oglml::EKeyButtonCode::KEY_ENTER
 				|| key == oglml::EKeyButtonCode::KEY_SPACE)
 			{
+				GameMaps::Get().RebuildLevelMap();
 				GameStateManager::Get().SwitchState(EGameState::MAIN_MENU);
 			}
 			break;

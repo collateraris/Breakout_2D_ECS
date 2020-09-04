@@ -3,6 +3,7 @@
 #include <components/TransformComponent.h>
 #include <ColliderComponent.h>
 #include <TimerComponent.h>
+#include <MovementComponent.h>
 #include <PlayerBallComponent.h>
 #include <PlayerComponent.h>
 #include <CollisionSystem.h>
@@ -112,30 +113,69 @@ void PowerUpLogicSystem::PowerUpOutsideLogic(PowerUpEntityId entityId)
 void PowerUpLogicSystem::CollitionResolution(const ColliderComponent& componentA, const ColliderComponent& componentB)
 {
     auto& ecs = EntityComponentSystem::Get();
-    if (!(ecs.IsExistEntityId(componentA.m_entityId) && ecs.IsExistEntityId(componentB.m_entityId)))
+    if (!ecs.IsExistEntityId(componentA.m_entityId) || !ecs.IsExistEntityId(componentB.m_entityId))
         return;
 
-    if (ecs.IsSameEntityType(static_cast<int>(EEntityType::PlayerBall), componentA.m_entityId)
-       && ecs.IsSameEntityType(static_cast<int>(EEntityType::Block), componentB.m_entityId))
+    const ColliderComponent* playerBall = nullptr;
+    const ColliderComponent* Block = nullptr;
+    const ColliderComponent* Paddle = nullptr;
+    const ColliderComponent* PowerUp = nullptr;
+
+    auto FindPlayerBall = [&](const ColliderComponent& candidate)
     {
-        auto& blockTransform = ecs.GetComponentByEntityId<TransformComponent>(componentB.m_entityId);
+        if (ecs.IsSameEntityType(static_cast<int>(EEntityType::PlayerBall), candidate.m_entityId))
+        {
+            playerBall = &candidate;
+        }
+    };
+
+    auto FindBlock = [&](const ColliderComponent& candidate)
+    {
+        if (ecs.IsSameEntityType(static_cast<int>(EEntityType::Block), candidate.m_entityId))
+        {
+            Block = &candidate;
+        }
+    };
+
+    auto FindPaddle = [&](const ColliderComponent& candidate)
+    {
+        if (ecs.IsSameEntityType(static_cast<int>(EEntityType::PlayerPaddle), candidate.m_entityId))
+        {
+            Paddle = &candidate;
+        }
+    };
+
+    auto FindPowerUp = [&](const ColliderComponent& candidate)
+    {
+        if (ecs.IsContainComponentByEntityId<PowerUpComponent>(candidate.m_entityId))
+        {
+            PowerUp = &candidate;
+        }
+    };
+
+    FindBlock(componentA);
+    FindPaddle(componentA);
+    FindPlayerBall(componentA);
+    FindPowerUp(componentA);
+
+    FindBlock(componentB);
+    FindPaddle(componentB);
+    FindPlayerBall(componentB);
+    FindPowerUp(componentB);
+
+    if (playerBall && playerBall->GetDamagableType() == EDamagableType::Intacted)
+    {
+        return;
+    }
+
+    if (playerBall && Block)
+    {
+        auto& blockTransform = ecs.GetComponentByEntityId<TransformComponent>(Block->m_entityId);
         SpawnPowerUps(blockTransform);
     }
-    else if (ecs.IsSameEntityType(static_cast<int>(EEntityType::PlayerBall), componentB.m_entityId)
-        && ecs.IsSameEntityType(static_cast<int>(EEntityType::Block), componentA.m_entityId))
+    else if (Paddle && PowerUp)
     {
-        auto& blockTransform = ecs.GetComponentByEntityId<TransformComponent>(componentA.m_entityId);
-        SpawnPowerUps(blockTransform);
-    }
-    else if (ecs.IsContainComponentByEntityId<PowerUpComponent>(componentA.m_entityId)
-        && ecs.IsSameEntityType(static_cast<int>(EEntityType::PlayerPaddle), componentB.m_entityId))
-    {
-        ActivatePowerUp(componentA.m_entityId);
-    }
-    else if (ecs.IsContainComponentByEntityId<PowerUpComponent>(componentB.m_entityId)
-        && ecs.IsSameEntityType(static_cast<int>(EEntityType::PlayerPaddle), componentA.m_entityId))
-    {
-        ActivatePowerUp(componentB.m_entityId);
+        ActivatePowerUp(PowerUp->m_entityId);
     }
 }
 
@@ -230,12 +270,19 @@ void PowerUpLogicSystem::ActivatePowerUp(PowerUpEntityId id)
     case breakout::EPowerUpType::None:
         break;
     case breakout::EPowerUpType::Speed:
+        ActivateTimer(id, 20.f, 2.f);
+        PlayerBallSpeedIncrease(id);
         break;
     case breakout::EPowerUpType::Sticky:
+        PlayerBallSticky(id);
         break;
     case breakout::EPowerUpType::PassThrough:
+        ActivateTimer(id, 10.f, 2.f);
+        PassThroughPlayerBall(id);
         break;
     case breakout::EPowerUpType::PadSizeIncrease:
+        ActivateTimer(id, 20.f, 2.f);
+        PadSizeIncrease(id);
         break;
     case breakout::EPowerUpType::Confuse:
         ActivateTimer(id, 15.f, 2.f);
@@ -267,12 +314,15 @@ void PowerUpLogicSystem::DeactivatePowerUp(PowerUpEntityId id)
     case breakout::EPowerUpType::None:
         break;
     case breakout::EPowerUpType::Speed:
+        TrySetInitPlayerBallSpeed(id);
         break;
     case breakout::EPowerUpType::Sticky:
         break;
     case breakout::EPowerUpType::PassThrough:
+        TrySetInitPassCondPlayerBall(id);
         break;
     case breakout::EPowerUpType::PadSizeIncrease:
+        TrySetInitPadSize(id);
         break;
     case breakout::EPowerUpType::Confuse:
         TrySetIdlePostEffect(id);
@@ -290,6 +340,86 @@ void PowerUpLogicSystem::TrySetIdlePostEffect(PowerUpEntityId id)
     if (m_currPostEffectEntityId != id)
         return;
     PostEffectsStateManager::Get().SwitchState(static_cast<int>(EPostEffectStates::Idle));
+}
+
+void PowerUpLogicSystem::PassThroughPlayerBall(PowerUpEntityId id)
+{
+    m_currPassThroughEntityId = id;
+    auto& ecs = EntityComponentSystem::Get();
+    int playerBallId = ECSBreakout::GetInitGameData().playerBallId;
+    auto& collider = ecs.GetComponentByEntityId<ColliderComponent>(playerBallId);
+    collider.SetDamagableType(EDamagableType::Intacted);
+}
+
+void PowerUpLogicSystem::TrySetInitPassCondPlayerBall(PowerUpEntityId id)
+{
+    if (m_currPassThroughEntityId != id)
+        return;
+
+    auto& ecs = EntityComponentSystem::Get();
+    int playerBallId = ECSBreakout::GetInitGameData().playerBallId;
+    auto& collider = ecs.GetComponentByEntityId<ColliderComponent>(playerBallId);
+    collider.SetDamagableType(EDamagableType::Saved);
+}
+
+void PowerUpLogicSystem::PadSizeIncrease(PowerUpEntityId id)
+{
+    m_currPadSizeIncEntityId = id;
+    auto& ecs = EntityComponentSystem::Get();
+    int playerId = ECSBreakout::GetInitGameData().playerId;
+    auto& transform = ecs.GetComponentByEntityId<TransformComponent>(playerId);
+    auto& collider = ecs.GetComponentByEntityId<ColliderComponent>(playerId);
+    auto size = ECSBreakout::GetInitGameData().data[static_cast<int>(EBreakoutInitGameDataId::playerPaddleSize)];
+    size[0] *= 1.5;
+    transform.SetScale(size);
+    collider.SetSize(size[0], size[1]);
+}
+
+void PowerUpLogicSystem::TrySetInitPadSize(PowerUpEntityId id)
+{
+    if (m_currPadSizeIncEntityId != id)
+        return;
+
+    auto& ecs = EntityComponentSystem::Get();
+    int playerId = ECSBreakout::GetInitGameData().playerId;
+    auto& transform = ecs.GetComponentByEntityId<TransformComponent>(playerId);
+    auto& collider = ecs.GetComponentByEntityId<ColliderComponent>(playerId);
+    auto size = ECSBreakout::GetInitGameData().data[static_cast<int>(EBreakoutInitGameDataId::playerPaddleSize)];
+    transform.SetScale(size);
+    collider.SetSize(size[0], size[1]);
+}
+
+void PowerUpLogicSystem::PlayerBallSpeedIncrease(PowerUpEntityId id)
+{
+    m_currIncBallSpeedEntityId = id;
+
+    auto& ecs = EntityComponentSystem::Get();
+    int playerBallId = ECSBreakout::GetInitGameData().playerBallId;
+    auto& movement = ecs.GetComponentByEntityId<MovementComponent>(playerBallId);
+    auto& velocity = ECSBreakout::GetInitGameData().data[static_cast<int>(EBreakoutInitGameDataId::playerBallVelocity)];
+    velocity[0] = 1.2 * velocity[0];
+    velocity[1] = 1.2 * velocity[1];
+    movement.SetVelocity(velocity);
+}
+
+void PowerUpLogicSystem::TrySetInitPlayerBallSpeed(PowerUpEntityId id)
+{
+    if (m_currIncBallSpeedEntityId != id)
+        return;
+
+    auto& ecs = EntityComponentSystem::Get();
+    int playerBallId = ECSBreakout::GetInitGameData().playerBallId;
+    auto& movement = ecs.GetComponentByEntityId<MovementComponent>(playerBallId);
+    auto& initVelocity = ECSBreakout::GetInitGameData().data[static_cast<int>(EBreakoutInitGameDataId::playerBallVelocity)];
+    movement.SetVelocity(initVelocity);  
+}
+
+void PowerUpLogicSystem::PlayerBallSticky(PowerUpEntityId id)
+{
+    auto& ecs = EntityComponentSystem::Get();
+    int playerBallId = ECSBreakout::GetInitGameData().playerBallId;
+    auto& playerBall = ecs.GetComponentByEntityId<PlayerBallComponent>(playerBallId);
+    playerBall.state = EPlayerBallState::Sticky;
 }
 
 void PowerUpLogicSystem::AddCandidateToDieList(PowerUpEntityId entityId)

@@ -50,6 +50,17 @@ namespace breakout
         void SwitchPostEffect(PowerUpEntityId, int new_effect);
         void TrySetIdlePostEffect(PowerUpEntityId);
 
+        void PlayerBallSpeedIncrease(PowerUpEntityId);
+        void TrySetInitPlayerBallSpeed(PowerUpEntityId);
+
+        void PassThroughPlayerBall(PowerUpEntityId);
+        void TrySetInitPassCondPlayerBall(PowerUpEntityId);
+
+        void PadSizeIncrease(PowerUpEntityId);
+        void TrySetInitPadSize(PowerUpEntityId);
+
+        void PlayerBallSticky(PowerUpEntityId);
+
         void SetPlayerEntityId();
         void SetPlayerBallEntityId();
 
@@ -64,6 +75,9 @@ namespace breakout
         std::vector<int> m_dieListCandidate = {};
         int m_currentDieListPos = 0;
 
-        int m_currPostEffectEntityId = 0;
+        int m_currPostEffectEntityId = -1;
+        int m_currIncBallSpeedEntityId = -1;
+        int m_currPadSizeIncEntityId = -1;
+        int m_currPassThroughEntityId = -1;
     };
 }
