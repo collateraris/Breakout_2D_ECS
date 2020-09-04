@@ -327,6 +327,9 @@ void PlayerBallLogicSystem::LossHealth()
 	health.LossHealth(1);
 
 	if (health.IsDead())
+	{
+		health.SetHealth(ECSBreakout::GetInitGameData().data[static_cast<int>(EBreakoutInitGameDataId::playerLives)][0]);
 		GameStateManager::Get().SwitchState(EGameState::GAME_OVER);
+	}
 }
 

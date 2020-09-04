@@ -29,6 +29,11 @@ namespace breakout
 			return m_healthSize <= 0;
 		}
 
+		int GetHealt() const
+		{
+			return m_healthSize;
+		}
+
 	private:
 
 		int m_healthSize = 0;

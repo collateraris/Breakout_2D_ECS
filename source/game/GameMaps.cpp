@@ -193,7 +193,8 @@ void GameMaps::DestroyCurrLevel()
     auto& ecs = EntityComponentSystem::Get();
     for (int entityId : m_usedEntityId)
     {
-        ecs.EntityDestroy(entityId);
+        if(ecs.IsExistEntityId(entityId))
+            ecs.EntityDestroy(entityId);
     }
 
     m_usedEntityId.clear();

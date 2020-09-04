@@ -54,10 +54,6 @@ void Text::SetCharacterSize(unsigned int size)
 void Text::SetFillColor(const Color& color)
 {
 	m_fillColor = glm::vec3(color[0], color[1], color[2]);
-
-	static const std::string uniformTextColor = "uTextColor";
-	Shader::Use(m_shaderId);
-	Shader::SetVector3f(m_shaderId, uniformTextColor.c_str(), m_fillColor);
 }
 
 void Text::SetOffset(float x, float y, float scale)
@@ -73,6 +69,9 @@ void Text::Draw()
 	assert(m_characterSize);
 
 	Shader::Use(m_shaderId);
+
+	static const std::string uniformTextColor = "uTextColor";
+	Shader::SetVector3f(m_shaderId, uniformTextColor.c_str(), m_fillColor);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

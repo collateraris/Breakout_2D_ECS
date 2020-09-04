@@ -14,9 +14,6 @@
 #include <GameplaySystem.h>
 #include <PhysicsSystem.h>
 
-#include <OGLML/Font.h>
-#include <OGLML/Text.h>
-#include <OGLML/Shader.h>
 
 #include <bindings/AssetsBindings.h>
 
@@ -71,24 +68,6 @@ void GameEngine::Start()
 
     float frameStartTime = m_window->GetCurrentTime();
 
-    oglml::Font font;
-    AssetManager::Get().Get(EFontsAssetId::ocraext, font);
-
-    oglml::Shader shader;
-    AssetManager::Get().Get(EShaderAssetId::Text_2D, shader);
-
-    oglml::TextInfo textInfo;
-    textInfo.shaderId = shader.GetProgramID();
-    textInfo.width = 800;
-    textInfo.height = 600;
-
-    oglml::Text text(textInfo);
-    text.SetFont(font);
-    text.SetCharacterSize(48);
-    text.SetOffset(25.0f, 25.0f, 1.0f);
-    text.SetFillColor({ 0.5, 0.8f, 0.2f });
-    text.SetString("Breakout is super GAME");
-
     while (!m_window->IsOpen())
     {
         frameStartTime = m_window->GetCurrentTime();
@@ -98,7 +77,6 @@ void GameEngine::Start()
         GameContext::Get().GetPhysicsSystem()->Update(deltaTime);
         GameContext::Get().GetGameplaySystem()->Update(deltaTime);
         GameContext::Get().GetRenderSystem()->Update(deltaTime);
-        text.Draw();
 
         GameContext::Get().GetEventsStorage().SwapStorages();
 

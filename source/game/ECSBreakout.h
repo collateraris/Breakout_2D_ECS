@@ -36,6 +36,9 @@ namespace breakout
 	struct BreakoutInitGameData
 	{
 		std::array<std::array<float, 2>, 7> data;
+
+		int playerId = -1;
+		int playerBallId = -1;
 	};
 
 	class ECSBreakout
@@ -46,7 +49,7 @@ namespace breakout
 
 		static int CreateComponent(EEntityType);
 
-		static const BreakoutInitGameData& GetInitGameData();
+		static BreakoutInitGameData& GetInitGameData();
 
 	private:
 

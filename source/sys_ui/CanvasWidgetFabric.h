@@ -8,6 +8,9 @@ namespace breakout
 	enum class ECanvasType
 	{
 		MAIN_MENU,
+		GAME_ACTIVE,
+		GAME_PAUSE,
+		GAME_OVER
 	};
 
 	class CanvasWidget;
@@ -27,6 +30,12 @@ namespace breakout
 		CanvasWidget* BuildCanvas(ECanvasType);
 
 		CanvasWidget* BuildMainMenu();
+		CanvasWidget* BuildGameActive();
+		CanvasWidget* BuildGamePause();
+		CanvasWidget* BuildGameOver();
+
+		CanvasWidget* AllocateCanvasWidget(ECanvasType);
+		TextWidget* AllocateTextWidget();
 
 		CanvasWidgetFabric();
 		~CanvasWidgetFabric();

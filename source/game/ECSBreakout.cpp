@@ -45,8 +45,6 @@
 
 using namespace breakout;
 
-BreakoutInitGameData g_initData;
-
 int CreateAwersomeEntity();
 
 int CreateBackground();
@@ -253,6 +251,7 @@ int CreatePlayerPaddle()
 {
 	auto& ecs = GameContext::Get().GetECS();
 	int entityId = ecs.CreateEntityByEntityTypeId(static_cast<int>(EEntityType::PlayerPaddle));
+	ECSBreakout::GetInitGameData().playerId = entityId;
 
 	ecs.AddComponentByEntityId<PlayerComponent>(entityId);
 
@@ -300,6 +299,7 @@ int CreatePlayerBall()
 {
 	auto& ecs = GameContext::Get().GetECS();
 	int entityId = ecs.CreateEntityByEntityTypeId(static_cast<int>(EEntityType::PlayerBall));
+	ECSBreakout::GetInitGameData().playerBallId = entityId;
 
 	ecs.AddComponentByEntityId<PlayerBallComponent>(entityId);
 
@@ -652,13 +652,14 @@ void ECSBreakout::LoadInitDataFromConfig()
 		float val1  = data.GetAttribute<float>(val1Str);
 		float val2 = data.GetAttribute<float>(val2Str);
 
-		g_initData.data[id] = {val1, val2};
+		GetInitGameData().data[id] = {val1, val2};
 	}
 }
 
-const BreakoutInitGameData& ECSBreakout::GetInitGameData()
+BreakoutInitGameData& ECSBreakout::GetInitGameData()
 {
-	return g_initData;
+	static BreakoutInitGameData initData;
+	return initData;
 }
 
 void ECSBreakout::InitGameStateController()
