@@ -24,7 +24,10 @@ using namespace breakout;
 
 void PowerUpLogicSystem::Init()
 {
-	EventManager::Get().OnCollitionDetected().BindObject(this, &PowerUpLogicSystem::CollitionResolution);
+    auto& eventManager = EventManager::Get();
+
+    eventManager.OnCollitionDetected().BindObject(this, &PowerUpLogicSystem::CollitionResolution);
+    eventManager.OnGameEnded().BindObject(this, &PowerUpLogicSystem::Restart);
 }
 
 void PowerUpLogicSystem::Update(float dtMilliseconds)
@@ -314,32 +317,37 @@ void PowerUpLogicSystem::DeactivatePowerUp(PowerUpEntityId id)
     case breakout::EPowerUpType::None:
         break;
     case breakout::EPowerUpType::Speed:
-        TrySetInitPlayerBallSpeed(id);
+        TryRestartBallSpeed(id);
         break;
     case breakout::EPowerUpType::Sticky:
         break;
     case breakout::EPowerUpType::PassThrough:
-        TrySetInitPassCondPlayerBall(id);
+        TryRestartPassThrough(id);
         break;
     case breakout::EPowerUpType::PadSizeIncrease:
-        TrySetInitPadSize(id);
+        TryRestartPadSize(id);
         break;
     case breakout::EPowerUpType::Confuse:
-        TrySetIdlePostEffect(id);
+        TryRestartPostEffect(id);
         break;
     case breakout::EPowerUpType::Chaos:
-        TrySetIdlePostEffect(id);
+        TryRestartPostEffect(id);
         break;
     default:
         break;
     }
 }
 
-void PowerUpLogicSystem::TrySetIdlePostEffect(PowerUpEntityId id)
+void PowerUpLogicSystem::RestartPostEffect()
+{
+    PostEffectsStateManager::Get().SwitchState(static_cast<int>(EPostEffectStates::Idle));
+}
+
+void PowerUpLogicSystem::TryRestartPostEffect(PowerUpEntityId id)
 {
     if (m_currPostEffectEntityId != id)
         return;
-    PostEffectsStateManager::Get().SwitchState(static_cast<int>(EPostEffectStates::Idle));
+    RestartPostEffect();
 }
 
 void PowerUpLogicSystem::PassThroughPlayerBall(PowerUpEntityId id)
@@ -351,15 +359,19 @@ void PowerUpLogicSystem::PassThroughPlayerBall(PowerUpEntityId id)
     collider.SetDamagableType(EDamagableType::Intacted);
 }
 
-void PowerUpLogicSystem::TrySetInitPassCondPlayerBall(PowerUpEntityId id)
+void PowerUpLogicSystem::RestartPassThrough()
 {
-    if (m_currPassThroughEntityId != id)
-        return;
-
     auto& ecs = EntityComponentSystem::Get();
     int playerBallId = ECSBreakout::GetInitGameData().playerBallId;
     auto& collider = ecs.GetComponentByEntityId<ColliderComponent>(playerBallId);
     collider.SetDamagableType(EDamagableType::Saved);
+}
+
+void PowerUpLogicSystem::TryRestartPassThrough(PowerUpEntityId id)
+{
+    if (m_currPassThroughEntityId != id)
+        return;
+    RestartPassThrough();
 }
 
 void PowerUpLogicSystem::PadSizeIncrease(PowerUpEntityId id)
@@ -375,11 +387,8 @@ void PowerUpLogicSystem::PadSizeIncrease(PowerUpEntityId id)
     collider.SetSize(size[0], size[1]);
 }
 
-void PowerUpLogicSystem::TrySetInitPadSize(PowerUpEntityId id)
+void PowerUpLogicSystem::RestartPadSize()
 {
-    if (m_currPadSizeIncEntityId != id)
-        return;
-
     auto& ecs = EntityComponentSystem::Get();
     int playerId = ECSBreakout::GetInitGameData().playerId;
     auto& transform = ecs.GetComponentByEntityId<TransformComponent>(playerId);
@@ -387,6 +396,14 @@ void PowerUpLogicSystem::TrySetInitPadSize(PowerUpEntityId id)
     auto size = ECSBreakout::GetInitGameData().data[static_cast<int>(EBreakoutInitGameDataId::playerPaddleSize)];
     transform.SetScale(size);
     collider.SetSize(size[0], size[1]);
+}
+
+void PowerUpLogicSystem::TryRestartPadSize(PowerUpEntityId id)
+{
+    if (m_currPadSizeIncEntityId != id)
+        return;
+
+    RestartPadSize();
 }
 
 void PowerUpLogicSystem::PlayerBallSpeedIncrease(PowerUpEntityId id)
@@ -402,16 +419,21 @@ void PowerUpLogicSystem::PlayerBallSpeedIncrease(PowerUpEntityId id)
     movement.SetVelocity(velocity);
 }
 
-void PowerUpLogicSystem::TrySetInitPlayerBallSpeed(PowerUpEntityId id)
+void PowerUpLogicSystem::RestartBallSpeed()
 {
-    if (m_currIncBallSpeedEntityId != id)
-        return;
-
     auto& ecs = EntityComponentSystem::Get();
     int playerBallId = ECSBreakout::GetInitGameData().playerBallId;
     auto& movement = ecs.GetComponentByEntityId<MovementComponent>(playerBallId);
     auto& initVelocity = ECSBreakout::GetInitGameData().data[static_cast<int>(EBreakoutInitGameDataId::playerBallVelocity)];
-    movement.SetVelocity(initVelocity);  
+    movement.SetVelocity(initVelocity);
+}
+
+void PowerUpLogicSystem::TryRestartBallSpeed(PowerUpEntityId id)
+{
+    if (m_currIncBallSpeedEntityId != id)
+        return; 
+
+    RestartBallSpeed();
 }
 
 void PowerUpLogicSystem::PlayerBallSticky(PowerUpEntityId id)
@@ -478,4 +500,31 @@ void PowerUpLogicSystem::SetPlayerBallEntityId()
         m_playerBallEntityId = ball->GetContainer().m_entityId;
         break;
     }
+}
+
+void PowerUpLogicSystem::Restart()
+{
+    RestartPostEffect();
+    RestartBallSpeed();
+    RestartPassThrough();
+    RestartPadSize();
+
+    auto& ecs = EntityComponentSystem::Get();
+    auto& powerUps = ecs.GetAllComponentsByType<PowerUpComponent>();
+    for (auto& powerUp: powerUps)
+    {
+        const auto& powerUpSetByCurrType = ecs.GetAllEntityIdBoundWithPrefab(powerUp->GetContainer().m_componentUniqueId);
+
+        if (!powerUpSetByCurrType)
+            continue;
+
+        std::vector<int> entities(powerUpSetByCurrType->begin(), powerUpSetByCurrType->end());
+
+        for (auto& id : entities)
+        {
+            if (ecs.IsExistEntityId(id))
+                ecs.EntityDestroy(id);
+        }
+    }
+
 }

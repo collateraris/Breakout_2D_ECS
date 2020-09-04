@@ -29,3 +29,8 @@ MulticastDelegate<>& EventManager::OnNewLevelLoaded()
 {
 	return OnNewLevelLoadedDelegate;
 }
+
+MulticastDelegate<>& EventManager::OnGameEnded()
+{
+	return OnGameEndedDelegate;
+}

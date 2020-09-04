@@ -48,21 +48,27 @@ namespace breakout
         void ActivateTimer(PowerUpEntityId, float duration, float decaySpeed);
 
         void SwitchPostEffect(PowerUpEntityId, int new_effect);
-        void TrySetIdlePostEffect(PowerUpEntityId);
+        void RestartPostEffect();
+        void TryRestartPostEffect(PowerUpEntityId);
 
         void PlayerBallSpeedIncrease(PowerUpEntityId);
-        void TrySetInitPlayerBallSpeed(PowerUpEntityId);
+        void RestartBallSpeed();
+        void TryRestartBallSpeed(PowerUpEntityId);
 
         void PassThroughPlayerBall(PowerUpEntityId);
-        void TrySetInitPassCondPlayerBall(PowerUpEntityId);
+        void RestartPassThrough();
+        void TryRestartPassThrough(PowerUpEntityId);
 
         void PadSizeIncrease(PowerUpEntityId);
-        void TrySetInitPadSize(PowerUpEntityId);
+        void RestartPadSize();
+        void TryRestartPadSize(PowerUpEntityId);
 
         void PlayerBallSticky(PowerUpEntityId);
 
         void SetPlayerEntityId();
         void SetPlayerBallEntityId();
+
+        void Restart();
 
     private:
 

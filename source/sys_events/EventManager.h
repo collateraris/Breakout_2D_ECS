@@ -16,6 +16,7 @@ namespace breakout
 
 		MulticastDelegate<const ColliderComponent&, const ColliderComponent&>& OnCollitionDetected();
 		MulticastDelegate<>& OnNewLevelLoaded();
+		MulticastDelegate<>& OnGameEnded();
 
 	private:
 
@@ -28,6 +29,7 @@ namespace breakout
 
 		MulticastDelegate<const ColliderComponent&, const ColliderComponent&> OnCollitionDetectedDelegate;
 		MulticastDelegate<> OnNewLevelLoadedDelegate;
+		MulticastDelegate<> OnGameEndedDelegate;
 	};
 }
 

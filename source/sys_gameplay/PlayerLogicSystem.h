@@ -31,6 +31,10 @@ namespace breakout
 
         void SetPlayerEntityId();
 
+        void Restart();
+
+        void SetInitPos();
+
     private:
 
         int m_playerEntityId = -1;

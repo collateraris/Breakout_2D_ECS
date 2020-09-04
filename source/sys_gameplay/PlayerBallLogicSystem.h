@@ -53,6 +53,8 @@ namespace breakout
         void LossLevelBlock();
         void TryWin();
 
+        void Restart();
+
     private:
 
         int m_playerEntityId = -1;

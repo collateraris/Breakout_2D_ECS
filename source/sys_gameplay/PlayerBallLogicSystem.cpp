@@ -42,6 +42,7 @@ void PlayerBallLogicSystem::Init()
 
 	eventManager.OnCollitionDetected().BindObject(this, &PlayerBallLogicSystem::CollitionResolution);
 	eventManager.OnNewLevelLoaded().BindObject(this, &PlayerBallLogicSystem::SetInitLevelBlocks);
+	eventManager.OnGameEnded().BindObject(this, &PlayerBallLogicSystem::Restart);
 }
 
 void PlayerBallLogicSystem::Update(float dtMilliseconds)
@@ -220,24 +221,12 @@ void PlayerBallLogicSystem::CollitionResolution(const ColliderComponent& compone
 
 void PlayerBallLogicSystem::SetPlayerEntityId()
 {
-	auto& playerComponents = EntityComponentSystem::Get().GetAllComponentsByType<PlayerComponent>();
-
-	for (auto& player : playerComponents)
-	{
-		m_playerEntityId = player->GetContainer().m_entityId;
-		break;
-	}
+	m_playerEntityId = ECSBreakout::GetInitGameData().playerId;
 }
 
 void PlayerBallLogicSystem::SetPlayerBallEntityId()
 {
-	auto& ballComponents = EntityComponentSystem::Get().GetAllComponentsByType<PlayerBallComponent>();
-
-	for (auto& ball : ballComponents)
-	{
-		m_playerBallEntityId = ball->GetContainer().m_entityId;
-		break;
-	}
+	m_playerBallEntityId = ECSBreakout::GetInitGameData().playerBallId;
 }
 
 void PlayerBallLogicSystem::SetInitLevelBlocks()
@@ -373,7 +362,6 @@ void PlayerBallLogicSystem::LossHealth()
 
 	if (health.IsDead())
 	{
-		health.SetHealth(ECSBreakout::GetInitGameData().data[static_cast<int>(EBreakoutInitGameDataId::playerLives)][0]);
 		GameStateManager::Get().SwitchState(EGameState::GAME_OVER);
 	}
 }
@@ -389,13 +377,16 @@ void PlayerBallLogicSystem::TryWin()
 
 	if (m_levelBlocksNum <= 0)
 	{
-		auto& health = GameContext::Get().GetECS().GetComponentByEntityId<HealthComponent>(m_playerEntityId);
-		health.SetHealth(ECSBreakout::GetInitGameData().data[static_cast<int>(EBreakoutInitGameDataId::playerLives)][0]);
-
-		SetInitPosition();
-		EntityComponentSystem::Get().GetComponentByEntityId<PlayerBallComponent>(m_playerBallEntityId).state = EPlayerBallState::IsStuckOnPlayerPaddle;
-
 		GameStateManager::Get().SwitchState(EGameState::GAME_WIN);
 	}
+}
+
+void PlayerBallLogicSystem::Restart()
+{
+	auto& health = GameContext::Get().GetECS().GetComponentByEntityId<HealthComponent>(m_playerEntityId);
+	health.SetHealth(ECSBreakout::GetInitGameData().data[static_cast<int>(EBreakoutInitGameDataId::playerLives)][0]);
+
+	SetInitPosition();
+	EntityComponentSystem::Get().GetComponentByEntityId<PlayerBallComponent>(m_playerBallEntityId).state = EPlayerBallState::IsStuckOnPlayerPaddle;
 }
 
