@@ -17,6 +17,7 @@ project "SysAnimation"
         paths.glm.inc,
         paths.GL.inc,
         paths.resource,
+        paths.ui,
     }
     
     files

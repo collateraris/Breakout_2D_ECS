@@ -4,10 +4,12 @@
 #include <PlayerBallComponent.h>
 #include <PlayerComponent.h>
 #include <ColliderComponent.h>
+#include <HealthComponent.h>
 #include <CollisionSystem.h>
 #include <AudioManager.h>
 
 #include <EventsStorage.h>
+#include <GameStateManager.h>
 
 #include <gameContext.h>
 #include <components/TransformComponent.h>
@@ -300,8 +302,11 @@ void PlayerBallLogicSystem::MoveLogic(float dtMilliseconds)
 	{
 		SetInitPosition();
 		EntityComponentSystem::Get().GetComponentByEntityId<PlayerBallComponent>(m_playerBallEntityId).state = EPlayerBallState::IsStuckOnPlayerPaddle;
+
+		LossHealth();
 		return;
 	}
+
 
 	ballTransform.SetPosition(ballPos.data());
 
@@ -316,4 +321,15 @@ void PlayerBallLogicSystem::BallParticlesShow()
 	GameContext::Get().GetECS().GetComponentByEntityId<ParticlesComponent>(m_playerBallEntityId).RespawnParticle(2, (ballSize * 0.5).data());
 }
 
+void PlayerBallLogicSystem::LossHealth()
+{
+	auto& health = GameContext::Get().GetECS().GetComponentByEntityId<HealthComponent>(m_playerEntityId);
+	health.LossHealth(1);
+
+	if (health.IsDead())
+	{
+		health.SetHealth(ECSBreakout::GetInitGameData().data[static_cast<int>(EBreakoutInitGameDataId::playerLives)][0]);
+		GameStateManager::Get().SwitchState(EGameState::GAME_OVER);
+	}
+}
 

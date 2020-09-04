@@ -11,6 +11,7 @@ namespace breakout
         void BindShaders();
         void BindSounds();
         void BindMusics();
+        void BindFonts();
     }
 
 }

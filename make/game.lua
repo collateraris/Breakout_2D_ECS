@@ -15,7 +15,10 @@ project "Game"
         "{COPY} " .. paths.irrKlang.bin .. "/ikpMP3.dll " .. paths.genRelease,
         "{COPY} " .. paths.irrKlang.bin .. "/irrKlang.dll " .. paths.build,
 		"{COPY} " .. paths.irrKlang.bin .. "/irrKlang.dll " .. paths.genDebug,
-		"{COPY} " .. paths.irrKlang.bin .. "/irrKlang.dll " .. paths.genRelease,		
+        "{COPY} " .. paths.irrKlang.bin .. "/irrKlang.dll " .. paths.genRelease,	
+        "{COPY} " .. paths.freetype2.bin .. "/freetype.dll " .. paths.build,
+		"{COPY} " .. paths.freetype2.bin .. "/freetype.dll " .. paths.genDebug,
+		"{COPY} " .. paths.freetype2.bin .. "/freetype.dll " .. paths.genRelease,	
 		"{COPY} " .. paths.root .. "/assets " .. paths.build .. "/assets",
 		"{COPY} " .. paths.root .. "/assets " .. paths.genDebug .. "/assets",
 		"{COPY} " .. paths.root .. "/assets " .. paths.genRelease .. "/assets",
@@ -32,7 +35,8 @@ project "Game"
         paths.glm.inc,
         paths.stb_image.inc,
         paths.tinyxml2.inc,
-        paths.irrKlang,
+        paths.irrKlang.inc,
+        paths.freetype2.inc,
         paths.config,
         paths.events,
         paths.gameState,
@@ -55,6 +59,7 @@ project "Game"
         paths.GL.lib,
         paths.GLFW.lib,
         paths.irrKlang.lib,
+        paths.freetype2.lib,
     }
     
     links
@@ -77,7 +82,8 @@ project "Game"
         "opengl32",
         "glfw3",
         "glew32s",
-        "irrKlang"
+        "irrKlang",
+        "freetype"
     }
     
     files

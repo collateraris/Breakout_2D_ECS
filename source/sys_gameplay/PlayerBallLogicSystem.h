@@ -48,6 +48,8 @@ namespace breakout
         void BlockCollition(const ColliderComponent&, const ColliderComponent&) const;
         void PaddlePlayerCollition(const ColliderComponent&, const ColliderComponent&) const;
 
+        void LossHealth();
+
     private:
 
         int m_playerEntityId = -1;

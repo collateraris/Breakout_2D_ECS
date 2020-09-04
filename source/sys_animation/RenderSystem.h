@@ -7,6 +7,7 @@ namespace breakout
     class ParticlesRenderSystem;
     class SpriteRenderSystem;
     class PostProcessingSystem;
+    class GuiSystem;
 
 	class RenderSystem : public BaseSystem
 	{
@@ -30,5 +31,6 @@ namespace breakout
         ParticlesRenderSystem* m_particlesRender = nullptr;
         SpriteRenderSystem* m_spriteRender = nullptr;
         PostProcessingSystem* m_postProcessing = nullptr;
+        GuiSystem* m_gui = nullptr;
 	};
 }

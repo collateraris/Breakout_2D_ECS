@@ -21,6 +21,8 @@ project "SysGameplay"
         paths.glm.inc,
         paths.audio,
         paths.resource,
+        paths.gameState,
+        paths.input,
     }
     
     files

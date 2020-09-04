@@ -1,0 +1,31 @@
+[33mcommit a840065b1ec311a8f179f09a9acf2ee10b268182[m[33m ([m[1;36mHEAD -> [m[1;32mdevelop[m[33m, [m[1;31morigin/develop[m[33m)[m
+Author: codemanfix <codemanfix@mail.ru>
+Date:   Fri Aug 28 16:24:47 2020 +0300
+
+    + power up system done (particulary)
+
+30	0	source/sys_gameplay/PowerUpSystem.cpp
+4	0	source/sys_gameplay/PowerUpSystem.h
+
+[33mcommit 4aad121495b19c9c142f0d51932fbf1718093002[m
+Author: codemanfix <codemanfix@mail.ru>
+Date:   Fri Aug 28 16:20:03 2020 +0300
+
+    + chaos and confuse effect provided
+
+1	0	assets/config.xml
+16	0	source/game/ECSBreakout.cpp
+4	4	source/sys_animation/APostEffectState.h
+9	0	source/sys_animation/PostEffectsStateManager.cpp
+3	0	source/sys_animation/PostEffectsStateManager.h
+1	0	source/sys_ecs/Component.h
+4	0	source/sys_ecs/ComponentManager.cpp
+5	0	source/sys_ecs/EntityComponentSystem.cpp
+2	0	source/sys_ecs/EntityComponentSystem.h
+5	0	source/sys_ecs/EntityManager.cpp
+3	0	source/sys_ecs/EntityManager.h
+2	2	source/sys_gameplay/DamagableColliderLogicSystem.cpp
+9	5	source/sys_gameplay/PlayerBallLogicSystem.cpp
+201	9	source/sys_gameplay/PowerUpSystem.cpp
+20	0	source/sys_gameplay/PowerUpSystem.h
+21	0	source/sys_gameplay/TimerComponent.h

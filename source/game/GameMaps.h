@@ -24,7 +24,13 @@ namespace breakout
 
 		void LoadMap(EGameMapLevels);
 
+		void NextLevel();
+
+		void PrevLevel();
+
 	private:
+
+		void DestroyCurrLevel();
 
 		void Load(const std::string& path, std::vector<std::vector<unsigned int>>& tileData);
 
@@ -36,5 +42,9 @@ namespace breakout
 		GameMaps(GameMaps&&) = delete;
 		void operator=(GameMaps&) = delete;
 		void operator=(GameMaps&&) = delete;
+
+		EGameMapLevels m_currLevel;
+
+		std::vector<int> m_usedEntityId = {};
 	};
 }

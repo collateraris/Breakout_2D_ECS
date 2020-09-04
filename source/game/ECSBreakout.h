@@ -29,12 +29,16 @@ namespace breakout
 		playerBallVelocity = 3,
 		powerUpSize = 4,
 		powerUpVelocity = 5,
-		MAX = 6
+		playerLives = 6,
+		MAX = 7
 	};
 
 	struct BreakoutInitGameData
 	{
-		std::array<std::array<float, 2>, 6> data;
+		std::array<std::array<float, 2>, 7> data;
+
+		int playerId = -1;
+		int playerBallId = -1;
 	};
 
 	class ECSBreakout
@@ -45,7 +49,7 @@ namespace breakout
 
 		static int CreateComponent(EEntityType);
 
-		static const BreakoutInitGameData& GetInitGameData();
+		static BreakoutInitGameData& GetInitGameData();
 
 	private:
 
@@ -54,6 +58,8 @@ namespace breakout
 		static void InitComponentsPools();
 
 		static void CreateWorld();
+
+		static void InitGameStateController();
 
 	};
 }

@@ -60,6 +60,6 @@ namespace breakout
 		void operator=(GameStateManager&) = delete;
 		void operator=(GameStateManager&&) = delete;
 
-		EGameState m_currentState = EGameState::IDLE;
+		EGameState m_currentState = EGameState::MAIN_MENU;
 	};
 }

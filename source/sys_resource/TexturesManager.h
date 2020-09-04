@@ -5,7 +5,6 @@
 #include <OGLML/Texture2D.h>
 
 #include <string>
-#include <iostream>
 
 namespace breakout
 {

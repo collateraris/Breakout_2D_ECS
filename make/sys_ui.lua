@@ -9,6 +9,15 @@ project "SysUI"
     includedirs
     {
         paths.ui,
+        paths.ecs,
+        paths.lib_multimedia,
+        paths.memory,
+        paths.resource,
+        paths.gameplay,
+        paths.game,
+        paths.gameState,
+        paths.events,
+        paths.glm.inc,
     }
     
     files

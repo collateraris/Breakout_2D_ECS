@@ -3,6 +3,8 @@
 #include <SystemManager.h>
 #include <CollisionSystem.h>
 
+#include <GameStateManager.h>
+
 using namespace breakout;
 
 PhysicsSystem::PhysicsSystem()
@@ -23,5 +25,8 @@ void PhysicsSystem::Init()
 
 void PhysicsSystem::Update(float dtMilliseconds)
 {
+    if (GameStateManager::Get().GetCurrentState() != EGameState::GAME)
+        return;
+
     m_collisionSystem->Update(dtMilliseconds);
 }

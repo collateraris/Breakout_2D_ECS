@@ -6,6 +6,7 @@ namespace breakout
 {
 	static const std::string assetsTexturesStr = "assets:textures";
 	static const std::string assetsShadersStr = "assets:shaders";
+	static const std::string assetsFontsStr = "assets:fonts";
 	static const std::string assetsSoundsStr = "assets:sounds";
 	static const std::string assetsMusicsStr = "assets:music";
 	static const std::string initDataStr = "initData";
@@ -26,4 +27,12 @@ namespace breakout
 	static const std::string playerSpaceClickPushEventRight = "PUSH EVENT : PLAYER SPACE CLICK";
 
 	static const std::string entityNotInitStr = "ENTITY DOESN`T INIT";
+
+	static const std::string livesTextStr = "Lives : ";
+	static const std::string pressEnterToStartTextStr = "Press ENTER or SPACE to start";
+	static const std::string pressXXtoSelectLevelTextStr = "Press A or D to select level";
+	static const std::string youWONTextStr = "You WON!!!";
+	static const std::string pressEntertoRetryTextStr = "Press ENTER to retry";
+	static const std::string gameOverTextStr = "GAME OVER :( ";
+	static const std::string gamePauseTextStr = "PAUSE zzz";
 }
