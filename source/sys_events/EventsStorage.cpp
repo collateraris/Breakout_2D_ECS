@@ -48,9 +48,14 @@ std::vector<BaseEvent>& EventsStorage::GetAll(EEventType eventTypeEnum)
 
 bool EventsStorage::IsContain(EEventType eventTypeEnum)
 {
-	auto currentEventIds = m_storage[m_active_storage_index].find(eventTypeEnum);
+	auto& currentEventIds = m_storage[m_active_storage_index].find(eventTypeEnum);
 
-	return currentEventIds != m_storage[m_active_storage_index].end();
+	if (currentEventIds != m_storage[m_active_storage_index].end())
+	{
+		auto& eventsList = currentEventIds->second;
+		return !eventsList.empty();
+	}
+	return false;
 }
 
 void EventsStorage::SwapStorages()

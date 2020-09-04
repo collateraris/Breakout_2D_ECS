@@ -31,12 +31,12 @@ CanvasWidgetFabric::~CanvasWidgetFabric()
 
 	for (auto& canvasWidget : m_canvasWidgets)
 	{
-		Deallocate<CanvasWidget>(allocator.get(), canvasWidget.second);
+		deallocate<CanvasWidget>(allocator.get(), canvasWidget.second);
 	}
 	
 	for (auto& textWidget: m_textWidgets )
 	{
-		Deallocate<TextWidget>(allocator.get(), textWidget);
+		deallocate<TextWidget>(allocator.get(), textWidget);
 	}
 }
 
@@ -235,7 +235,7 @@ CanvasWidget* CanvasWidgetFabric::BuildGameOver()
 CanvasWidget* CanvasWidgetFabric::AllocateCanvasWidget(ECanvasType type)
 {
 	auto allocator = MemoryManager::Get().GetGlobalAllocator();
-	CanvasWidget* canvas = Allocate<CanvasWidget>(allocator.get());
+	CanvasWidget* canvas = allocate<CanvasWidget>(allocator.get());
 	m_canvasWidgets.insert({type, canvas});
 
 	return canvas;
@@ -244,7 +244,7 @@ CanvasWidget* CanvasWidgetFabric::AllocateCanvasWidget(ECanvasType type)
 TextWidget* CanvasWidgetFabric::AllocateTextWidget()
 {
 	auto allocator = MemoryManager::Get().GetGlobalAllocator();
-	TextWidget* text = Allocate<TextWidget>(allocator.get());
+	TextWidget* text = allocate<TextWidget>(allocator.get());
 	m_textWidgets.push_back(text);
 
 	return text;

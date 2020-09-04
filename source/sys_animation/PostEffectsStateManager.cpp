@@ -33,7 +33,7 @@ PostEffectsStateManager& PostEffectsStateManager::Get()
 void PostEffectsStateManager::Init()
 {
 	auto globalAllocator = MemoryManager::Get().GetGlobalAllocator();
-	m_postProcessor = Allocate<oglml::PostProcessor>(globalAllocator.get());
+	m_postProcessor = allocate<oglml::PostProcessor>(globalAllocator.get());
 
 	int windowW, windowH;
 	GameContext::Get().GetMainWindowSize(windowW, windowH);

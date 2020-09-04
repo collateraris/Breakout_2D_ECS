@@ -17,7 +17,7 @@ LinearAllocator::~LinearAllocator()
     delete[] m_memoryStart;
 }
 
-void* LinearAllocator::Allocate(const size_t size)
+void* LinearAllocator::allocate(const size_t size)
 {
     assert(size > 0);
 
@@ -38,7 +38,7 @@ void* LinearAllocator::Allocate(const size_t size)
     return static_cast<void*>(prevCurrentPosition);
 }
 
-void LinearAllocator::Deallocate(void* p)
+void LinearAllocator::deallocate(void* p)
 {
     assert(p);
     assert(p > m_memoryStart);

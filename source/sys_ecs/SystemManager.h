@@ -48,7 +48,7 @@ namespace breakout
 		assert(foundIt == m_systems.end());
 
 		auto globalAllocator = MemoryManager::Get().GetGlobalAllocator();
-		auto system = Allocate<systemClass>(globalAllocator.get());
+		auto system = allocate<systemClass>(globalAllocator.get());
 
 		m_systems[type] = system;
 
