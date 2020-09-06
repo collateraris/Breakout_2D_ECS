@@ -236,7 +236,7 @@ CanvasWidget* CanvasWidgetFabric::BuildGameOver()
 
 CanvasWidget* CanvasWidgetFabric::BuildGameWin()
 {
-	CanvasWidget* gameWin = AllocateCanvasWidget(ECanvasType::GAME_OVER);
+	CanvasWidget* gameWin = AllocateCanvasWidget(ECanvasType::GAME_WIN);
 
 	auto& assetManager = AssetManager::Get();
 
