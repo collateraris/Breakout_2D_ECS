@@ -273,8 +273,8 @@ void PowerUpLogicSystem::ActivatePowerUp(PowerUpEntityId id)
     case breakout::EPowerUpType::None:
         break;
     case breakout::EPowerUpType::Speed:
-        ActivateTimer(id, 20.f, 2.f);
-        PlayerBallSpeedIncrease(id);
+        //ActivateTimer(id, 20.f, 2.f);
+        //PlayerBallSpeedIncrease(id);
         break;
     case breakout::EPowerUpType::Sticky:
         PlayerBallSticky(id);
@@ -317,7 +317,7 @@ void PowerUpLogicSystem::DeactivatePowerUp(PowerUpEntityId id)
     case breakout::EPowerUpType::None:
         break;
     case breakout::EPowerUpType::Speed:
-        TryRestartBallSpeed(id);
+        //TryRestartBallSpeed(id);
         break;
     case breakout::EPowerUpType::Sticky:
         break;
@@ -505,7 +505,7 @@ void PowerUpLogicSystem::SetPlayerBallEntityId()
 void PowerUpLogicSystem::Restart()
 {
     RestartPostEffect();
-    RestartBallSpeed();
+    //RestartBallSpeed();
     RestartPassThrough();
     RestartPadSize();
 
