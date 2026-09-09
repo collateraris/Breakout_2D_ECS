@@ -8,7 +8,7 @@
 	></window>
 	
 	<FPS>
-		<fps id = "0" FPS = "60"></fps>
+		<fps id = "0" FPS = "120"></fps>
 	</FPS>
 		
 	<systems>
